@@ -43,16 +43,16 @@ Creates offline events for the fore.vip (前凌智选) platform via MCP Server.
 
 ---
 
-## MCP Request/Response
+## HTTP API Endpoints
 
-### Request Format
+**Base URL**: `https://api.fore.vip/mcp`
 
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
+### Call Tool (Recommended)
+
+```bash
+curl -X POST https://api.fore.vip/mcp/tools_call \
+  -H "Content-Type: application/json" \
+  -d '{
     "name": "create_activity",
     "arguments": {
       "kid": "kl_abc123",
@@ -63,25 +63,46 @@ Creates offline events for the fore.vip (前凌智选) platform via MCP Server.
       "range": 0,
       "pay": false
     }
-  }
-}
+  }'
 ```
+
+### Direct Call
+
+```bash
+curl -X POST https://api.fore.vip/mcp/createActivity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "kid": "kl_abc123",
+    "content": "AI Weekend Meetup",
+    "start_time": 1711094400000,
+    "end_time": 1711108800000,
+    "address": "Beijing Sanlitun",
+    "range": 0,
+    "pay": false
+  }'
+```
+
+### List Tools
+
+```bash
+curl https://api.fore.vip/mcp/tools_list
+```
+
+---
+
+## Response Format
 
 ### Success Response
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "{\n  \"success\": true,\n  \"id\": \"act_xxx\",\n  \"kid\": \"kl_abc123\",\n  \"message\": \"Activity created successfully\"\n}"
-      }
-    ],
-    "isError": false
-  }
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"id\": \"act_xxx\",\n  \"kid\": \"kl_abc123\",\n  \"message\": \"Activity created successfully\"\n}"
+    }
+  ],
+  "isError": false
 }
 ```
 
@@ -89,17 +110,13 @@ Creates offline events for the fore.vip (前凌智选) platform via MCP Server.
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "{\n  \"success\": false,\n  \"error\": \"Bot not found: kl_invalid\"\n}"
-      }
-    ],
-    "isError": true
-  }
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": false,\n  \"error\": \"Bot not found\"\n}"
+    }
+  ],
+  "isError": true
 }
 ```
 
@@ -107,44 +124,65 @@ Creates offline events for the fore.vip (前凌智选) platform via MCP Server.
 
 ## Usage Examples
 
-### uniCloud Call (Cloud Function)
+### JavaScript (Fetch API)
 
 ```javascript
-// Import MCP cloud function
-const mcp = uniCloud.importObject('mcp')
-
-// List available tools
-const tools = await mcp.tools_list()
-
-// Create activity
-const result = await mcp.tools_call({
-  name: 'create_activity',
-  arguments: {
-    kid: 'kl_user_bot_123',
-    content: 'AI Experience Day',
-    start_time: Date.now() + 86400000,
-    end_time: Date.now() + 90000000,
-    address: 'Beijing Sanlitun',
-    range: 0,
-    pay: false
-  }
+// Create activity via tools_call
+const result = await fetch('https://api.fore.vip/mcp/tools_call', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: 'create_activity',
+    arguments: {
+      kid: 'kl_user_bot_123',
+      content: 'AI Experience Day',
+      start_time: Date.now() + 86400000,
+      end_time: Date.now() + 90000000,
+      address: 'Beijing Sanlitun',
+      range: 0,
+      pay: false
+    }
+  })
 })
 
-// Parse result
-const response = JSON.parse(result.content[0].text)
-if (response.success) {
-  console.log('Created:', response.id)
+const response = await result.json()
+const data = JSON.parse(response.content[0].text)
+
+if (data.success) {
+  console.log('Created:', data.id)
 } else {
-  console.error('Error:', response.error)
+  console.error('Error:', data.error)
 }
 ```
 
-### Client Call (uni-app)
+### Direct Call Example
 
 ```javascript
-// In uni-app client
+const result = await fetch('https://api.fore.vip/mcp/createActivity', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    kid: 'kl_bot_456',
+    content: 'VIP AI Meetup',
+    start_time: 1711872000000,
+    end_time: 1711958400000,
+    address: 'Shanghai Jing\'an Temple',
+    location: { type: 'Point', coordinates: [121.44, 31.23] },
+    range: 9900,
+    pay: true,
+    wx: 'forevip123'
+  })
+})
+
+const response = await result.json()
+```
+
+### uniCloud (Cloud Function)
+
+```javascript
 const mcp = uniCloud.importObject('mcp')
 
+// Via tools_call
 const result = await mcp.tools_call({
   name: 'create_activity',
   arguments: {
@@ -152,18 +190,20 @@ const result = await mcp.tools_call({
     content: 'VIP AI Meetup',
     start_time: 1711872000000,
     end_time: 1711958400000,
-    address: 'Shanghai Jing\'an Temple',
-    location: {
-      type: 'Point',
-      coordinates: [121.44, 31.23]
-    },
     range: 9900,
-    pay: true,
-    wx: 'forevip123'
+    pay: true
   }
 })
 
-const response = JSON.parse(result.content[0].text)
+// Direct call
+const result = await mcp.createActivity({
+  kid: 'kl_bot_456',
+  content: 'VIP AI Meetup',
+  start_time: 1711872000000,
+  end_time: 1711958400000,
+  range: 9900,
+  pay: true
+})
 ```
 
 ---
@@ -178,6 +218,7 @@ const response = JSON.parse(result.content[0].text)
 | `start_time must be before end_time` | Invalid time range |
 | `range cannot be negative` | Invalid ticket price |
 | `Bot not found: xxx` | Invalid bot ID |
+| `Unknown tool: xxx` | Invalid tool name |
 
 ---
 
@@ -187,10 +228,11 @@ const response = JSON.parse(result.content[0].text)
 2. **Money**: range in cents (¥99 = 9900)
 3. **Location**: GeoJSON format
 4. **Auth**: Authentication placeholder (implement per deployment)
-5. **uniCloud**: Methods use underscore naming (tools_list, tools_call)
+5. **HTTP API**: Available at `https://api.fore.vip/mcp`
 
 ---
 
 **Version**: 2.1.0  
 **Updated**: 2026-03-20  
-**MCP Spec**: https://modelcontextprotocol.io/
+**MCP Spec**: https://modelcontextprotocol.io/  
+**API**: https://api.fore.vip/mcp

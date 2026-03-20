@@ -43,16 +43,16 @@ license: MIT
 
 ---
 
-## MCP 请求/响应格式
+## HTTP API 端点
 
-### 请求
+**基础 URL**: `https://api.fore.vip/mcp`
 
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
+### 调用工具 (推荐)
+
+```bash
+curl -X POST https://api.fore.vip/mcp/tools_call \
+  -H "Content-Type: application/json" \
+  -d '{
     "name": "create_activity",
     "arguments": {
       "kid": "kl_abc123",
@@ -63,25 +63,46 @@ license: MIT
       "range": 0,
       "pay": false
     }
-  }
-}
+  }'
 ```
+
+### 直接调用
+
+```bash
+curl -X POST https://api.fore.vip/mcp/createActivity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "kid": "kl_abc123",
+    "content": "AI 周末聚会",
+    "start_time": 1711094400000,
+    "end_time": 1711108800000,
+    "address": "北京三里屯",
+    "range": 0,
+    "pay": false
+  }'
+```
+
+### 获取工具列表
+
+```bash
+curl https://api.fore.vip/mcp/tools_list
+```
+
+---
+
+## 响应格式
 
 ### 成功响应
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "{\n  \"success\": true,\n  \"id\": \"act_xxx\",\n  \"kid\": \"kl_abc123\",\n  \"message\": \"Activity created successfully\"\n}"
-      }
-    ],
-    "isError": false
-  }
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"id\": \"act_xxx\",\n  \"kid\": \"kl_abc123\",\n  \"message\": \"Activity created successfully\"\n}"
+    }
+  ],
+  "isError": false
 }
 ```
 
@@ -89,17 +110,13 @@ license: MIT
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "content": [
-      {
-        "type": "text",
-        "text": "{\n  \"success\": false,\n  \"error\": \"Bot not found: kl_invalid\"\n}"
-      }
-    ],
-    "isError": true
-  }
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": false,\n  \"error\": \"Bot not found\"\n}"
+    }
+  ],
+  "isError": true
 }
 ```
 
@@ -107,44 +124,65 @@ license: MIT
 
 ## 使用示例
 
-### uniCloud 调用 (云函数)
+### JavaScript (Fetch API)
 
 ```javascript
-// 导入 MCP 云函数
-const mcp = uniCloud.importObject('mcp')
-
-// 获取工具列表
-const tools = await mcp.tools_list()
-
-// 创建活动
-const result = await mcp.tools_call({
-  name: 'create_activity',
-  arguments: {
-    kid: 'kl_user_bot_123',
-    content: 'AI 体验日',
-    start_time: Date.now() + 86400000,  // 明天
-    end_time: Date.now() + 90000000,    // 明天 +4 小时
-    address: '北京三里屯',
-    range: 0,
-    pay: false
-  }
+// 通过 tools_call 创建活动
+const result = await fetch('https://api.fore.vip/mcp/tools_call', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: 'create_activity',
+    arguments: {
+      kid: 'kl_user_bot_123',
+      content: 'AI 体验日',
+      start_time: Date.now() + 86400000,
+      end_time: Date.now() + 90000000,
+      address: '北京三里屯',
+      range: 0,
+      pay: false
+    }
+  })
 })
 
-// 解析结果
-const response = JSON.parse(result.content[0].text)
-if (response.success) {
-  console.log('创建成功:', response.id)
+const response = await result.json()
+const data = JSON.parse(response.content[0].text)
+
+if (data.success) {
+  console.log('创建成功:', data.id)
 } else {
-  console.error('错误:', response.error)
+  console.error('错误:', data.error)
 }
 ```
 
-### 客户端调用 (uni-app)
+### 直接调用示例
 
 ```javascript
-// uni-app 客户端
+const result = await fetch('https://api.fore.vip/mcp/createActivity', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    kid: 'kl_bot_456',
+    content: 'VIP AI 见面会',
+    start_time: 1711872000000,
+    end_time: 1711958400000,
+    address: '上海静安寺',
+    location: { type: 'Point', coordinates: [121.44, 31.23] },
+    range: 9900,
+    pay: true,
+    wx: 'forevip123'
+  })
+})
+
+const response = await result.json()
+```
+
+### uniCloud (云函数)
+
+```javascript
 const mcp = uniCloud.importObject('mcp')
 
+// 通过 tools_call
 const result = await mcp.tools_call({
   name: 'create_activity',
   arguments: {
@@ -152,18 +190,20 @@ const result = await mcp.tools_call({
     content: 'VIP AI 见面会',
     start_time: 1711872000000,
     end_time: 1711958400000,
-    address: '上海静安寺',
-    location: {
-      type: 'Point',
-      coordinates: [121.44, 31.23]
-    },
-    range: 9900,  // ¥99
-    pay: true,
-    wx: 'forevip123'
+    range: 9900,
+    pay: true
   }
 })
 
-const response = JSON.parse(result.content[0].text)
+// 直接调用
+const result = await mcp.createActivity({
+  kid: 'kl_bot_456',
+  content: 'VIP AI 见面会',
+  start_time: 1711872000000,
+  end_time: 1711958400000,
+  range: 9900,
+  pay: true
+})
 ```
 
 ---
@@ -178,6 +218,7 @@ const response = JSON.parse(result.content[0].text)
 | `start_time must be before end_time` | 时间范围无效 |
 | `range cannot be negative` | 门票金额无效 |
 | `Bot not found: xxx` | 机器人 ID 无效 |
+| `Unknown tool: xxx` | 工具名称无效 |
 
 ---
 
@@ -187,10 +228,11 @@ const response = JSON.parse(result.content[0].text)
 2. **金额**: range 单位为分 (¥99 = 9900)
 3. **位置**: GeoJSON 格式
 4. **认证**: 认证占位符 (根据部署实现)
-5. **uniCloud**: 方法使用下划线命名 (tools_list, tools_call)
+5. **HTTP API**: 端点 `https://api.fore.vip/mcp`
 
 ---
 
 **版本**: 2.1.0  
 **更新**: 2026-03-20  
-**MCP 规范**: https://modelcontextprotocol.io/
+**MCP 规范**: https://modelcontextprotocol.io/  
+**API**: https://api.fore.vip/mcp
