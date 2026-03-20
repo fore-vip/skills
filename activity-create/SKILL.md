@@ -1,13 +1,13 @@
 ---
 name: activity-create
 description: Create offline events for Qianling Zhixuan (fore.vip) platform. Use this skill when users need to create activities, including event info, time/location setup, ticket pricing, etc.
-version: 1.0.0
+version: 1.1.0
 license: MIT
 ---
 
 ## Skill Description
 
-This skill helps create offline events for the Qianling Zhixuan (fore.vip) platform. Data is persisted via MCP cloud functions.
+This skill helps create offline events for the Qianling Zhixuan (fore.vip) platform. Data is persisted via MCP cloud functions following the Model Context Protocol (MCP) specification.
 
 ---
 
@@ -16,6 +16,25 @@ This skill helps create offline events for the Qianling Zhixuan (fore.vip) platf
 - User wants to create a new offline event
 - Need to set event time, location, ticket price, etc.
 - Link to existing AI bots (kl collection)
+
+---
+
+## MCP Server Info
+
+**Server**: `fore-vip-mcp`  
+**Version**: `1.0.0`  
+**Endpoint**: `uniCloud-aliyun/cloudfunctions/mcp/index.obj.js`
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `create_activity` | Create a new offline event |
+| `update_activity` | Update an existing event |
+| `delete_activity` | Delete an event |
+| `list_activities` | List events (by bot or user) |
+| `get_activity` | Get event details |
+| `list_bots` | List user's bots |
 
 ---
 
@@ -68,15 +87,46 @@ Please confirm the following:
 - range: optional, number, >= 0
 ```
 
-### 3. Call Cloud Function
+### 3. Call MCP Cloud Function
+
+#### Method A: Using tools_call (MCP Standard)
 
 ```javascript
 const mcp = uniCloud.importObject('mcp')
 
+const res = await mcp.tools_call({
+  token: uni.getStorageSync('token'),
+  tool_name: 'create_activity',
+  arguments: {
+    kid: "kl_xxx",
+    content: "Weekend AI Experience",
+    start_time: 1711008000000,
+    end_time: 1711094400000,
+    address: "Beijing Chaoyang District xxx",
+    location: { type: "Point", coordinates: [116.4, 39.9] },
+    range: 9900,
+    pay: true
+  }
+})
+
+// MCP Standard Response Format
+// {
+//   content: [
+//     {
+//       type: 'text',
+//       text: '{"success":true,"id":"act_xxx","message":"活动创建成功"}'
+//     }
+//   ]
+// }
+```
+
+#### Method B: Direct Call (Legacy)
+
+```javascript
 const res = await mcp.createAct({
   token: uni.getStorageSync('token'),
   kid: "kl_xxx",
-  content: "Event description",
+  content: "Weekend AI Experience",
   start_time: 1711008000000,
   end_time: 1711094400000,
   address: "Beijing Chaoyang District xxx",
@@ -86,15 +136,19 @@ const res = await mcp.createAct({
 })
 
 // Returns
-// { id: "act_xxx", created: true, kid, content }
+// { success: true, id: "act_xxx", kid, content, message: "活动创建成功" }
 ```
 
 ### 4. Handle Results
 
 **Success**:
 ```javascript
-uni.showToast({ title: 'Created successfully', icon: 'success' })
-uni.navigateTo({ url: '/ai/st?id=' + res.id })
+// Parse MCP response
+const result = JSON.parse(res.content[0].text)
+if (result.success) {
+  uni.showToast({ title: 'Created successfully', icon: 'success' })
+  uni.navigateTo({ url: '/ai/st?id=' + result.id })
+}
 ```
 
 **Failure**:
@@ -136,16 +190,27 @@ uni.showToast({ title: e.message, icon: 'none' })
 **AI**: Creating your event...
 
 ```javascript
-// Call cloud function
-const res = await mcp.createAct({
+// First, query user's bots
+const botsRes = await mcp.tools_call({
   token,
-  kid: "kl_user_bot_123",  // Query user's bots first
-  content: "Face-to-face AI interaction",
-  start_time: 1711094400000,  // Saturday 14:00
-  end_time: 1711108800000,    // Saturday 18:00
-  address: "Beijing Sanlitun",
-  range: 0,
-  pay: false
+  tool_name: 'list_bots',
+  arguments: { limit: 10 }
+})
+const bots = JSON.parse(botsRes.content[0].text).data
+
+// Then create activity
+const res = await mcp.tools_call({
+  token,
+  tool_name: 'create_activity',
+  arguments: {
+    kid: "kl_user_bot_123",
+    content: "Face-to-face AI interaction",
+    start_time: 1711094400000,  // Saturday 14:00
+    end_time: 1711108800000,    // Saturday 18:00
+    address: "Beijing Sanlitun",
+    range: 0,
+    pay: false
+  }
 })
 ```
 
@@ -166,16 +231,64 @@ const res = await mcp.createAct({
 
 **AI**: 
 ```javascript
-const res = await mcp.createAct({
+const res = await mcp.tools_call({
   token,
-  kid: "kl_cs_bot_456",
-  content: "VIP User Meetup",
-  start_time: 1711872000000,  // Next Sunday 00:00
-  end_time: 1711958400000,    // Next Sunday 23:59
-  address: "Shanghai Jing'an Temple",
-  range: 9900,  // ¥99 = 9900 cents
-  pay: true
+  tool_name: 'create_activity',
+  arguments: {
+    kid: "kl_cs_bot_456",
+    content: "VIP User Meetup",
+    start_time: 1711872000000,  // Next Sunday 00:00
+    end_time: 1711958400000,    // Next Sunday 23:59
+    address: "Shanghai Jing'an Temple",
+    range: 9900,  // ¥99 = 9900 cents
+    pay: true
+  }
 })
+```
+
+---
+
+## MCP Response Format
+
+All MCP tool calls return responses in the following format:
+
+```javascript
+{
+  content: [
+    {
+      type: 'text',
+      text: JSON.stringify({
+        success: boolean,
+        // ... other data
+      })
+    }
+  ]
+}
+```
+
+### Success Response Example
+
+```json
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"success\": true,\n  \"id\": \"act_xxx\",\n  \"message\": \"活动创建成功\"\n}"
+    }
+  ]
+}
+```
+
+### Error Response
+
+Errors are thrown as exceptions:
+
+```javascript
+try {
+  const res = await mcp.tools_call({ ... })
+} catch (e) {
+  console.error(e.message)  // Error message
+}
 ```
 
 ---
@@ -184,13 +297,16 @@ const res = await mcp.createAct({
 
 MCP cloud functions provide these event-related methods:
 
-| Method | Description | Parameters |
-|--------|-------------|------------|
-| `createAct` | Create new event | `kid, content, start_time, end_time, ...` |
-| `updateAct` | Update event | `id, data` |
-| `deleteAct` | Delete event | `id` |
-| `listActs` | List events | `kid, limit` |
-| `getAct` | Get event details | `id` |
+| Method | Type | Description |
+|--------|------|-------------|
+| `tools_list` | MCP Standard | List all available tools |
+| `tools_call` | MCP Standard | Call a specific tool |
+| `serverInfo` | MCP Standard | Get server information |
+| `createAct` | Legacy | Create new event (direct) |
+| `updateAct` | Legacy | Update event (direct) |
+| `deleteAct` | Legacy | Delete event (direct) |
+| `listActs` | Legacy | List events (direct) |
+| `getAct` | Legacy | Get event details (direct) |
 
 ---
 
@@ -201,6 +317,7 @@ MCP cloud functions provide these event-related methods:
 3. **Coordinate Format**: location uses GeoJSON `{type:"Point",coordinates:[longitude,latitude]}`
 4. **Permission**: Can only operate on own events
 5. **Image Upload**: pic array must be uploaded via uni-file-picker first to get URLs
+6. **MCP Compliance**: Responses follow MCP Spec with `content[].text` JSON format
 
 ---
 
@@ -209,11 +326,20 @@ MCP cloud functions provide these event-related methods:
 ### Query User's Bots
 
 ```javascript
-const db = uniCloud.database()
-const bots = await db.collection('kl')
-  .where({ user: auth.uid })
-  .field('_id,name')
-  .get()
+const mcp = uniCloud.importObject('mcp')
+const res = await mcp.tools_call({
+  token,
+  tool_name: 'list_bots',
+  arguments: { limit: 10 }
+})
+const bots = JSON.parse(res.content[0].text).data
+```
+
+### List Available Tools
+
+```javascript
+const tools = await mcp.tools_list({ token })
+console.log(tools.tools)  // Array of tool definitions
 ```
 
 ### Time Picker Conversion
@@ -239,7 +365,8 @@ uni.chooseLocation({
 
 ---
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Last Updated**: 2026-03-20  
 **Backend**: MCP Cloud Function (`uniCloud-aliyun/cloudfunctions/mcp/index.obj.js`)  
-**Platform**: Qianling Zhixuan (fore.vip)
+**Platform**: Qianling Zhixuan (fore.vip)  
+**MCP Spec**: https://modelcontextprotocol.io/
