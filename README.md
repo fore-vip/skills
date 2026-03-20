@@ -1,12 +1,12 @@
-# AI 飞花令技能集合
+# 前凌智选技能集合
 
-为 AI 飞花令 (fore.vip) 平台创建的 Agent 技能集合。
+为 前凌智选 (fore.vip) 平台创建的 Agent 技能集合。
 
 ## 📦 可用技能
 
 | 技能 | 说明 | 安装命令 |
 |------|------|----------|
-| [activity-create](skills/activity-create/SKILL.md) | 创建 AI 飞花令线下活动 | `npx skills add fore-vip/skills -s activity-create` |
+| [activity-create](skills/activity-create/SKILL.md) | 创建 前凌智选线下活动 | `npx skills add fore-vip/skills -s activity-create` |
 
 ## 🚀 快速开始
 
@@ -53,7 +53,7 @@ skills/
 
 | 项目 | 说明 |
 |------|------|
-| [AI 飞花令](https://fore.vip) | 主平台 |
+| [前凌智选](https://fore.vip) | 主平台 |
 | [MCP 云函数](https://github.com/fore-vip/skills) | 服务端技能实现 |
 
 ## 📄 License
