@@ -1,7 +1,7 @@
 ---
 name: activity-create
 description: Create offline events for fore.vip platform. Use when users need to create activities with time, location, and ticket information.
-version: 0.0.1
+version: 0.0.2
 license: MIT
 ---
 

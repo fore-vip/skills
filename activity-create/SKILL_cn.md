@@ -1,7 +1,7 @@
 ---
 name: activity-create
 description: 创建 前凌智选线下活动。用于创建包含时间、地点、门票信息的活动。
-version: 0.0.1
+version: 0.0.2
 license: MIT
 ---
 
