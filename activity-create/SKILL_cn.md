@@ -1,7 +1,7 @@
 ---
 name: activity-create
 description: 创建 前凌智选线下活动。用于创建包含时间、地点、门票信息的活动。
-version: 2.0.0
+version: 2.1.0
 license: MIT
 ---
 
@@ -107,12 +107,17 @@ license: MIT
 
 ## 使用示例
 
-### 示例 1: 免费活动
+### uniCloud 调用 (云函数)
 
 ```javascript
+// 导入 MCP 云函数
 const mcp = uniCloud.importObject('mcp')
 
-const result = await mcp['tools/call']({
+// 获取工具列表
+const tools = await mcp.tools_list()
+
+// 创建活动
+const result = await mcp.tools_call({
   name: 'create_activity',
   arguments: {
     kid: 'kl_user_bot_123',
@@ -134,10 +139,13 @@ if (response.success) {
 }
 ```
 
-### 示例 2: 付费活动带位置
+### 客户端调用 (uni-app)
 
 ```javascript
-const result = await mcp['tools/call']({
+// uni-app 客户端
+const mcp = uniCloud.importObject('mcp')
+
+const result = await mcp.tools_call({
   name: 'create_activity',
   arguments: {
     kid: 'kl_bot_456',
@@ -154,6 +162,8 @@ const result = await mcp['tools/call']({
     wx: 'forevip123'
   }
 })
+
+const response = JSON.parse(result.content[0].text)
 ```
 
 ---
@@ -177,9 +187,10 @@ const result = await mcp['tools/call']({
 2. **金额**: range 单位为分 (¥99 = 9900)
 3. **位置**: GeoJSON 格式
 4. **认证**: 认证占位符 (根据部署实现)
+5. **uniCloud**: 方法使用下划线命名 (tools_list, tools_call)
 
 ---
 
-**版本**: 2.0.0  
+**版本**: 2.1.0  
 **更新**: 2026-03-20  
 **MCP 规范**: https://modelcontextprotocol.io/

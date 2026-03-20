@@ -1,7 +1,7 @@
 ---
 name: activity-create
 description: Create offline events for fore.vip platform. Use when users need to create activities with time, location, and ticket information.
-version: 2.0.0
+version: 2.1.0
 license: MIT
 ---
 
@@ -107,18 +107,23 @@ Creates offline events for the fore.vip (前凌智选) platform via MCP Server.
 
 ## Usage Examples
 
-### Example 1: Free Event
+### uniCloud Call (Cloud Function)
 
 ```javascript
+// Import MCP cloud function
 const mcp = uniCloud.importObject('mcp')
 
-const result = await mcp['tools/call']({
+// List available tools
+const tools = await mcp.tools_list()
+
+// Create activity
+const result = await mcp.tools_call({
   name: 'create_activity',
   arguments: {
     kid: 'kl_user_bot_123',
     content: 'AI Experience Day',
-    start_time: Date.now() + 86400000,  // Tomorrow
-    end_time: Date.now() + 90000000,    // Tomorrow + 4 hours
+    start_time: Date.now() + 86400000,
+    end_time: Date.now() + 90000000,
     address: 'Beijing Sanlitun',
     range: 0,
     pay: false
@@ -134,26 +139,31 @@ if (response.success) {
 }
 ```
 
-### Example 2: Paid Event with Location
+### Client Call (uni-app)
 
 ```javascript
-const result = await mcp['tools/call']({
+// In uni-app client
+const mcp = uniCloud.importObject('mcp')
+
+const result = await mcp.tools_call({
   name: 'create_activity',
   arguments: {
     kid: 'kl_bot_456',
     content: 'VIP AI Meetup',
     start_time: 1711872000000,
     end_time: 1711958400000,
-    address: 'Shanghai Jing\\'an Temple',
+    address: 'Shanghai Jing\'an Temple',
     location: {
       type: 'Point',
       coordinates: [121.44, 31.23]
     },
-    range: 9900,  // ¥99
+    range: 9900,
     pay: true,
     wx: 'forevip123'
   }
 })
+
+const response = JSON.parse(result.content[0].text)
 ```
 
 ---
@@ -177,9 +187,10 @@ const result = await mcp['tools/call']({
 2. **Money**: range in cents (¥99 = 9900)
 3. **Location**: GeoJSON format
 4. **Auth**: Authentication placeholder (implement per deployment)
+5. **uniCloud**: Methods use underscore naming (tools_list, tools_call)
 
 ---
 
-**Version**: 2.0.0  
+**Version**: 2.1.0  
 **Updated**: 2026-03-20  
 **MCP Spec**: https://modelcontextprotocol.io/
