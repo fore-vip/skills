@@ -1,10 +1,11 @@
 # Fore-Vip Agent Skills 集合
 
-[![Version](https://img.shields.io/badge/version-0.0.2-blue)](https://github.com/fore-vip/skills)
+[![Skills](https://img.shields.io/badge/skills-fore--vip%2Fskills-blue)](https://skills.sh/github/fore-vip/skills)
+[![Version](https://img.shields.io/badge/version-0.0.3-blue)](https://github.com/fore-vip/skills)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-1.0-orange)](https://modelcontextprotocol.io/)
 
-为 前凌智选 (fore.vip) 平台创建的 Agent 技能集合。
+为前凌智选 (fore.vip) 平台创建的 Agent 技能集合。
 
 **中文** | **[English Version](README.md)**
 
@@ -14,7 +15,7 @@
 
 | 技能 | 说明 | 版本 | 安装命令 |
 |------|------|------|----------|
-| [activity-create](skills/activity-create/SKILL.md) | 创建 前凌智选线下活动 | v0.0.2 | `npx skills add fore-vip/skills -s activity-create` |
+| [activity-create](activity-create/SKILL.md) | 创建前凌智选线下活动 | v0.0.3 | `npx skills add fore-vip/skills -s activity-create` |
 
 ---
 
@@ -43,6 +44,19 @@ npx skills add fore-vip/skills -s activity-create
 npx skills add fore-vip/skills --list
 ```
 
+### 安装到指定 Agent
+
+```bash
+# 安装到 Claude Code
+npx skills add fore-vip/skills -a claude-code
+
+# 安装到多个 Agent
+npx skills add fore-vip/skills -a claude-code -a cursor -a opencode
+
+# 全局安装（所有项目可用）
+npx skills add fore-vip/skills -g
+```
+
 ---
 
 ## 🧪 测试
@@ -50,7 +64,7 @@ npx skills add fore-vip/skills --list
 ### 测试 MCP 端点
 
 ```bash
-# 获取工具列表
+# 列出可用工具
 curl https://api.fore.vip/mcp/tools/list
 
 # 创建活动
@@ -62,7 +76,7 @@ curl -X POST https://api.fore.vip/mcp/tools/call \
       "content": "测试活动",
       "start_time": 1711094400000,
       "end_time": 1711108800000,
-      "address": "北京",
+      "address": "北京市朝阳区",
       "range": 0,
       "pay": false
     }
@@ -77,7 +91,7 @@ curl -X POST https://api.fore.vip/mcp/tools/call \
 |------|------|------|
 | 基础功能 | ✅ 3 | 3 |
 | 错误处理 | ✅ 3 | 3 |
-| 边界测试 | ✅ 1 | 1 |
+| 边界情况 | ✅ 1 | 1 |
 
 ---
 
@@ -85,19 +99,22 @@ curl -X POST https://api.fore.vip/mcp/tools/call \
 
 ```
 skills/
-├── README.md                 # 英文版
-├── README_cn.md              # 中文版 (本文件)
+├── README.md                 # 英文说明
+├── README_cn.md              # 中文说明（本文件）
 ├── README_ACTIVITY.md        # activity-create 使用指南
 ├── LICENSE
 ├── SKILL_TEMPLATE.md         # SKILL.md 标准模板
 ├── PUBLISH_GUIDE.md          # 发布指南
-└── skills/
-    ├── activity-create/
-    │   ├── SKILL.md          # 英文技能文档
-    │   ├── SKILL_cn.md       # 中文技能文档
-    │   ├── TEST_CONVERSATION.md  # 对话测试
-    │   └── test_local.sh     # 本地测试脚本
-    └── ...                   # 更多技能
+├── DOCUMENTATION.md          # MCP 文档
+└── activity-create/
+    ├── SKILL.md              # 英文技能文档
+    ├── SKILL_cn.md           # 中文技能文档
+    ├── INSTALL.md            # 安装指南（中文）
+    ├── INSTALL_en.md         # 安装指南（英文）
+    ├── README.md             # 技能说明（中文）
+    ├── README_en.md          # 技能说明（英文）
+    ├── TEST_CONVERSATION.md  # 对话测试
+    └── test_local.sh         # 本地测试脚本
 ```
 
 ---
@@ -107,8 +124,8 @@ skills/
 ### 1. 创建技能结构
 
 ```bash
-mkdir -p skills/你的技能名称
-cd skills/你的技能名称
+mkdir -p your-skill-name
+cd your-skill-name
 ```
 
 ### 2. 编写 SKILL.md
@@ -117,13 +134,13 @@ cd skills/你的技能名称
 
 ```markdown
 ---
-name: 你的技能名称
+name: your-skill-name
 description: 技能功能描述
 version: 0.0.1
 license: MIT
 ---
 
-## 说明
+## 描述
 ...
 
 ## 参数
@@ -136,12 +153,12 @@ license: MIT
 ### 3. 本地测试
 
 ```bash
-bash skills/activity-create/test_local.sh
+bash your-skill-name/test_local.sh
 ```
 
 ### 4. 提交 PR
 
-1. 提交你的修改
+1. 提交更改
 2. 创建 Pull Request
 3. 等待审核
 
@@ -152,15 +169,17 @@ bash skills/activity-create/test_local.sh
 | 项目 | 说明 |
 |------|------|
 | [前凌智选](https://fore.vip) | 主平台 |
-| [MCP 服务器](https://api.fore.vip/mcp) | MCP API 端点 |
-| [文档](https://doc.fore.vip) | 平台文档 |
+| [MCP Server](https://api.fore.vip/mcp) | MCP API 端点 |
+| [项目文档](https://doc.fore.vip) | 平台文档 |
+| [法律文档](https://doc.fore.vip/legal/) | 服务条款与隐私政策 |
 
 ---
 
 ## 🔗 资源链接
 
 - **MCP 规范**: https://modelcontextprotocol.io/
-- **skills.sh**: https://skills.sh
+- **skills.sh 目录**: https://skills.sh/github/fore-vip/skills
+- **Agent Skills 规范**: https://agentskills.io
 - **uniCloud 文档**: https://doc.dcloud.net.cn/uniCloud/
 
 ---
@@ -173,8 +192,9 @@ MIT License - 详见 [LICENSE](LICENSE)
 
 **官网**: https://fore.vip  
 **文档**: https://doc.fore.vip  
-**API**: https://api.fore.vip/mcp
+**API**: https://api.fore.vip/mcp  
+**Skills**: https://skills.sh/github/fore-vip/skills
 
 ---
 
-*最后更新：2026-03-20*
+*最后更新：2026-03-21*
