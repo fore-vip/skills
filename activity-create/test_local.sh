@@ -1,106 +1,81 @@
 #!/bin/bash
 
-# 本地测试 activity-create skill
-# 模拟 npx skills add fore-vip/skills -s activity-create
+# activity-create skill 本地测试脚本
+# 用于验证 MCP Server 调用逻辑
 
-echo "███████╗██╗ ██╗██╗██╗ ██╗ ███████╗"
-echo "██╔════╝██║ ██╔╝██║██║ ██║ ██╔════╝"
-echo "███████╗█████╔╝ ██║██║ ██║ ███████╗"
-echo "╚════██║██╔═██╗ ██║██║ ██║ ╚════██║"
-echo "███████║██║ ██╗██║███████╗███████║"
-echo "╚══════╝╚═╝ ╚═╝╚═╝╚══════╝╚══════╝"
-echo ""
-echo "Testing activity-create skill locally..."
+echo "========================================="
+echo "activity-create skill 本地测试"
+echo "========================================="
 echo ""
 
-# 检查 SKILL.md 是否存在
-SKILL_FILE="/Users/codes/git/ai/skills/activity-create/SKILL.md"
+# MCP 端点
+MCP_URL="https://api.fore.vip/mcp/create_activity"
 
-if [ ! -f "$SKILL_FILE" ]; then
-    echo "❌ SKILL.md not found at: $SKILL_FILE"
-    exit 1
-fi
+echo "测试 1: 创建活动（成功场景）"
+echo "-------------------------------------------"
 
-echo "✅ SKILL.md found"
-echo ""
-
-# 解析 SKILL.md 头部信息
-echo "📦 Skill Information:"
-echo "─────────────────────────────────────"
-grep -A 5 "^---" "$SKILL_FILE" | grep -E "^(name|description|version|license):" | sed 's/^/   /'
-echo ""
-
-# 测试 MCP 端点
-echo "🧪 Testing MCP Endpoints:"
-echo "─────────────────────────────────────"
-
-# 测试 1: tools/list
-echo -n "1. GET /mcp/tools/list ... "
-TOOLS_RESPONSE=$(curl -s https://api.fore.vip/mcp/tools/list)
-if echo "$TOOLS_RESPONSE" | grep -q '"jsonrpc":"2.0"'; then
-    echo "✅ Pass"
-else
-    echo "❌ Fail"
-    echo "   Response: $TOOLS_RESPONSE"
-fi
-
-# 测试 2: tools/call (创建测试活动)
-echo -n "2. POST /mcp/tools/call ... "
-TEST_RESPONSE=$(curl -s -X POST https://api.fore.vip/mcp/tools/call \
+RESPONSE=$(curl -s -X POST "$MCP_URL" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "create_activity",
-    "arguments": {
-      "content": "本地测试活动",
-      "start_time": 1711094400000,
-      "end_time": 1711108800000,
-      "address": "测试地址",
-      "range": 0,
-      "pay": false
-    }
+    "content": "skill 测试活动",
+    "start_time": 1711094400000,
+    "address": "测试地址",
+    "wx": "test123"
   }')
 
-if echo "$TEST_RESPONSE" | grep -q '"success":true'; then
-    echo "✅ Pass"
-    ACTIVITY_ID=$(echo "$TEST_RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['content'][0]['text'])" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
-    echo "   Activity ID: $ACTIVITY_ID"
+echo "响应：$RESPONSE" | jq .
+
+if echo "$RESPONSE" | jq -e '.success == true' > /dev/null 2>&1; then
+    echo "✅ 测试 1 通过：创建活动成功"
+    ACTIVITY_ID=$(echo "$RESPONSE" | jq -r '.id')
+    echo "活动 ID: $ACTIVITY_ID"
+    echo "活动 URL: https://fore.vip/st?id=$ACTIVITY_ID"
 else
-    echo "❌ Fail"
-    echo "   Response: $TEST_RESPONSE"
+    echo "❌ 测试 1 失败：创建活动失败"
+    echo "错误：$(echo "$RESPONSE" | jq -r '.error.message')"
 fi
 
 echo ""
-echo "─────────────────────────────────────"
-echo ""
+echo "测试 2: 参数验证（content 太短）"
+echo "-------------------------------------------"
 
-# 显示文档路径
-echo "📚 Documentation:"
-echo "   - SKILL.md:        $SKILL_FILE"
-echo "   - SKILL_cn.md:     /Users/codes/git/ai/skills/activity-create/SKILL_cn.md"
-echo "   - Test Plan:       /Users/codes/.jvs/.openclaw/workspace/MCP_TEST_PLAN.md"
-echo "   - Test Report:     /Users/codes/.jvs/.openclaw/workspace/MCP_TEST_REPORT.md"
-echo ""
+RESPONSE=$(curl -s -X POST "$MCP_URL" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "A",
+    "start_time": 1711094400000,
+    "address": "测试地址",
+    "wx": "test123"
+  }')
 
-# 模拟对话示例
-echo "💬 Example Conversation:"
-echo "─────────────────────────────────────"
-echo "User: 我想创建一个周末 AI 体验活动"
-echo ""
-echo "Assistant: 好的！我来帮你创建这个 AI 体验活动。请问："
-echo "   1. 活动什么时候开始？(日期和具体时间)"
-echo "   2. 预计持续多久？(结束时间)"
-echo "   3. 活动地点在哪里？(可选)"
-echo "   4. 是否收取门票？(可选)"
-echo ""
-echo "─────────────────────────────────────"
-echo ""
+echo "响应：$RESPONSE" | jq .
 
-# 安装说明
-echo "📦 Installation (when published):"
-echo "   npx skills add fore-vip/skills -s activity-create"
-echo ""
-echo "   Or with flags:"
-echo "   npx skills add fore-vip/skills -s activity-create --yes --global"
-echo ""
+if echo "$RESPONSE" | jq -e '.success == false' > /dev/null 2>&1; then
+    echo "✅ 测试 2 通过：参数验证正确"
+else
+    echo "❌ 测试 2 失败：应该拒绝短 content"
+fi
 
-echo "✅ Local test completed!"
+echo ""
+echo "测试 3: 参数验证（缺少必需参数）"
+echo "-------------------------------------------"
+
+RESPONSE=$(curl -s -X POST "$MCP_URL" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "测试活动",
+    "start_time": 1711094400000
+  }')
+
+echo "响应：$RESPONSE" | jq .
+
+if echo "$RESPONSE" | jq -e '.success == false' > /dev/null 2>&1; then
+    echo "✅ 测试 3 通过：缺少参数验证正确"
+else
+    echo "❌ 测试 3 失败：应该拒绝缺少必需参数的请求"
+fi
+
+echo ""
+echo "========================================="
+echo "测试完成"
+echo "========================================="
