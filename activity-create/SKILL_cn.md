@@ -14,8 +14,8 @@ license: MIT
 ## MCP 工具
 
 **工具名称**: `create_activity`  
-**服务器**: `fore-vip-mcp`  
-**端点**: `https://api.fore.vip/mcp`
+**服务器**: `fore-vip`  
+**端点**: `https://api.fore.vip/tools`
 
 ---
 
@@ -50,7 +50,7 @@ license: MIT
 ### 获取工具列表
 
 ```bash
-curl https://api.fore.vip/mcp/tools/list
+curl https://api.fore.vip/tools/list
 ```
 
 **响应**:
@@ -85,7 +85,7 @@ curl https://api.fore.vip/mcp/tools/list
 ### 调用工具
 
 ```bash
-curl -X POST https://api.fore.vip/mcp/tools/call \
+curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "create_activity",
@@ -136,7 +136,7 @@ curl -X POST https://api.fore.vip/mcp/tools/call \
 
 ```javascript
 // 创建活动
-const result = await fetch('https://api.fore.vip/mcp/tools/call', {
+const result = await fetch('https://api.fore.vip/tools/call', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -304,5 +304,5 @@ if (range < 0) {
 **版本**: 0.0.3  
 **更新**: 2026-03-20  
 **MCP 规范**: https://modelcontextprotocol.io/  
-**API**: https://api.fore.vip/mcp  
+**API**: https://api.fore.vip/tools  
 **平台**: https://fore.vip
