@@ -1,11 +1,11 @@
 # Fore-Vip Agent Skills Collection
 
 [![Skills](https://img.shields.io/badge/skills-fore--vip%2Fskills-blue)](https://skills.sh/github/fore-vip/skills)
-[![Version](https://img.shields.io/badge/version-0.0.3-blue)](https://github.com/fore-vip/skills)
+[![Version](https://img.shields.io/badge/version-0.0.4-blue)](https://github.com/fore-vip/skills)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![MCP](https://img.shields.io/badge/MCP-1.0-orange)](https://modelcontextprotocol.io/)
+[![MCP](https://img.shields.io/badge/MCP-Server-orange)](https://modelcontextprotocol.io/)
 
-A collection of Agent skills created for the Fore-Vip (fore.vip) platform.
+A collection of Agent skills for the Fore-Vip (fore.vip) platform.
 
 **[中文版本](README_cn.md)** | **English**
 
@@ -13,188 +13,112 @@ A collection of Agent skills created for the Fore-Vip (fore.vip) platform.
 
 ## 📦 Available Skills
 
-| Skill | Description | Version | Install Command |
-|-------|-------------|---------|-----------------|
-| [activity-create](activity-create/SKILL.md) | Create offline events for fore.vip platform | v0.0.3 | `npx skills add fore-vip/skills -s activity-create` |
+| Skill | Description | Version | Install |
+|-------|-------------|---------|---------|
+| [activity-create](activity-create/) | Create offline events for fore.vip platform via MCP Server | v0.0.4 | `npx skills add fore-vip/skills -s activity-create` |
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
-
-- Node.js >= 16
-- npm or npx installed
-
-### Install All Skills
+### Install Skill
 
 ```bash
-npx skills add fore-vip/skills
+# Install specific skill
+npx skills add fore-vip/skills --skill activity-create
+
+# Install all skills
+npx skills add fore-vip/skills --all
 ```
 
-### Install Single Skill
+### Usage
 
+Once installed, AI agents can automatically use this skill when you ask to:
+- Create an offline event
+- Publish an activity on fore.vip
+- Schedule a meetup
+
+---
+
+## 🔧 MCP Server
+
+**Endpoint**: `https://api.fore.vip/mcp`
+
+**Available Methods**:
+- `POST /mcp/create_activity` - Create offline event
+- `POST /mcp/query_kl` - Query products
+
+**Example**:
 ```bash
-npx skills add fore-vip/skills -s activity-create
+curl -X POST https://api.fore.vip/mcp/create_activity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "AI Weekend Meetup",
+    "start_time": 1711094400000,
+    "address": "Beijing Sanlitun",
+    "wx": "forevip123"
+  }'
 ```
 
-### List Available Skills
-
-```bash
-npx skills add fore-vip/skills --list
+**Response**:
+```json
+{
+  "success": true,
+  "id": "69bf8d848a5c785fa8c566cd",
+  "url": "https://fore.vip/st?id=69bf8d848a5c785fa8c566cd"
+}
 ```
 
-### Install to Specific Agents
+---
 
-```bash
-# Install to Claude Code
-npx skills add fore-vip/skills -a claude-code
+## 📚 Documentation
 
-# Install to multiple agents
-npx skills add fore-vip/skills -a claude-code -a cursor -a opencode
-
-# Global install (available across all projects)
-npx skills add fore-vip/skills -g
-```
+- **[MCP Specification](https://modelcontextprotocol.io/)** - Model Context Protocol
+- **[skills.sh](https://skills.sh/)** - Agent Skills Directory
+- **[Fore-Vip](https://fore.vip/)** - Platform Website
 
 ---
 
 ## 🧪 Testing
 
-### Test MCP Endpoints
-
 ```bash
-# List available tools
-curl https://api.fore.vip/mcp/tools/list
-
-# Create activity
-curl -X POST https://api.fore.vip/mcp/tools/call \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "create_activity",
-    "arguments": {
-      "content": "Test Event",
-      "start_time": 1711094400000,
-      "end_time": 1711108800000,
-      "address": "Beijing",
-      "range": 0,
-      "pay": false
-    }
-  }'
-```
-
-### Test Status
-
-✅ **All tests passed** (7/7)
-
-| Category | Passed | Total |
-|----------|--------|-------|
-| Basic Functionality | ✅ 3 | 3 |
-| Error Handling | ✅ 3 | 3 |
-| Edge Cases | ✅ 1 | 1 |
-
----
-
-## 📁 Directory Structure
-
-```
-skills/
-├── README.md                 # This file (English)
-├── README_cn.md              # Chinese version
-├── README_ACTIVITY.md        # activity-create usage guide
-├── LICENSE
-├── SKILL_TEMPLATE.md         # SKILL.md Standard Template
-├── PUBLISH_GUIDE.md          # Publishing Guide
-├── DOCUMENTATION.md          # MCP Documentation
-└── activity-create/
-    ├── SKILL.md              # English skill doc
-    ├── SKILL_cn.md           # Chinese skill doc
-    ├── INSTALL.md            # Installation guide (CN)
-    ├── INSTALL_en.md         # Installation guide (EN)
-    ├── README.md             # Skill README (CN)
-    ├── README_en.md          # Skill README (EN)
-    ├── TEST_CONVERSATION.md  # Conversation tests
-    └── test_local.sh         # Local test script
-```
-
----
-
-## 🛠️ Developing New Skills
-
-### 1. Create Skill Structure
-
-```bash
-mkdir -p activity-create
+# Run local tests
 cd activity-create
+./test_local.sh
 ```
 
-### 2. Write SKILL.md
-
-Follow the [SKILL_TEMPLATE.md](SKILL_TEMPLATE.md) format:
-
-```markdown
----
-name: your-skill-name
-description: What your skill does
-version: 0.0.1
-license: MIT
 ---
 
-## Description
-...
+## 📝 Version History
 
-## Parameters
-...
+### v0.0.4 (2026-03-22)
+- ✅ Update to MCP Server standard
+- ✅ Simplify SKILL.md format to follow skills.sh
+- ✅ Add test_local.sh script
+- ✅ Update endpoint to `/mcp/create_activity`
 
-## Usage Examples
-...
-```
-
-### 3. Test Locally
-
-```bash
-bash activity-create/test_local.sh
-```
-
-### 4. Submit PR
-
-1. Commit your changes
-2. Create a pull request
-3. Wait for review
+### v0.0.3 (2026-03-20)
+- ✅ Initial release
+- ✅ Basic activity creation
 
 ---
 
-## 📚 Related Projects
+## 🤝 Contributing
 
-| Project | Description |
-|---------|-------------|
-| [Fore-Vip](https://fore.vip) | Main Platform |
-| [MCP Server](https://api.fore.vip/mcp) | MCP API Endpoints |
-| [Documentation](https://doc.fore.vip) | Platform Docs |
-| [Legal Docs](https://doc.fore.vip/legal/) | Terms & Privacy |
-
----
-
-## 🔗 Resources
-
-- **MCP Specification**: https://modelcontextprotocol.io/
-- **skills.sh Directory**: https://skills.sh/github/fore-vip/skills
-- **Agent Skills Spec**: https://agentskills.io
-- **uniCloud Docs**: https://doc.dcloud.net.cn/uniCloud/
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
 
 ---
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) for details
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
+**Maintainer**: wise  
 **Website**: https://fore.vip  
-**Documentation**: https://doc.fore.vip  
-**API**: https://api.fore.vip/mcp  
-**Skills**: https://skills.sh/github/fore-vip/skills
-
----
-
-*Last updated: 2026-03-21*
+**API**: https://api.fore.vip/mcp

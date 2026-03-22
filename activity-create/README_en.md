@@ -1,191 +1,191 @@
 # activity-create Skill
 
-[![Skills](https://img.shields.io/badge/skills-fore--vip%2Fskills-blue)](https://skills.sh/github/fore-vip/skills)
-[![Version](https://img.shields.io/badge/version-v0.0.3-blue)](https://github.com/fore-vip/skills)
-[![Download](https://img.shields.io/badge/download-extension-blue)](https://f.fore.vip/download/fore-ex-v1.1.zip)
-[![MCP](https://img.shields.io/badge/MCP-supported-green)](https://modelcontextprotocol.io/)
+[![Version](https://img.shields.io/badge/version-0.0.4-blue)](https://github.com/fore-vip/skills/tree/main/activity-create)
+[![License](https://img.shields.io/badge/license-MIT-green)](../LICENSE)
 
-Agent skill for creating offline events on fore.vip platform via MCP protocol.
+Create offline events for the fore.vip platform via MCP Server.
 
 ---
 
-## Overview
+## 📋 Description
 
-`activity-create` is an MCP (Model Context Protocol) skill that enables AI assistants to help users create offline events through natural language conversations.
-
-**Core Features**:
-- Create events via conversation
-- Support for time, location, and ticket configuration
-- Natural language interaction
-- Auto-redirect to event detail page
+This skill enables AI agents to create offline events on the fore.vip platform. It handles event scheduling, location management, and contact information collection.
 
 ---
 
-## Quick Start
-
-### Installation
-
-#### Option 1: Install via npx
+## 🚀 Installation
 
 ```bash
-npx skills add fore-vip/skills -s activity-create
+# Install from GitHub
+npx skills add fore-vip/skills --skill activity-create
+
+# Install from local path
+npx skills add /path/to/skills --skill activity-create
 ```
 
-#### Option 2: Global Installation
+---
+
+## 🔧 MCP Server Configuration
+
+**Endpoint**: `https://api.fore.vip/mcp/create_activity`  
+**Method**: `POST`  
+**Content-Type**: `application/json`
+
+---
+
+## 📝 Parameters
+
+### Required
+
+| Parameter | Type | Description | Example |
+|-----------|------|-------------|---------|
+| `content` | string | Event description (min 2 chars) | `"AI Weekend Meetup"` |
+| `start_time` | number | Start timestamp (ms) | `1711094400000` |
+| `address` | string | Event location address | `"Beijing Sanlitun"` |
+| `wx` | string | Contact WeChat ID | `"forevip123"` |
+
+### Optional
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `end_time` | number | - | End timestamp (ms) |
+| `location` | object | - | GeoJSON coordinates |
+| `range` | number | `0` | Ticket price in cents |
+| `pay` | boolean | `false` | Is paid event |
+| `url` | string | - | External link URL |
+
+---
+
+## 💡 Usage Examples
+
+### Basic Event Creation
+
+```javascript
+const response = await fetch('https://api.fore.vip/mcp/create_activity', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    content: 'AI Weekend Meetup',
+    start_time: Date.now() + 86400000,
+    address: 'Beijing Sanlitun',
+    wx: 'forevip123'
+  })
+});
+
+const result = await response.json();
+console.log('Event created:', result.url);
+```
+
+### With All Parameters
+
+```javascript
+const event = {
+  content: 'Premium AI Conference',
+  start_time: 1711872000000,
+  end_time: 1711958400000,
+  address: 'Shanghai Jing\\'an Temple',
+  location: {
+    type: 'Point',
+    coordinates: [121.44, 31.23]
+  },
+  wx: 'forevip123',
+  range: 9900,  // ¥99
+  pay: true,
+  url: 'https://example.com'
+};
+```
+
+---
+
+## 📊 Response Format
+
+### Success
+
+```json
+{
+  "success": true,
+  "id": "69bf8d848a5c785fa8c566cd",
+  "url": "https://fore.vip/st?id=69bf8d848a5c785fa8c566cd"
+}
+```
+
+### Error
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "FunctionBizError",
+    "message": "Parameter content must be at least 2 characters"
+  }
+}
+```
+
+---
+
+## ⚠️ Error Handling
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `Parameter content must be at least 2 characters` | Content too short | Provide longer description |
+| `Missing required parameter: start_time` | No start time | Add start_time field |
+| `Missing required parameter: address` | No address | Add address field |
+| `Missing required parameter: wx` | No contact | Add wx field |
+
+---
+
+## 🧪 Testing
 
 ```bash
-npx skills add fore-vip/skills -s activity-create -g
+# Run local tests
+cd activity-create
+./test_local.sh
 ```
 
-#### Option 3: Install to Specific Agent
-
-```bash
-# Claude Code
-npx skills add fore-vip/skills -s activity-create -a claude-code
-
-# Cursor
-npx skills add fore-vip/skills -s activity-create -a cursor
-
-# OpenCode
-npx skills add fore-vip/skills -s activity-create -a opencode
-```
+**Test Cases**:
+- ✅ Create event (success scenario)
+- ✅ Parameter validation (short content)
+- ✅ Parameter validation (missing required fields)
 
 ---
 
-## Usage Examples
+## 📚 Related Resources
 
-### Basic Usage
-
-```
-User: I want to create an AI tech sharing event
-Assistant: Sure, please provide the event name, time, location...
-```
-
-### Complete Conversation Example
-
-```
-User: Create a weekend book club event
-
-Assistant: I'll help you create the event. Please provide:
-- Event Name: Weekend Book Club
-- Start Time: 2026-03-28 14:00
-- End Time: 2026-03-28 17:00
-- Location: Sanlitun, Chaoyang District, Beijing
-- Ticket Price: Free
-
-Event created successfully! View details: https://fore.vip/st?id=xxx
-```
+- **[MCP Specification](https://modelcontextprotocol.io/)** - Protocol docs
+- **[skills.sh](https://skills.sh/)** - Skills directory
+- **[Fore-Vip](https://fore.vip/)** - Platform website
+- **[API Docs](https://api.fore.vip/mcp)** - MCP API
 
 ---
 
-## Parameters
+## 📝 Version History
 
-### MCP Tool: `create_activity`
+### v0.0.4 (2026-03-22)
+- ✅ Update to MCP Server standard
+- ✅ Simplify SKILL.md format
+- ✅ Add test script
+- ✅ Update endpoint to `/mcp/create_activity`
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `content` | string | Yes | Event name/description |
-| `start_time` | number | Yes | Start timestamp (milliseconds) |
-| `end_time` | number | No | End timestamp (milliseconds) |
-| `address` | string | Yes | Event address |
-| `range` | number | No | Ticket price in cents (default: 0) |
-| `pay` | boolean | No | Payment required visibility (default: false) |
+### v0.0.3 (2026-03-20)
+- ✅ Initial release
 
 ---
 
-## Architecture
+## 🤝 Contributing
 
-```
-┌─────────────┐
-│   AI Agent  │
-│  (Claude/   │
-│   Cursor)   │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│ SKILL.md    │
-│ (Event Logic)│
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│ MCP Server  │
-│ api.fore.vip│
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│ UniCloud DB │
-│ (act collect)│
-└─────────────┘
-```
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a PR
 
 ---
 
-## Testing
+## 📄 License
 
-### Local Test
-
-```bash
-bash test_local.sh
-```
-
-### Online Test
-
-```bash
-# Test MCP endpoint
-curl https://api.fore.vip/mcp/tools/list
-
-# Test create activity
-curl -X POST https://api.fore.vip/mcp/tools/call \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "create_activity",
-    "arguments": {
-      "content": "Test Event",
-      "start_time": 1711094400000,
-      "address": "Beijing"
-    }
-  }'
-```
+MIT License - see [LICENSE](../LICENSE) file.
 
 ---
 
-## Files
-
-```
-activity-create/
-├── SKILL.md           # Main skill doc (English)
-├── SKILL_cn.md        # Main skill doc (Chinese)
-├── README.md          # Chinese documentation
-├── README_en.md       # This file (English docs)
-├── INSTALL.md         # Installation guide (CN)
-├── INSTALL_en.md      # Installation guide (EN)
-├── test_local.sh      # Local test script
-└── TEST_CONVERSATION.md  # Conversation test cases
-```
-
----
-
-## Links
-
-| Resource | URL |
-|----------|-----|
-| Fore.Vip Official | https://fore.vip |
-| MCP Server | https://api.fore.vip/mcp |
-| Documentation | https://doc.fore.vip |
-| Legal Docs | https://doc.fore.vip/legal/ |
-| Chrome Extension | https://f.fore.vip/download/fore-ex-v1.1.zip |
-
----
-
-## License
-
-MIT License
-
----
-
-**Version**: v0.0.3  
-**Last Updated**: 2026-03-21  
-**Maintainer**: Fore-Zhixiang (Shenzhen) Technology Co., Ltd.
+**Maintainer**: wise  
+**Last Updated**: 2026-03-22
