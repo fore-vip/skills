@@ -1,8 +1,48 @@
 # MCP Skills 文档索引
 
 **项目**: 前凌智选 (fore.vip)  
-**最后更新**: 2026-03-23  
-**版本**: 0.0.4
+**最后更新**: 2026-03-24  
+**版本**: 0.0.6
+
+---
+
+## 🔐 认证 (Authentication)
+
+### Open Key 获取方式
+
+**中文**:
+1. 在 [fore.vip](https://fore.vip) 平台注册/登录
+2. 进入 **用户中心** → **API 设置**
+3. 生成或复制你的 **Open Key**
+4. 在请求头中包含 Open Key
+
+**English**:
+1. Register/Login on [fore.vip](https://fore.vip)
+2. Go to **User Center** → **API Settings**
+3. Generate/copy your **Open Key**
+4. Include in request headers
+
+### Header 格式
+
+使用以下**任一**格式：
+
+```http
+Authorization: Bearer <your_open_key>
+```
+
+或
+
+```http
+X-Open-Key: <your_open_key>
+```
+
+### 认证要求
+
+| 工具 | 认证 | 说明 |
+|------|------|------|
+| `create_activity` | 🔐 需要 | 创建活动需认证 |
+| `create_kl` | 🔐 需要 | 发布产品需认证 |
+| `query_kl` | ❌ 公开 | 查询产品无需认证 |
 
 ---
 
@@ -26,7 +66,7 @@
 │  - create_activity(params)              │
 │  - query_kl(params)                     │
 │  - create_kl(params)                    │
-│  职责：纯业务逻辑，不管协议格式            │
+│  职责：纯业务逻辑，从 Header 获取 Open Key   │
 └─────────────────────────────────────────┘
 ```
 
@@ -35,18 +75,19 @@
 ```
 /Users/codes/git/ai/fore/uniCloud-aliyun/cloudfunctions/
 ├── tools/
-│   └── index.obj.js          # MCP 协议层（tools_list, tools_call）
+│   └── index.obj.js          # MCP 协议层
 └── mcp/
-    └── index.obj.js          # 业务逻辑层（create_activity, query_kl, create_kl）
+    └── index.obj.js          # 业务逻辑层（含 Open Key 验证）
 ```
 
 ---
 
 ## 🧩 可用工具
 
-### create_activity (v0.0.3)
+### create_activity (v0.0.6)
 
 **MCP 工具**: `create_activity`  
+**认证**: 🔐 需要 Open Key
 
 #### 必需参数 (4 个)
 
@@ -57,7 +98,7 @@
 | `address` | string | 活动地址 |
 | `wx` | string | 联系方式 (微信) |
 
-#### 可选参数 (6 个)
+#### 可选参数
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
@@ -69,37 +110,40 @@
 
 ---
 
-### product (v0.0.2)
+### product (v0.0.3)
 
-**MCP 工具**: `query_kl`, `create_kl`  
+**MCP 工具**: `query_kl`, `create_kl`
 
 #### query_kl - 查询产品
 
-**可选参数** (3 个):
+**认证**: ❌ 公开（无需认证）
+
+**可选参数**:
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `tag` | string | - | 产品标签过滤 |
-| `limit` | number | 20 | 最大返回结果数 (1-100) |
-| `skip` | number | 0 | 分页跳过的结果数 |
+| `tag` | string | - | 产品标签 |
+| `limit` | number | 20 | 最大结果数 (1-100) |
+| `skip` | number | 0 | 分页跳过数 |
 
 #### create_kl - 发布产品
 
-**必需参数** (3 个):
+**认证**: 🔐 需要 Open Key
+
+**必需参数**:
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | `name` | string | 产品名称 (≥2 字符) |
 | `content` | string | 产品描述 (≥10 字符) |
-| `user` | string | 创建者用户 ID |
 
-**可选参数** (4 个):
+**可选参数**:
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `pic` | string[] | [] | 图片 URL 数组 |
 | `tag` | string | "推荐" | 产品标签 |
-| `hot` | number | 0 | 热度分数 |
+| `hot` | number | 0 | 热度 |
 | `url` | string | "" | 外部链接 |
 
 ---
@@ -114,52 +158,52 @@ https://api.fore.vip
 
 ### 端点列表
 
-| 端点 | 方法 | 说明 | 云对象 |
-|------|------|------|--------|
-| `/tools/list` | GET | 获取 MCP 工具列表 | tools |
-
-### 协议
-
-- **规范**: Model Context Protocol (MCP)
-- **格式**: JSON-RPC 2.0
+| 端点 | 方法 | 认证 | 说明 |
+|------|------|------|------|
+| `/tools/list` | GET | ❌ | 获取工具列表 |
+| `/mcp/create_activity` | POST | 🔐 | 创建活动 |
+| `/mcp/create_kl` | POST | 🔐 | 发布产品 |
+| `/mcp/query_kl` | POST | ❌ | 查询产品 |
 
 ---
 
 ## 📖 使用示例
 
-### 获取工具列表
+### 创建活动（带认证）
 
 ```bash
-curl https://api.fore.vip/tools/list
+curl -X POST https://api.fore.vip/mcp/create_activity \
+  -H "Authorization: Bearer YOUR_OPEN_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "AI 技术分享会",
+    "start_time": 1711094400000,
+    "address": "北京三里屯",
+    "wx": "forevip123"
+  }'
 ```
 
-### 调用工具
+### 查询产品（无需认证）
 
 ```bash
-# 发布产品
+curl -X POST https://api.fore.vip/mcp/query_kl \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "create_kl",
-    "arguments": {
-      "name": "AI 智能助手",
-      "content": "这是一款强大的 AI 智能助手产品，可以帮助您高效完成各种任务。",
-      "user": "6437c73e09e2988160cb54f6",
-      "pic": ["https://example.com/image.jpg"],
-      "tag": "推荐",
-      "hot": 0,
-      "url": "https://example.com"
-    }
+    "tag": "推荐",
+    "limit": 10
   }'
+```
 
-# 查询产品
+### 发布产品（带认证）
+
+```bash
+curl -X POST https://api.fore.vip/mcp/create_kl \
+  -H "Authorization: Bearer YOUR_OPEN_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "query_kl",
-    "arguments": {
-      "tag": "推荐",
-      "limit": 10,
-      "skip": 0
-    }
+    "name": "AI 智能助手",
+    "content": "强大的 AI 助手产品",
+    "tag": "推荐"
   }'
 ```
 
@@ -174,7 +218,7 @@ curl https://api.fore.vip/tools/list
   _id: "产品 ID",
   name: "产品名称",
   content: "产品描述",
-  pic: ["图片 URL 数组"],
+  pic: ["图片 URL"],
   tag: "标签",
   hot: 0,
   url: "外部链接",
@@ -188,20 +232,17 @@ curl https://api.fore.vip/tools/list
 ```javascript
 {
   _id: "活动 ID",
-  kid: "关联机器人 ID",
+  kid: "关联产品 ID",
   user: "创建者 ID",
   content: "活动介绍",
   start_time: 1711094400000,
   end_time: 1711108800000,
-  address: "地址文本",
+  address: "地址",
   location: { type: "Point", coordinates: [经度，纬度] },
   range: 0,
   pay: false,
-  url: "",
-  wx: "",
-  type: 0,
-  hot: 0,
-  create_date: 1711000000000
+  wx: "微信",
+  hot: 0
 }
 ```
 
@@ -209,19 +250,19 @@ curl https://api.fore.vip/tools/list
 
 ## 📝 更新日志
 
+### v0.0.6 (2026-03-24)
+
+- ✅ 新增 Open Key 认证文档
+- ✅ 说明 Header 格式（Authorization / X-Open-Key）
+- ✅ 标注每个工具的认证要求
+- ✅ 中英文文档同步更新
+
 ### v0.0.4 (2026-03-23)
 
-- ✅ 新增 `create_kl` 工具 - 发布产品功能
-- ✅ **架构重构**: 分离 tools (协议层) 和 mcp (业务层)
-- ✅ tools 云对象：处理 JSON-RPC 2.0 协议
-- ✅ mcp 云对象：纯业务逻辑
-
-### v0.0.3 (2026-03-20)
-
-- ✅ 修正必需参数：`content`, `start_time`, `address`, `wx`
-- ✅ 更新错误代码表
+- ✅ 新增 `create_kl` 工具
+- ✅ 架构重构：分离 tools 和 mcp
 
 ---
 
 **维护者**: wise · 严谨专业版  
-**联系方式**: forevip123 (微信)
+**微信**: forevip123

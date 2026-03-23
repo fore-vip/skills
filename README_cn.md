@@ -1,124 +1,110 @@
 # Fore-Vip Agent Skills 集合
 
 [![Skills](https://img.shields.io/badge/skills-fore--vip%2Fskills-blue)](https://skills.sh/github/fore-vip/skills)
-[![Version](https://img.shields.io/badge/version-0.0.4-blue)](https://github.com/fore-vip/skills)
+[![Version](https://img.shields.io/badge/version-0.0.6-blue)](https://github.com/fore-vip/skills)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-Server-orange)](https://modelcontextprotocol.io/)
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-Compatible-purple)](https://openclaw.ai/)
+[![Hub](https://img.shields.io/badge/Hub-Integration-cyan)](https://hub.ai/)
 
-为 Fore-Vip (fore.vip) 平台创建的 AI 智能体技能集合。
+🤖 **AI 智能体技能**集合，为 **前凌智选 (fore.vip)** 平台打造。兼容 **OpenClaw**、**Hub** 和 **MCP Server** 协议。
 
 **English** | **[中文版本](README_cn.md)**
 
 ---
 
+## 🔥 热门关键词
+
+**AI 智能体** | **技能** | **MCP Server** | **OpenClaw** | **Hub** | **产品** | **活动** | **fore.vip** | **产品目录** | **线下活动**
+
+---
+
 ## 📦 可用技能
 
-| 技能 | 说明 | 版本 | 安装命令 |
-|------|------|------|----------|
-| [activity-create](activity-create/) | 通过 MCP Server 为 fore.vip 平台创建线下活动 | v0.0.4 | `npx skills add fore-vip/skills -s activity-create` |
+| 技能 | 说明 | 版本 | 安装 |
+|------|------|------|------|
+| [🎯 activity-create](activity-create/) | 创建线下活动，需要 **Open Key** 认证 | v0.0.6 | `npx skills add fore-vip/skills -s activity-create` |
+| [📦 product](product/) | 查询产品目录，`query_kl` 公开，`create_kl` 需 **Open Key** | v0.0.3 | `npx skills add fore-vip/skills -s product` |
 
 ---
 
-## 🚀 快速开始
+## 🔐 认证 (Open Key)
 
-### 安装技能
+部分 MCP 端点需要 **Open Key 认证**。
 
-```bash
-# 安装特定技能
-npx skills add fore-vip/skills --skill activity-create
+### 如何获取 Open Key
 
-# 安装所有技能
-npx skills add fore-vip/skills --all
+1. 在 [fore.vip](https://fore.vip) 平台 **注册/登录**
+2. 进入 **用户中心** → **API 设置**
+3. **生成**或**复制**你的 **Open Key**
+4. 在请求头中包含 Open Key
+
+### Header 格式
+
+使用以下**任一**格式：
+
+```http
+Authorization: Bearer <your_open_key>
 ```
 
-### 使用方式
+或
 
-安装后，AI 智能体在以下场景会自动使用此技能：
-- 创建线下活动
-- 在 fore.vip 发布活动
-- 安排聚会
+```http
+X-Open-Key: <your_open_key>
+```
+
+### 认证要求
+
+| 端点 | 认证 |
+|------|------|
+| `create_activity` | 🔐 需要 |
+| `create_kl` | 🔐 需要 |
+| `query_kl` | ❌ 公开 |
+| `/tools/list` | ❌ 公开 |
 
 ---
 
-## 🔧 MCP Server
+## 🌐 MCP Server 配置
 
-**端点**: `https://api.fore.vip/mcp`
+**基础端点**: `https://api.fore.vip/mcp`
 
-**可用方法**:
-- `POST /mcp/create_activity` - 创建线下活动
-- `POST /mcp/query_kl` - 查询产品
+| 端点 | 方法 | 认证 | 说明 |
+|------|------|------|------|
+| `/mcp/create_activity` | POST | 🔐 | 创建活动 |
+| `/mcp/create_kl` | POST | 🔐 | 发布产品 |
+| `/mcp/query_kl` | POST | ❌ | 查询产品 |
+| `/tools/list` | GET | ❌ | 工具列表 |
 
-**示例**:
+### 示例（带认证）
+
 ```bash
 curl -X POST https://api.fore.vip/mcp/create_activity \
+  -H "Authorization: Bearer YOUR_OPEN_KEY" \
   -H "Content-Type: application/json" \
-  -d '{
-    "content": "AI 周末聚会",
-    "start_time": 1711094400000,
-    "address": "北京三里屯",
-    "wx": "forevip123"
-  }'
-```
-
-**响应**:
-```json
-{
-  "success": true,
-  "id": "69bf8d848a5c785fa8c566cd",
-  "url": "https://fore.vip/st?id=69bf8d848a5c785fa8c566cd"
-}
+  -d '{"content":"AI 技术分享会","start_time":1711094400000,"address":"北京","wx":"forevip123"}'
 ```
 
 ---
 
 ## 📚 文档
 
-- **[MCP 规范](https://modelcontextprotocol.io/)** - Model Context Protocol
-- **[skills.sh](https://skills.sh/)** - Agent 技能目录
-- **[Fore-Vip](https://fore.vip/)** - 平台官网
-
----
-
-## 🧪 测试
-
-```bash
-# 运行本地测试
-cd activity-create
-./test_local.sh
-```
+- **[MCP 规范](https://modelcontextprotocol.io/)**
+- **[skills.sh](https://skills.sh/)**
+- **[OpenClaw](https://openclaw.ai/)**
+- **[前凌智选](https://fore.vip/)**
 
 ---
 
 ## 📝 版本历史
 
-### v0.0.4 (2026-03-22)
-- ✅ 更新为 MCP Server 标准
-- ✅ 简化 SKILL.md 格式，符合 skills.sh 规范
-- ✅ 添加 test_local.sh 测试脚本
-- ✅ 更新端点为 `/mcp/create_activity`
+### v0.0.6 (2026-03-24) - Open Key 认证
+- ✅ 添加 Open Key 认证文档
+- ✅ 更新所有技能的认证要求
 
-### v0.0.3 (2026-03-20)
-- ✅ 初始版本
-- ✅ 基础活动创建功能
+### v0.0.5 (2026-03-22) - SEO 优化
+- ✅ SEO 优化所有文档
 
 ---
 
-## 🤝 贡献
-
-1. Fork 仓库
-2. 创建特性分支
-3. 提交更改
-4. 推送到分支
-5. 创建 Pull Request
-
----
-
-## 📄 许可证
-
-MIT License - 详见 [LICENSE](LICENSE) 文件
-
----
-
-**维护者**: wise  
-**官网**: https://fore.vip  
-**API**: https://api.fore.vip/mcp
+**版本**: 0.0.6 | **更新**: 2026-03-24  
+**维护者**: wise · 严谨专业版
