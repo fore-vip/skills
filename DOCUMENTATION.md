@@ -2,7 +2,7 @@
 
 **项目**: 前凌智选 (fore.vip)  
 **最后更新**: 2026-03-24  
-**版本**: 0.0.7
+**版本**: 0.0.8
 
 ---
 
@@ -36,41 +36,53 @@ X-Open-Key: <your_open_key>
 
 ---
 
-## 🚀 一键发布 (Auto Publish) - v0.0.7 新功能
+## 🚀 智能发布 (Smart Publish) - v0.0.8
 
-### 功能说明
+### ⚠️ 重要说明
 
-用户只需提供**标签**，Agent 自动完成：
-1. 查询该标签下最热门的产品
-2. 提取产品信息作为模板
-3. 显示预览并请求用户确认
-4. 自动填充所有字段并提交发布
+**内容来源**: 外部来源（**不是**现有产品数据库）
+
+**原因**: 避免循环依赖（不能先查询产品再发布同样的产品）
+
+### 内容来源
+
+| 来源 | 说明 | 适用场景 |
+|------|------|----------|
+| **AI 生成** | AI 根据标签创作内容 | 通用产品发布 |
+| **搜索引擎** | Google/Bing 搜索结果 | 分享真实产品 |
+| **会话上下文** | 用户对话中提到的内容 | 用户描述的产品 |
+| **GitHub** | 热门开源项目 | 技术类分享 |
+| **Product Hunt** | 每日热门产品 | 新产品发现 |
+| **其他技能** | copywriting 等技能 | 专业内容生成 |
 
 ### 工作流程
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  1. 用户提供标签                                          │
-│     用户："发布一个 推荐 标签的产品"                        │
+│  1. 用户请求发布产品                                      │
+│     用户："发布一个 AI 工具 标签的产品"                    │
 └───────────────────┬─────────────────────────────────────┘
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────┐
-│  2. Agent 调用 query_kl(tag="推荐", limit=1)              │
-│     获取最热门产品                                        │
+│  2. Agent 选择内容来源                                    │
+│     - AI 生成（默认）                                     │
+│     - 搜索引擎                                          │
+│     - 会话上下文                                        │
+│     - GitHub/Product Hunt                               │
 └───────────────────┬─────────────────────────────────────┘
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────┐
-│  3. Agent 提取产品信息                                    │
-│     {name, content, pic, tag, hot, url}                 │
+│  3. 获取/生成产品信息                                    │
+│     {name, content, pic, tag, url}                      │
 └───────────────────┬─────────────────────────────────────┘
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────┐
 │  4. Agent 显示预览                                        │
-│     "找到：AI 文案助手 (热度：21307866)                   │
-│      是否以此模板发布？(确认/取消)"                       │
+│     "📦 产品预览：名称、描述、标签...                    │
+│      是否确认发布？(确认/取消)"                          │
 └───────────────────┬─────────────────────────────────────┘
                     │
                     ▼
@@ -81,7 +93,7 @@ X-Open-Key: <your_open_key>
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────┐
-│  6. Agent 调用 create_kl 自动填充所有字段                   │
+│  6. Agent 调用 create_kl 发布                              │
 │     POST /mcp/create_kl                                 │
 └───────────────────┬─────────────────────────────────────┘
                     │
@@ -93,150 +105,173 @@ X-Open-Key: <your_open_key>
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Agent 实现伪代码
+---
+
+## 🤖 Agent 实现方案
+
+### 方案 1: AI 生成（推荐）
 
 ```javascript
-async function autoPublishKl(tag, openKey) {
-  // Step 1: 查询最热门产品
-  const queryRes = await fetch('https://api.fore.vip/mcp/query_kl', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tag, limit: 1, skip: 0 })
-  });
-  const queryData = await queryRes.json();
+async function smartPublish(tag, openKey) {
+  // Step 1: AI 生成内容
+  const aiPrompt = `
+为标签"${tag}"生成一个产品介绍：
+- 产品名称（有吸引力）
+- 产品描述（50-100 字）
+- 建议的图片关键词
+- 外部链接（如有）
+  `;
   
-  if (!queryData.success || queryData.total === 0) {
-    throw new Error(`标签"${tag}"下没有找到产品`);
-  }
+  const aiResponse = await callLLM(aiPrompt);
+  const product = parseAIResponse(aiResponse);
   
-  // Step 2: 提取模板
-  const template = queryData.data[0];
-  
-  // Step 3: 显示预览
+  // Step 2: 显示预览
   console.log(`
-🔍 找到热门产品：
-- 名称：${template.name}
-- 热度：${template.hot}
-- 标签：${template.tag}
-- 描述：${template.content.substring(0, 50)}...
-- 图片：${template.pic?.length || 0} 张
+📦 产品预览:
+- 名称：${product.name}
+- 描述：${product.content}
+- 标签：${tag}
 
-是否以此模板发布？(回复"确认"或"取消")
+是否确认发布？(确认/取消)
   `);
   
-  // Step 4: 等待用户确认
-  const confirmed = await waitForUserConfirmation();
-  if (!confirmed) return;
+  // Step 3: 等待确认
+  if (!await confirm()) return;
   
-  // Step 5: 发布
-  const createRes = await fetch('https://api.fore.vip/mcp/create_kl', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${openKey}`
-    },
-    body: JSON.stringify({
-      name: template.name,
-      content: template.content,
-      pic: template.pic || [],
-      tag: template.tag,
-      hot: template.hot || 0,
-      url: template.url || ''
-    })
-  });
-  const createData = await createRes.json();
-  
-  return createData;
+  // Step 4: 发布
+  return await create_kl(product, openKey);
 }
 ```
 
-### 用户对话示例
+### 方案 2: 搜索引擎
 
-**场景 1：发布推荐产品**
+```javascript
+async function publishFromSearch(topic, openKey) {
+  // Step 1: 搜索
+  const results = await search(`best ${topic} tools 2026`);
+  
+  // Step 2: 提取信息
+  const product = {
+    name: results[0].title,
+    content: results[0].snippet,
+    url: results[0].url,
+    tag: topic
+  };
+  
+  // Step 3: 确认并发布
+  // ...
+}
+```
+
+### 方案 3: 会话上下文
+
+```javascript
+async function publishFromContext(history, openKey) {
+  // Step 1: 分析对话
+  const info = extractProductFromChat(history);
+  
+  // Step 2: AI 补全
+  const product = await aiFill(info);
+  
+  // Step 3: 确认并发布
+  // ...
+}
+```
+
+### 方案 4: GitHub Trending
+
+```javascript
+async function publishGitHubTrending(lang, openKey) {
+  // Step 1: 获取热门
+  const repos = await fetch('https://api.github.com/trending');
+  
+  // Step 2: 格式化
+  const product = {
+    name: repos[0].name,
+    content: repos[0].description,
+    url: repos[0].html_url,
+    tag: lang || '开源'
+  };
+  
+  // Step 3: 确认并发布
+  // ...
+}
+```
+
+---
+
+## 📖 用户对话示例
+
+### 示例 1: AI 生成
 
 ```
-用户：帮我发布一个"推荐"标签的产品
+用户：帮我发布一个"AI 工具"标签的产品
 
 Agent: 
-🔍 正在查找"推荐"标签下最热门产品...
+🤖 正在为您生成"AI 工具"相关产品内容...
 
-找到：AI 文案助手 (热度：21307866)
-- 描述：请你扮演一个优质 AI 文案助手...
-- 图片：2 张
-- 标签：推荐
+📦 产品预览:
+- 名称：智能写作助手 Pro
+- 描述：基于最新 AI 技术的写作助手，支持多语言、风格调整、语法检查。
+- 标签：AI 工具
 
-是否以此模板发布？(确认/取消)
+是否确认发布？(确认/取消)
 
 用户：确认
 
 Agent:
 ✅ 发布成功！
-产品 ID: 69c17ea8c3b5c9fe38676a89
-链接：https://fore.vip/p?id=69c17ea8c3b5c9fe38676a89
+产品 ID: xxx
+链接：https://fore.vip/p?id=xxx
 ```
 
-**场景 2：标签下无产品**
+### 示例 2: 搜索引擎
 
 ```
-用户：发布一个"不存在的标签"的产品
+用户：发布一个"Notion 替代品"的产品
 
 Agent:
-❌ 抱歉，标签"不存在的标签"下没有找到产品。
-请尝试其他标签，如：推荐、热门、游戏、AI 等。
-```
+🔍 正在搜索"Notion 替代品 2026"...
 
-**场景 3：用户取消**
+找到：Anytype
+- 描述：Local-first, E2E encrypted note-taking app
+- 链接：https://anytype.io
 
-```
-用户：发布一个"推荐"标签的产品
+是否发布？(确认/取消)
 
-Agent:
-🔍 找到：AI 文案助手 (热度：21307866)
-是否以此模板发布？(确认/取消)
-
-用户：取消
+用户：确认
 
 Agent:
-好的，已取消发布。
+✅ 发布成功！
 ```
 
----
-
-## 🏗️ 架构说明
-
-### 职责分离
+### 示例 3: 会话上下文
 
 ```
-┌─────────────────────────────────────────┐
-│  tools (协议层)                          │
-│  - list() → 返回 MCP 工具列表             │
-│  - call(params) → 调用工具               │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  mcp (业务层)                            │
-│  - create_activity(params)              │
-│  - query_kl(params)                     │
-│  - create_kl(params)                    │
-│  职责：纯业务逻辑，从 Header 获取 Open Key   │
-└─────────────────────────────────────────┘
+用户：我想分享 Cursor，是个 AI 代码编辑器，很好用！
+
+[... 对话继续 ...]
+
+用户：把刚才说的 Cursor 发布到平台
+
+Agent:
+📦 根据对话内容整理:
+- 名称：Cursor
+- 描述：AI 代码编辑器，支持智能补全
+- 标签：AI 工具
+- 链接：https://cursor.sh
+
+是否发布？(确认/取消)
+
+用户：确认
+
+Agent:
+✅ 发布成功！
 ```
 
 ---
 
 ## 🧩 可用工具
-
-### create_activity (v0.0.6)
-
-**认证**: 🔐 需要 Open Key
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `content` | string | 活动介绍 (≥2 字符) |
-| `start_time` | number | 开始时间戳 |
-| `address` | string | 活动地址 |
-| `wx` | string | 联系方式 |
 
 ### query_kl (v0.0.3)
 
@@ -246,7 +281,7 @@ Agent:
 |------|------|------|------|
 | `tag` | string | - | 产品标签 |
 | `limit` | number | 20 | 最大结果数 |
-| `skip` | number | 0 | 分页跳过 |
+| `skip` | number | 0 | 分页 |
 
 ### create_kl (v0.0.3)
 
@@ -256,7 +291,7 @@ Agent:
 |------|------|------|
 | `name` | string | 产品名称 (≥2 字符) |
 | `content` | string | 产品描述 (≥10 字符) |
-| `pic` | string[] | 图片 URL 数组 |
+| `pic` | string[] | 图片 URL |
 | `tag` | string | 产品标签 |
 | `hot` | number | 热度 |
 | `url` | string | 外部链接 |
@@ -267,61 +302,29 @@ Agent:
 
 | 端点 | 方法 | 认证 | 说明 |
 |------|------|------|------|
-| `/tools/list` | GET | ❌ | 获取工具列表 |
-| `/mcp/create_activity` | POST | 🔐 | 创建活动 |
-| `/mcp/create_kl` | POST | 🔐 | 发布产品 |
+| `/tools/list` | GET | ❌ | 工具列表 |
 | `/mcp/query_kl` | POST | ❌ | 查询产品 |
-
----
-
-## 📖 使用示例
-
-### 一键发布（Agent 自动处理）
-
-```
-用户：发布一个"推荐"标签的产品
-
-Agent 自动执行:
-1. query_kl(tag="推荐", limit=1)
-2. 显示预览
-3. 用户确认
-4. create_kl(自动填充数据)
-5. 返回结果
-```
-
-### 手动发布
-
-```bash
-# 查询产品
-curl -X POST https://api.fore.vip/mcp/query_kl \
-  -H "Content-Type: application/json" \
-  -d '{"tag":"推荐","limit":10}'
-
-# 发布产品
-curl -X POST https://api.fore.vip/mcp/create_kl \
-  -H "Authorization: Bearer YOUR_OPEN_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "AI 智能助手",
-    "content": "强大的 AI 助手产品",
-    "tag": "推荐"
-  }'
-```
+| `/mcp/create_kl` | POST | 🔐 | 发布产品 |
+| `/mcp/create_activity` | POST | 🔐 | 创建活动 |
 
 ---
 
 ## 📝 更新日志
 
+### v0.0.8 (2026-03-24)
+
+- ✅ 修复循环依赖问题
+- ✅ 内容来自外部来源（AI、搜索、GitHub 等）
+- ✅ 多种发布方案
+- ✅ 完善文档
+
 ### v0.0.7 (2026-03-24)
 
-- ✅ 新增**一键发布**功能
-- ✅ Agent 可自动查询热门产品并填充
-- ✅ 用户确认机制
-- ✅ 完善的中英文文档
+- ⚠️ 已弃用（循环依赖）
 
 ### v0.0.6 (2026-03-24)
 
-- ✅ Open Key 认证文档
+- ✅ Open Key 认证
 
 ---
 
