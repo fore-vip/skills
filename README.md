@@ -88,7 +88,6 @@ Once installed, **AI agents** can automatically use these skills when you ask to
 | `/mcp/create_activity` | POST | activity-create | Create **offline event** / **activity** |
 | `/mcp/query_kl` | POST | product | Query **AI products** catalog |
 | `/tools/list` | GET | All | List available **MCP tools** |
-| `/tools/call` | POST | All | Call **MCP tool** (standard protocol) |
 
 ### Example: Create Activity
 

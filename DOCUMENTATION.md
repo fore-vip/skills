@@ -47,7 +47,6 @@
 ### create_activity (v0.0.3)
 
 **MCP 工具**: `create_activity`  
-**端点**: `https://api.fore.vip/tools/call`
 
 #### 必需参数 (4 个)
 
@@ -73,7 +72,6 @@
 ### product (v0.0.2)
 
 **MCP 工具**: `query_kl`, `create_kl`  
-**端点**: `https://api.fore.vip/tools/call`
 
 #### query_kl - 查询产品
 
@@ -119,7 +117,6 @@ https://api.fore.vip
 | 端点 | 方法 | 说明 | 云对象 |
 |------|------|------|--------|
 | `/tools/list` | GET | 获取 MCP 工具列表 | tools |
-| `/tools/call` | POST | 调用 MCP 工具 | tools |
 
 ### 协议
 
@@ -140,7 +137,6 @@ curl https://api.fore.vip/tools/list
 
 ```bash
 # 发布产品
-curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "create_kl",
@@ -156,7 +152,6 @@ curl -X POST https://api.fore.vip/tools/call \
   }'
 
 # 查询产品
-curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "query_kl",

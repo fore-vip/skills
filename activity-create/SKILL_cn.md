@@ -85,7 +85,6 @@ curl https://api.fore.vip/tools/list
 ### 调用工具
 
 ```bash
-curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "create_activity",
@@ -136,7 +135,6 @@ curl -X POST https://api.fore.vip/tools/call \
 
 ```javascript
 // 创建活动
-const result = await fetch('https://api.fore.vip/tools/call', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({

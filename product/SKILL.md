@@ -53,7 +53,6 @@ The **fore.vip MCP Server** provides two endpoints for **AI Agents** and **Skill
 | `/mcp/query_kl` | POST | Query **products** (direct) | ⭐⭐⭐⭐⭐ |
 | `/mcp/create_activity` | POST | Create **activities** (direct) | ⭐⭐⭐⭐⭐ |
 | `/tools/list` | GET | List tools (MCP standard) | ⭐⭐⭐ |
-| `/tools/call` | POST | Call tool (MCP standard) | ⭐⭐⭐ |
 
 ### Direct Call (Recommended for OpenClaw & Hub)
 
@@ -91,7 +90,6 @@ curl -X POST https://api.fore.vip/mcp/query_kl \
 ### Via Tools Protocol (MCP Standard for AI Agents)
 
 ```bash
-curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "query_kl",

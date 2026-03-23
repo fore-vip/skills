@@ -1,7 +1,7 @@
 ---
 name: activity-create
 description: AI Agents Skills - Create offline events and activities for fore.vip platform using MCP Server. Compatible with OpenClaw, Hub, and MCP protocols. Perfect for AI product launches, meetups, and community events.
-version: 0.0.5
+version: 0.0.6
 license: MIT
 keywords:
   - AI Agents
@@ -53,7 +53,6 @@ The **fore.vip MCP Server** provides endpoints for **AI Agents** and **Skills**:
 | `/mcp/create_activity` | POST | Create **activities** (direct) | ⭐⭐⭐⭐⭐ |
 | `/mcp/query_kl` | POST | Query **products** (direct) | ⭐⭐⭐⭐⭐ |
 | `/tools/list` | GET | List tools (MCP standard) | ⭐⭐⭐ |
-| `/tools/call` | POST | Call tool (MCP standard) | ⭐⭐⭐ |
 
 ## 📝 Required Parameters
 

@@ -24,7 +24,6 @@ curl https://api.fore.vip/mcp/tools/list
 ### 2. 创建活动
 
 ```bash
-curl -X POST https://api.fore.vip/mcp/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "create_activity",
@@ -70,7 +69,6 @@ curl -X POST https://api.fore.vip/mcp/tools/call \
 | 端点 | 方法 | 说明 |
 |------|------|------|
 | `/tools/list` | GET | 获取工具列表 |
-| `/tools/call` | POST | 调用工具 |
 
 ---
 

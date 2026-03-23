@@ -59,7 +59,6 @@
 | `/mcp/create_activity` | POST | Create activity | ⭐⭐⭐⭐⭐ |
 | `/mcp/query_kl` | POST | Query products | ⭐⭐⭐⭐⭐ |
 | `/tools/list` | GET | List tools | ⭐⭐⭐ |
-| `/tools/call` | POST | Call tool | ⭐⭐⭐ |
 
 ---
 

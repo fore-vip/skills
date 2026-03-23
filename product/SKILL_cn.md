@@ -15,7 +15,6 @@ license: MIT
 
 **工具名称**: `query_kl`, `create_kl`  
 **服务器**: `fore-vip-mcp`  
-**端点**: `https://api.fore.vip/tools/call`
 
 ---
 
@@ -64,7 +63,6 @@ curl https://api.fore.vip/tools/list
 
 ```bash
 # 查询产品
-curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "query_kl",
@@ -76,7 +74,6 @@ curl -X POST https://api.fore.vip/tools/call \
   }'
 
 # 发布产品
-curl -X POST https://api.fore.vip/tools/call \
   -H "Content-Type: application/json" \
   -d '{
     "name": "create_kl",

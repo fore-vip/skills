@@ -56,7 +56,6 @@
 
 **调用 MCP API**:
 ```bash
-POST https://api.fore.vip/mcp/tools/call
 {
   "name": "create_activity",
   "arguments": {
