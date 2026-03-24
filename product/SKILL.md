@@ -1,7 +1,7 @@
 ---
 name: product
 description: Query/create AI products. Smart publish with AI-generated content from external sources.
-version: 0.0.9
+version: 0.1.0
 license: MIT
 keywords:
   - AI Agents
