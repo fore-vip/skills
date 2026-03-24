@@ -1,7 +1,7 @@
 ---
 name: product
 description: Query/create AI products. Smart publish with AI-generated content from external sources.
-version: 0.0.8
+version: 0.0.9
 license: MIT
 keywords:
   - AI Agents
@@ -21,7 +21,7 @@ keywords:
 Query and create **AI products** on **fore.vip** platform.
 
 **Tools**: 
-- `query_kl` (public) - Query products by tag
+- `query_kl` (public) - Query products by tag or name
 - `create_kl` (🔐 requires Open Key) - Create/publish product
 - `smart_publish_kl` (🔐 requires Open Key) - **AI-powered auto-fill from external sources**
 
@@ -47,7 +47,7 @@ X-Open-Key: <your_open_key>
 
 ---
 
-## 🚀 Smart Publish (v0.0.8)
+## 🚀 Smart Publish (v0.0.9)
 
 **⚠️ Important**: Content is generated from **external sources**, NOT from existing products (avoids circular dependency).
 
@@ -77,13 +77,46 @@ User: "发布一个 AI 工具 标签的产品"
 3. Agent compiles product info:
    - name, content, pic, tag, url
    ↓
-4. Show preview for confirmation
+4. 🔍 Check if name exists (query_kl with name param)
    ↓
-5. User confirms
+5. If exists → Skip creation, return existing product
    ↓
-6. Call create_kl with collected data
+6. If not exists → Show preview for confirmation
+   ↓
+7. User confirms
+   ↓
+8. Call create_kl with collected data
    ↓
 ✅ Publish success!
+```
+
+### ⚠️ Duplicate Check Logic
+
+**Before creating a product, ALWAYS check if the name already exists:**
+
+```javascript
+async function smartPublish(tag, openKey) {
+  // Step 1: Generate product content using AI
+  const aiPrompt = `Generate a product description for tag "${tag}"`;
+  const aiResponse = await callLLM(aiPrompt);
+  const product = parseAIResponse(aiResponse);
+  
+  // Step 2: 🔍 Check if name exists
+  const existing = await query_kl({ name: product.name, limit: 1 });
+  
+  if (existing.data && existing.data.length > 0) {
+    // Name exists, skip creation
+    return {
+      skipped: true,
+      reason: 'Product name already exists',
+      existing: existing.data[0]
+    };
+  }
+  
+  // Step 3: Show preview & confirm
+  // Step 4: Publish
+  return await create_kl(product, openKey);
+}
 ```
 
 ---
@@ -101,15 +134,22 @@ User: "发布一个 AI 工具 标签的产品"
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `tag` | string | - | Product tag |
+| `name` | string | - | **Product name (fuzzy match, case-insensitive)** |
 | `limit` | number | 20 | Max results (1-100) |
 | `skip` | number | 0 | Pagination |
 
 #### Example
 
 ```bash
+# Query by tag
 curl -X POST https://api.fore.vip/mcp/query_kl \
   -H "Content-Type: application/json" \
   -d '{"tag":"推荐","limit":10}'
+
+# Query by name (fuzzy match)
+curl -X POST https://api.fore.vip/mcp/query_kl \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Cursor","limit":5}'
 ```
 
 ---
@@ -171,7 +211,18 @@ Generate a product description for tag "${tag}":
   const aiResponse = await callLLM(aiPrompt);
   const product = parseAIResponse(aiResponse);
   
-  // Step 2: Show preview
+  // Step 2: 🔍 Check if name exists
+  const existing = await query_kl({ name: product.name, limit: 1 });
+  
+  if (existing.data && existing.data.length > 0) {
+    return {
+      skipped: true,
+      reason: 'Product name already exists',
+      existing: existing.data[0]
+    };
+  }
+  
+  // Step 3: Show preview
   console.log(`
 📦 产品预览:
 - 名称：${product.name}
@@ -182,10 +233,10 @@ Generate a product description for tag "${tag}":
 是否确认发布？(确认/取消)
   `);
   
-  // Step 3: Wait for confirmation
+  // Step 4: Wait for confirmation
   if (!await confirm()) return;
   
-  // Step 4: Publish
+  // Step 5: Publish
   return await create_kl(product, openKey);
 }
 ```
@@ -209,7 +260,14 @@ async function publishFromSearch(topic, openKey) {
     tag: topic
   };
   
-  // Step 3: Confirm & publish
+  // Step 3: 🔍 Check if name exists
+  const existing = await query_kl({ name: product.name, limit: 1 });
+  
+  if (existing.data && existing.data.length > 0) {
+    return { skipped: true, existing: existing.data[0] };
+  }
+  
+  // Step 4: Confirm & publish
   // ...
 }
 ```
@@ -226,7 +284,14 @@ async function publishFromContext(sessionHistory, openKey) {
   // Step 2: Fill missing fields with AI
   const completeProduct = await aiFill(productInfo);
   
-  // Step 3: Confirm & publish
+  // Step 3: 🔍 Check if name exists
+  const existing = await query_kl({ name: completeProduct.name, limit: 1 });
+  
+  if (existing.data && existing.data.length > 0) {
+    return { skipped: true, existing: existing.data[0] };
+  }
+  
+  // Step 4: Confirm & publish
   // ...
 }
 ```
@@ -249,7 +314,14 @@ async function publishGitHubTrending(language, openKey) {
     tag: language || '开源'
   };
   
-  // Step 3: Confirm & publish
+  // Step 3: 🔍 Check if name exists
+  const existing = await query_kl({ name: product.name, limit: 1 });
+  
+  if (existing.data && existing.data.length > 0) {
+    return { skipped: true, existing: existing.data[0] };
+  }
+  
+  // Step 4: Confirm & publish
   // ...
 }
 ```
@@ -327,6 +399,21 @@ Agent:
 ✅ 发布成功！
 ```
 
+### Example 4: Duplicate Detection
+
+```
+User: 发布一个名为"智能写作助手"的产品
+
+Agent:
+🔍 检查产品名称...
+⚠️ 发现同名产品已存在：
+- 名称：智能写作助手
+- 描述：AI 驱动的写作工具
+- 链接：https://fore.vip/p?id=xxx
+
+跳过创建，使用现有产品。
+```
+
 ---
 
 ## ⚠️ Important Notes
@@ -335,6 +422,7 @@ Agent:
 2. **User Confirmation**: Always confirm before publishing
 3. **Data Accuracy**: Verify information from external sources
 4. **Copyright**: Respect original content ownership
+5. **🔍 Duplicate Check**: Always check if product name exists before creating
 
 ---
 
@@ -342,13 +430,40 @@ Agent:
 
 | Tool | Auth | Description |
 |------|------|-------------|
-| `query_kl` | ❌ Public | Query products |
+| `query_kl` | ❌ Public | Query products by tag or name |
 | `create_kl` | 🔐 Required | Create product |
 | `smart_publish_kl` | 🔐 Required | AI-powered publish |
 
 ---
 
+## 📢 Output Guidelines
+
+**Keep output minimal and focused:**
+
+- ✅ Only show final results (success/failure)
+- ✅ Skip intermediate steps unless errors occur
+- ✅ Use concise format for success messages
+- ✅ Include essential info only (ID, URL)
+
+**Example:**
+
+```
+✅ 发布成功！
+ID: xxx
+链接：https://fore.vip/p?id=xxx
+```
+
+---
+
 ## 📝 Version History
+
+### v0.0.9 (2026-03-24) - Duplicate Check + Minimal Output
+
+- ✅ Added `name` parameter to `query_kl` (fuzzy match)
+- ✅ **Mandatory duplicate check before creation**
+- ✅ Updated smart publish workflow with name validation
+- ✅ Added output guidelines (minimal, focused results)
+- ✅ Updated documentation with examples
 
 ### v0.0.8 (2026-03-24) - Smart Publish (External Sources)
 
@@ -367,4 +482,4 @@ Agent:
 
 ---
 
-**Version**: 0.0.8 | **Updated**: 2026-03-24
+**Version**: 0.0.9 | **Updated**: 2026-03-24
