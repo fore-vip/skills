@@ -1,29 +1,26 @@
 ---
 name: product
-description: Query/create AI products. Smart publish with AI-generated content from external sources.
-version: 0.1.0
+description: Batch push AI products. Create multiple products from external sources (AI, search, GitHub, etc.) without duplicate check.
+version: 2.0.0
 license: MIT
 keywords:
   - AI Agents
   - MCP Server
   - OpenClaw
-  - Product Catalog
+  - Batch Push
+  - Multiple Products
   - Auto Publish
-  - AI Generated
-  - 产品查询
-  - 智能发布
-  - AI 生成
   - fore.vip
 ---
 
-# Product Skill
+# Product Batch Push Skill
 
-Query and create **AI products** on **fore.vip** platform.
+**Batch push multiple AI products** to **fore.vip** platform. 
+
+**⚠️ Important**: This skill is for **BATCH PUSH ONLY**. No duplicate check, no query. Use `product-create` skill for single product with duplicate detection.
 
 **Tools**: 
-- `query_kl` (public) - Query products by tag or name
-- `create_kl` (🔐 requires Open Key) - Create/publish product
-- `smart_publish_kl` (🔐 requires Open Key) - **AI-powered auto-fill from external sources**
+- `create_kl` (🔐 requires Open Key) - Create/publish products in batch
 
 ## 🔐 Authentication
 
@@ -47,112 +44,36 @@ X-Open-Key: <your_open_key>
 
 ---
 
-## 🚀 Smart Publish (v0.0.9)
-
-**⚠️ Important**: Content is generated from **external sources**, NOT from existing products (avoids circular dependency).
-
-### Content Sources
-
-| Source | Description | Example |
-|--------|-------------|---------|
-| **AI Generation** | Generate content based on tag | "推荐" → AI creates product |
-| **Search Engine** | Search for popular products/tools | Search "AI tools 2026" |
-| **Session Context** | User's previous messages | Product described in chat |
-| **GitHub** | Trending repositories | GitHub trending |
-| **Product Hunt** | Daily hot products | ph.com trending |
-| **Other Skills** | Copywriting, etc. | Generate descriptions |
+## 🚀 Usage
 
 ### Workflow
 
 ```
-User: "发布一个 AI 工具 标签的产品"
+1. Prepare product list from external sources:
+   - AI generation (multiple products)
+   - Search engine results
+   - GitHub trending list
+   - Product Hunt hot products
    ↓
-1. Agent asks user for details OR
-2. Agent searches external sources:
-   - Search engine (Google/Bing)
-   - GitHub trending
-   - Product Hunt
-   - AI generation
+2. For each product in batch:
+   - Call create_kl directly
+   - No duplicate check
    ↓
-3. Agent compiles product info:
-   - name, content, pic, tag, url
+3. Return batch results
    ↓
-4. 🔍 Check if name exists (query_kl with name param)
-   ↓
-5. If exists → Skip creation, return existing product
-   ↓
-6. If not exists → Show preview for confirmation
-   ↓
-7. User confirms
-   ↓
-8. Call create_kl with collected data
-   ↓
-✅ Publish success!
+✅ Batch push complete!
 ```
 
-### ⚠️ Duplicate Check Logic
+### ⚠️ Important Rules
 
-**Before creating a product, ALWAYS check if the name already exists:**
-
-```javascript
-async function smartPublish(tag, openKey) {
-  // Step 1: Generate product content using AI
-  const aiPrompt = `Generate a product description for tag "${tag}"`;
-  const aiResponse = await callLLM(aiPrompt);
-  const product = parseAIResponse(aiResponse);
-  
-  // Step 2: 🔍 Check if name exists
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    // Name exists, skip creation
-    return {
-      skipped: true,
-      reason: 'Product name already exists',
-      existing: existing.data[0]
-    };
-  }
-  
-  // Step 3: Show preview & confirm
-  // Step 4: Publish
-  return await create_kl(product, openKey);
-}
-```
+1. **NO duplicate check** - This is batch push, duplicates handled externally
+2. **NO query_kl** - This skill only creates, doesn't query
+3. **Content MUST come from external sources** (AI, search, GitHub, etc.)
+4. **Batch size recommended**: 5-20 products per batch
 
 ---
 
 ## 🌐 MCP Endpoints
-
-### query_kl (Public)
-
-**URL**: `https://api.fore.vip/mcp/query_kl`  
-**Method**: `POST`  
-**Auth**: ❌ Public
-
-#### Parameters
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `tag` | string | - | Product tag |
-| `name` | string | - | **Product name (fuzzy match, case-insensitive)** |
-| `limit` | number | 20 | Max results (1-100) |
-| `skip` | number | 0 | Pagination |
-
-#### Example
-
-```bash
-# Query by tag
-curl -X POST https://api.fore.vip/mcp/query_kl \
-  -H "Content-Type: application/json" \
-  -d '{"tag":"推荐","limit":10}'
-
-# Query by name (fuzzy match)
-curl -X POST https://api.fore.vip/mcp/query_kl \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Cursor","limit":5}'
-```
-
----
 
 ### create_kl (Auth Required)
 
@@ -191,238 +112,117 @@ curl -X POST https://api.fore.vip/mcp/create_kl \
 
 ---
 
-## 🤖 Smart Publish Implementation
+## 🤖 Batch Push Implementation
 
-### Method 1: AI Generation (Recommended)
-
-**Use Case**: User provides tag, AI generates content
+### Example 1: Batch AI Generation
 
 ```javascript
-async function smartPublish(tag, openKey) {
-  // Step 1: Generate product content using AI
-  const aiPrompt = `
-Generate a product description for tag "${tag}":
-- Product name (creative, catchy)
-- Description (50-100 chars, engaging)
-- Suggested image keywords
-- External URL (if applicable)
-  `;
+async function batchPublish(tags, openKey) {
+  const results = [];
   
-  const aiResponse = await callLLM(aiPrompt);
-  const product = parseAIResponse(aiResponse);
-  
-  // Step 2: 🔍 Check if name exists
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return {
-      skipped: true,
-      reason: 'Product name already exists',
-      existing: existing.data[0]
-    };
+  for (const tag of tags) {
+    // Generate content using AI
+    const aiPrompt = `Generate a product for tag "${tag}"`;
+    const aiResponse = await callLLM(aiPrompt);
+    const product = parseAIResponse(aiResponse);
+    
+    // Create directly (no duplicate check)
+    const result = await create_kl(product, openKey);
+    results.push(result);
   }
   
-  // Step 3: Show preview
-  console.log(`
-📦 产品预览:
-- 名称：${product.name}
-- 描述：${product.content}
-- 标签：${tag}
-- 图片来源：AI 生成建议
-
-是否确认发布？(确认/取消)
-  `);
-  
-  // Step 4: Wait for confirmation
-  if (!await confirm()) return;
-  
-  // Step 5: Publish
-  return await create_kl(product, openKey);
+  return {
+    total: results.length,
+    success: results.filter(r => r.success).length,
+    results: results
+  };
 }
 ```
 
-### Method 2: Search Engine
-
-**Use Case**: Find real products/tools online
+### Example 2: Batch from GitHub Trending
 
 ```javascript
-async function publishFromSearch(topic, openKey) {
-  // Step 1: Search web
-  const searchQuery = `best ${topic} tools 2026`;
+async function batchGitHubTrending(openKey) {
+  // Fetch top 10 trending repos
+  const repos = await fetch('https://api.github.com/trending');
+  const top10 = repos.slice(0, 10);
+  
+  const results = [];
+  
+  for (const repo of top10) {
+    const product = {
+      name: repo.name,
+      content: repo.description,
+      url: repo.html_url,
+      tag: '开源'
+    };
+    
+    // Create directly (no duplicate check)
+    const result = await create_kl(product, openKey);
+    results.push(result);
+  }
+  
+  return {
+    total: results.length,
+    success: results.filter(r => r.success).length,
+    results: results
+  };
+}
+```
+
+### Example 3: Batch from Search Results
+
+```javascript
+async function batchFromSearch(topic, openKey) {
+  // Search for multiple products
+  const searchQuery = `top ${topic} tools 2026`;
   const results = await searchEngine(searchQuery);
   
-  // Step 2: Extract top result
-  const topResult = results[0];
-  const product = {
-    name: topResult.title,
-    content: topResult.snippet,
-    url: topResult.url,
+  const products = results.slice(0, 10).map(r => ({
+    name: r.title,
+    content: r.snippet,
+    url: r.url,
     tag: topic
+  }));
+  
+  // Batch create
+  const createResults = [];
+  for (const product of products) {
+    const result = await create_kl(product, openKey);
+    createResults.push(result);
+  }
+  
+  return {
+    total: createResults.length,
+    success: createResults.filter(r => r.success).length,
+    results: createResults
   };
-  
-  // Step 3: 🔍 Check if name exists
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return { skipped: true, existing: existing.data[0] };
-  }
-  
-  // Step 4: Confirm & publish
-  // ...
-}
-```
-
-### Method 3: Session Context
-
-**Use Case**: User described product in conversation
-
-```javascript
-async function publishFromContext(sessionHistory, openKey) {
-  // Step 1: Analyze conversation
-  const productInfo = extractProductFromChat(sessionHistory);
-  
-  // Step 2: Fill missing fields with AI
-  const completeProduct = await aiFill(productInfo);
-  
-  // Step 3: 🔍 Check if name exists
-  const existing = await query_kl({ name: completeProduct.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return { skipped: true, existing: existing.data[0] };
-  }
-  
-  // Step 4: Confirm & publish
-  // ...
-}
-```
-
-### Method 4: GitHub Trending
-
-**Use Case**: Share popular open-source projects
-
-```javascript
-async function publishGitHubTrending(language, openKey) {
-  // Step 1: Fetch GitHub trending
-  const repos = await fetch('https://api.github.com/trending');
-  const topRepo = repos[0];
-  
-  // Step 2: Format as product
-  const product = {
-    name: topRepo.name,
-    content: topRepo.description,
-    url: topRepo.html_url,
-    tag: language || '开源'
-  };
-  
-  // Step 3: 🔍 Check if name exists
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return { skipped: true, existing: existing.data[0] };
-  }
-  
-  // Step 4: Confirm & publish
-  // ...
 }
 ```
 
 ---
 
-## 📝 User Conversation Examples
+## 📝 Output Format
 
-### Example 1: AI Generation
-
-```
-User: 帮我发布一个"AI 工具"标签的产品
-
-Agent: 
-🤖 正在为您生成"AI 工具"相关产品内容...
-
-📦 产品预览:
-- 名称：智能写作助手 Pro
-- 描述：基于最新 AI 技术的写作助手，支持多语言、风格调整、语法检查，让您的写作更高效。
-- 标签：AI 工具
-- 图片来源：建议使用 AI 生成工具图标
-
-是否确认发布？(确认/取消)
-
-User: 确认
-
-Agent:
-✅ 发布成功！
-产品 ID: xxx
-链接：https://fore.vip/p?id=xxx
-```
-
-### Example 2: From Search
+**Batch result summary:**
 
 ```
-User: 发布一个关于"Notion 替代品"的产品
+✅ 批量推送完成！
+总计：10 个
+成功：8 个
+失败：2 个
 
-Agent:
-🔍 正在搜索"Notion 替代品 2026"...
-
-找到热门产品：Anytype
-- 描述：Local-first, E2E encrypted note-taking app
-- 链接：https://anytype.io
-- 来源：Product Hunt #1 today
-
-是否发布此产品？(确认/取消)
-
-User: 确认
-
-Agent:
-✅ 发布成功！
+成功列表:
+- Product A: https://fore.vip/p?id=xxx
+- Product B: https://fore.vip/p?id=yyy
+...
 ```
 
-### Example 3: From Context
+**Minimal format:**
 
 ```
-User: 我想分享一个很棒的 AI 工具，叫 Cursor，是一个 AI 代码编辑器
-
-[... conversation continues ...]
-
-User: 把刚才说的 Cursor 发布到平台上
-
-Agent:
-📦 根据对话内容整理:
-- 名称：Cursor
-- 描述：AI 代码编辑器，支持智能补全、代码生成
-- 标签：AI 工具
-- 链接：https://cursor.sh
-
-是否发布？(确认/取消)
-
-User: 确认
-
-Agent:
-✅ 发布成功！
+✅ 批量推送完成 (10/10)
 ```
-
-### Example 4: Duplicate Detection
-
-```
-User: 发布一个名为"智能写作助手"的产品
-
-Agent:
-🔍 检查产品名称...
-⚠️ 发现同名产品已存在：
-- 名称：智能写作助手
-- 描述：AI 驱动的写作工具
-- 链接：https://fore.vip/p?id=xxx
-
-跳过创建，使用现有产品。
-```
-
----
-
-## ⚠️ Important Notes
-
-1. **NO Circular Dependency**: Content comes from external sources, NOT from query_kl
-2. **User Confirmation**: Always confirm before publishing
-3. **Data Accuracy**: Verify information from external sources
-4. **Copyright**: Respect original content ownership
-5. **🔍 Duplicate Check**: Always check if product name exists before creating
 
 ---
 
@@ -430,56 +230,37 @@ Agent:
 
 | Tool | Auth | Description |
 |------|------|-------------|
-| `query_kl` | ❌ Public | Query products by tag or name |
-| `create_kl` | 🔐 Required | Create product |
-| `smart_publish_kl` | 🔐 Required | AI-powered publish |
+| `create_kl` | 🔐 Required | Batch create products |
+
+**Note**: `query_kl` is NOT part of this skill. Use `product-create` skill if you need duplicate detection.
 
 ---
 
-## 📢 Output Guidelines
+## 🔄 Skill Comparison
 
-**Keep output minimal and focused:**
-
-- ✅ Only show final results (success/failure)
-- ✅ Skip intermediate steps unless errors occur
-- ✅ Use concise format for success messages
-- ✅ Include essential info only (ID, URL)
-
-**Example:**
-
-```
-✅ 发布成功！
-ID: xxx
-链接：https://fore.vip/p?id=xxx
-```
+| Feature | `product` (this) | `product-create` |
+|---------|------------------|------------------|
+| **Purpose** | Batch push | Single create |
+| **Duplicate Check** | ❌ No | ✅ Yes |
+| **Query Tool** | ❌ No | ✅ Yes |
+| **Batch Size** | 5-20 products | 1 product |
+| **Use Case** | Bulk import | Careful single publish |
 
 ---
 
 ## 📝 Version History
 
-### v0.0.9 (2026-03-24) - Duplicate Check + Minimal Output
+### v2.0.0 (2026-03-30) - Batch Push Only
 
-- ✅ Added `name` parameter to `query_kl` (fuzzy match)
-- ✅ **Mandatory duplicate check before creation**
-- ✅ Updated smart publish workflow with name validation
-- ✅ Added output guidelines (minimal, focused results)
-- ✅ Updated documentation with examples
+- ✅ **Removed query_kl** - No longer part of this skill
+- ✅ **Removed duplicate check** - Batch push doesn't check duplicates
+- ✅ **Focused on batch creation** - Only create_kl tool
+- ✅ Split single-product functionality to `product-create` skill
 
-### v0.0.8 (2026-03-24) - Smart Publish (External Sources)
+### v0.0.9 (2026-03-24) - Deprecated
 
-- ✅ Fixed circular dependency issue
-- ✅ Content from external sources (AI, search, context, GitHub)
-- ✅ Added multiple publish methods
-- ✅ Updated documentation
-
-### v0.0.7 (2026-03-24) - Auto Publish
-
-- ⚠️ Deprecated: Used query_kl for content (circular dependency)
-
-### v0.0.6 (2026-03-24) - Open Key Auth
-
-- ✅ Added Open Key authentication
+- ⚠️ Old version with duplicate check (moved to `product-create`)
 
 ---
 
-**Version**: 0.0.9 | **Updated**: 2026-03-24
+**Version**: 2.0.0 | **Updated**: 2026-03-30

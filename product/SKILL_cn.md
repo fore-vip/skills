@@ -1,26 +1,26 @@
 ---
 name: product
-description: 查询/创建 AI 产品。智能发布，支持从外部来源自动生成内容。
-version: 0.1.0
+description: 批量推送 AI 产品。从外部来源创建多个产品，不查重。
+version: 2.0.0
 license: MIT
 keywords:
   - AI Agents
   - MCP Server
   - OpenClaw
-  - 产品目录
-  - 智能发布
-  - AI 生成
+  - 批量推送
+  - 多个产品
+  - 自动发布
   - fore.vip
 ---
 
-# 产品技能（Product Skill）
+# 产品批量推送技能
 
-在 **fore.vip** 平台上查询和创建 **AI 产品**。
+**批量推送多个 AI 产品**到 **fore.vip** 平台。
+
+**⚠️ 重要**：此技能仅用于**批量推送**。无查重、无查询。单个产品创建请使用 `product-create` 技能。
 
 **工具**:
-- `query_kl`（公开） - 按标签或名称查询产品
-- `create_kl`（🔐 需 Open Key） - 创建/发布产品
-- `smart_publish_kl`（🔐 需 Open Key） - **AI 智能补全发布**
+- `create_kl`（🔐 需 Open Key） - 批量创建/发布产品
 
 ## 🔐 认证方式
 
@@ -44,112 +44,36 @@ X-Open-Key: <your_open_key>
 
 ---
 
-## 🚀 智能发布（v0.0.9）
-
-**⚠️ 重要**：内容来自**外部来源**，而非已有产品（避免循环依赖）。
-
-### 内容来源
-
-| 来源 | 说明 | 示例 |
-|------|------|------|
-| **AI 生成** | 根据标签自动生成内容 | "推荐" → AI 创建产品 |
-| **搜索引擎** | 搜索热门工具/产品 | 搜索 "AI tools 2026" |
-| **对话上下文** | 用户之前提到的产品 | 聊天中描述的产品 |
-| **GitHub** | 热门开源项目 | GitHub trending |
-| **Product Hunt** | 每日热门产品 | ph.com trending |
-| **其他技能** | 文案生成等 | 生成描述文案 |
+## 🚀 使用说明
 
 ### 工作流程
 
 ```
-用户："发布一个"AI 工具"标签的产品"
+1. 从外部来源准备产品列表：
+   - AI 生成（多个产品）
+   - 搜索引擎结果
+   - GitHub trending 列表
+   - Product Hunt 热门产品
    ↓
-1. Agent 向用户询问详情，或
-2. Agent 搜索外部来源：
-   - 搜索引擎（Google/Bing）
-   - GitHub trending
-   - Product Hunt
-   - AI 生成
+2. 对每个产品：
+   - 直接调用 create_kl
+   - 不查重
    ↓
-3. Agent 整理产品信息：
-   - name, content, pic, tag, url
+3. 返回批量结果
    ↓
-4. 🔍 检查名称是否已存在（用 name 参数调用 query_kl）
-   ↓
-5. 如已存在 → 跳过创建，返回已有产品
-   ↓
-6. 如不存在 → 显示预览供确认
-   ↓
-7. 用户确认
-   ↓
-8. 调用 create_kl 提交数据
-   ↓
-✅ 发布成功！
+✅ 批量推送完成！
 ```
 
-### ⚠️ 重名检测逻辑
+### ⚠️ 重要规则
 
-**创建产品前，必须检查名称是否已存在：**
-
-```javascript
-async function smartPublish(tag, openKey) {
-  // 步骤 1：用 AI 生成产品内容
-  const aiPrompt = `根据标签 "${tag}" 生成产品描述`;
-  const aiResponse = await callLLM(aiPrompt);
-  const product = parseAIResponse(aiResponse);
-  
-  // 步骤 2：🔍 检查名称是否已存在
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    // 名称已存在，跳过创建
-    return {
-      skipped: true,
-      reason: '产品名称已存在',
-      existing: existing.data[0]
-    };
-  }
-  
-  // 步骤 3：显示预览 & 确认
-  // 步骤 4：发布
-  return await create_kl(product, openKey);
-}
-```
+1. **不查重** - 批量推送，外部处理重复
+2. **不使用 query_kl** - 此技能仅创建，不查询
+3. **内容必须来自外部来源**（AI、搜索、GitHub 等）
+4. **推荐批量大小**：每次 5-20 个产品
 
 ---
 
 ## 🌐 MCP 接口
-
-### query_kl（公开）
-
-**URL**: `https://api.fore.vip/mcp/query_kl`  
-**Method**: `POST`  
-**认证**: ❌ 公开
-
-#### 参数
-
-| 参数 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `tag` | string | - | 产品标签 |
-| `name` | string | - | **产品名称（模糊匹配，不区分大小写）** |
-| `limit` | number | 20 | 最大返回数量（1-100） |
-| `skip` | number | 0 | 分页偏移 |
-
-#### 示例
-
-```bash
-# 按标签查询
-curl -X POST https://api.fore.vip/mcp/query_kl \
-  -H "Content-Type: application/json" \
-  -d '{"tag":"推荐","limit":10}'
-
-# 按名称查询（模糊匹配）
-curl -X POST https://api.fore.vip/mcp/query_kl \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Cursor","limit":5}'
-```
-
----
 
 ### create_kl（需认证）
 
@@ -188,238 +112,117 @@ curl -X POST https://api.fore.vip/mcp/create_kl \
 
 ---
 
-## 🤖 智能发布实现
+## 🤖 批量推送实现
 
-### 方式一：AI 生成（推荐）
-
-**适用场景**：用户提供标签，AI 自动生成内容
+### 示例一：批量 AI 生成
 
 ```javascript
-async function smartPublish(tag, openKey) {
-  // 步骤 1：用 AI 生成产品内容
-  const aiPrompt = `
-根据标签 "${tag}" 生成产品描述：
-- 产品名称（创意、吸引人）
-- 产品描述（50-100 字，有吸引力）
-- 建议的图片关键词
-- 外部链接（如有）
-  `;
+async function batchPublish(tags, openKey) {
+  const results = [];
   
-  const aiResponse = await callLLM(aiPrompt);
-  const product = parseAIResponse(aiResponse);
-  
-  // 步骤 2：🔍 检查名称是否已存在
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return {
-      skipped: true,
-      reason: '产品名称已存在',
-      existing: existing.data[0]
-    };
+  for (const tag of tags) {
+    // 用 AI 生成内容
+    const aiPrompt = `根据标签 "${tag}" 生成产品`;
+    const aiResponse = await callLLM(aiPrompt);
+    const product = parseAIResponse(aiResponse);
+    
+    // 直接创建（不查重）
+    const result = await create_kl(product, openKey);
+    results.push(result);
   }
   
-  // 步骤 3：显示预览
-  console.log(`
-📦 产品预览:
-- 名称：${product.name}
-- 描述：${product.content}
-- 标签：${tag}
-- 图片来源：AI 生成建议
-
-是否确认发布？(确认/取消)
-  `);
-  
-  // 步骤 4：等待确认
-  if (!await confirm()) return;
-  
-  // 步骤 5：发布
-  return await create_kl(product, openKey);
+  return {
+    total: results.length,
+    success: results.filter(r => r.success).length,
+    results: results
+  };
 }
 ```
 
-### 方式二：搜索引擎
-
-**适用场景**：从网络查找真实产品/工具
+### 示例二：批量从 GitHub Trending
 
 ```javascript
-async function publishFromSearch(topic, openKey) {
-  // 步骤 1：搜索网络
-  const searchQuery = `best ${topic} tools 2026`;
+async function batchGitHubTrending(openKey) {
+  // 获取前 10 个 trending 仓库
+  const repos = await fetch('https://api.github.com/trending');
+  const top10 = repos.slice(0, 10);
+  
+  const results = [];
+  
+  for (const repo of top10) {
+    const product = {
+      name: repo.name,
+      content: repo.description,
+      url: repo.html_url,
+      tag: '开源'
+    };
+    
+    // 直接创建（不查重）
+    const result = await create_kl(product, openKey);
+    results.push(result);
+  }
+  
+  return {
+    total: results.length,
+    success: results.filter(r => r.success).length,
+    results: results
+  };
+}
+```
+
+### 示例三：批量从搜索结果
+
+```javascript
+async function batchFromSearch(topic, openKey) {
+  // 搜索多个产品
+  const searchQuery = `top ${topic} tools 2026`;
   const results = await searchEngine(searchQuery);
   
-  // 步骤 2：提取首个结果
-  const topResult = results[0];
-  const product = {
-    name: topResult.title,
-    content: topResult.snippet,
-    url: topResult.url,
+  const products = results.slice(0, 10).map(r => ({
+    name: r.title,
+    content: r.snippet,
+    url: r.url,
     tag: topic
+  }));
+  
+  // 批量创建
+  const createResults = [];
+  for (const product of products) {
+    const result = await create_kl(product, openKey);
+    createResults.push(result);
+  }
+  
+  return {
+    total: createResults.length,
+    success: createResults.filter(r => r.success).length,
+    results: createResults
   };
-  
-  // 步骤 3：🔍 检查名称是否已存在
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return { skipped: true, existing: existing.data[0] };
-  }
-  
-  // 步骤 4：确认 & 发布
-  // ...
-}
-```
-
-### 方式三：对话上下文
-
-**适用场景**：用户在对话中已提到某产品
-
-```javascript
-async function publishFromContext(sessionHistory, openKey) {
-  // 步骤 1：分析对话内容
-  const productInfo = extractProductFromChat(sessionHistory);
-  
-  // 步骤 2：用 AI 补全缺失字段
-  const completeProduct = await aiFill(productInfo);
-  
-  // 步骤 3：🔍 检查名称是否已存在
-  const existing = await query_kl({ name: completeProduct.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return { skipped: true, existing: existing.data[0] };
-  }
-  
-  // 步骤 4：确认 & 发布
-  // ...
-}
-```
-
-### 方式四：GitHub Trending
-
-**适用场景**：分享热门开源项目
-
-```javascript
-async function publishGitHubTrending(language, openKey) {
-  // 步骤 1：获取 GitHub trending
-  const repos = await fetch('https://api.github.com/trending');
-  const topRepo = repos[0];
-  
-  // 步骤 2：格式化为产品
-  const product = {
-    name: topRepo.name,
-    content: topRepo.description,
-    url: topRepo.html_url,
-    tag: language || '开源'
-  };
-  
-  // 步骤 3：🔍 检查名称是否已存在
-  const existing = await query_kl({ name: product.name, limit: 1 });
-  
-  if (existing.data && existing.data.length > 0) {
-    return { skipped: true, existing: existing.data[0] };
-  }
-  
-  // 步骤 4：确认 & 发布
-  // ...
 }
 ```
 
 ---
 
-## 📝 用户对话示例
+## 📝 输出格式
 
-### 示例一：AI 生成
-
-```
-用户：帮我发布一个"AI 工具"标签的产品
-
-Agent: 
-🤖 正在为您生成"AI 工具"相关产品内容...
-
-📦 产品预览:
-- 名称：智能写作助手 Pro
-- 描述：基于最新 AI 技术的写作助手，支持多语言、风格调整、语法检查，让您的写作更高效。
-- 标签：AI 工具
-- 图片来源：建议使用 AI 生成工具图标
-
-是否确认发布？(确认/取消)
-
-用户：确认
-
-Agent:
-✅ 发布成功！
-产品 ID: xxx
-链接：https://fore.vip/p?id=xxx
-```
-
-### 示例二：从搜索
+**批量结果汇总：**
 
 ```
-用户：发布一个关于"Notion 替代品"的产品
+✅ 批量推送完成！
+总计：10 个
+成功：8 个
+失败：2 个
 
-Agent:
-🔍 正在搜索"Notion 替代品 2026"...
-
-找到热门产品：Anytype
-- 描述：Local-first, E2E encrypted note-taking app
-- 链接：https://anytype.io
-- 来源：Product Hunt #1 today
-
-是否发布此产品？(确认/取消)
-
-用户：确认
-
-Agent:
-✅ 发布成功！
+成功列表:
+- Product A: https://fore.vip/p?id=xxx
+- Product B: https://fore.vip/p?id=yyy
+...
 ```
 
-### 示例三：从对话上下文
+**精简格式：**
 
 ```
-用户：我想分享一个很棒的 AI 工具，叫 Cursor，是一个 AI 代码编辑器
-
-[... 对话继续 ...]
-
-用户：把刚才说的 Cursor 发布到平台上
-
-Agent:
-📦 根据对话内容整理:
-- 名称：Cursor
-- 描述：AI 代码编辑器，支持智能补全、代码生成
-- 标签：AI 工具
-- 链接：https://cursor.sh
-
-是否发布？(确认/取消)
-
-用户：确认
-
-Agent:
-✅ 发布成功！
+✅ 批量推送完成 (10/10)
 ```
-
-### 示例四：重名检测
-
-```
-用户：发布一个名为"智能写作助手"的产品
-
-Agent:
-🔍 检查产品名称...
-⚠️ 发现同名产品已存在：
-- 名称：智能写作助手
-- 描述：AI 驱动的写作工具
-- 链接：https://fore.vip/p?id=xxx
-
-跳过创建，使用现有产品。
-```
-
----
-
-## ⚠️ 重要注意事项
-
-1. **禁止循环依赖**：内容来自外部来源，不能用 query_kl 查询结果作为内容
-2. **用户确认**：发布前必须让用户确认
-3. **数据准确性**：核实外部来源的信息
-4. **版权尊重**：尊重原始内容归属
-5. **🔍 重名检测**：创建前必须检查产品名称是否已存在
 
 ---
 
@@ -427,56 +230,37 @@ Agent:
 
 | 工具 | 认证 | 说明 |
 |------|------|------|
-| `query_kl` | ❌ 公开 | 按标签或名称查询产品 |
-| `create_kl` | 🔐 必填 | 创建产品 |
-| `smart_publish_kl` | 🔐 必填 | AI 智能发布 |
+| `create_kl` | 🔐 必填 | 批量创建产品 |
+
+**注意**: `query_kl` 不属于此技能。如需查重请使用 `product-create` 技能。
 
 ---
 
-## 📢 输出规范
+## 🔄 技能对比
 
-**保持输出简洁聚焦：**
-
-- ✅ 只显示最终结果（成功/失败）
-- ✅ 无错误时跳过中间步骤
-- ✅ 成功消息格式简洁
-- ✅ 只包含必要信息（ID、链接）
-
-**示例：**
-
-```
-✅ 发布成功！
-ID: xxx
-链接：https://fore.vip/p?id=xxx
-```
+| 功能 | `product` (本技能) | `product-create` |
+|------|-------------------|------------------|
+| **用途** | 批量推送 | 单个创建 |
+| **查重** | ❌ 无 | ✅ 有 |
+| **查询工具** | ❌ 无 | ✅ 有 |
+| **批量大小** | 5-20 个产品 | 1 个产品 |
+| **使用场景** | 批量导入 | 精确单个发布 |
 
 ---
 
 ## 📝 版本历史
 
-### v0.0.9 (2026-03-24) - 重名检测 + 精简输出
+### v2.0.0 (2026-03-30) - 仅批量推送
 
-- ✅ 新增 `name` 参数到 `query_kl`（模糊匹配）
-- ✅ **创建前强制重名检测**
-- ✅ 更新智能发布流程，加入名称校验
-- ✅ 新增输出规范（精简、聚焦）
-- ✅ 更新文档示例
+- ✅ **移除 query_kl** - 不再属于此技能
+- ✅ **移除查重逻辑** - 批量推送不查重
+- ✅ **专注于批量创建** - 仅使用 create_kl 工具
+- ✅ 拆分单个产品功能到 `product-create` 技能
 
-### v0.0.8 (2026-03-24) - 智能发布（外部来源）
+### v0.0.9 (2026-03-24) - 已废弃
 
-- ✅ 修复循环依赖问题
-- ✅ 内容来自外部来源（AI、搜索、上下文、GitHub）
-- ✅ 新增多种发布方式
-- ✅ 更新文档
-
-### v0.0.7 (2026-03-24) - 自动发布
-
-- ⚠️ 已废弃：使用 query_kl 获取内容（循环依赖）
-
-### v0.0.6 (2026-03-24) - Open Key 认证
-
-- ✅ 新增 Open Key 认证
+- ⚠️ 旧版本含查重（已移至 `product-create`）
 
 ---
 
-**版本**: 0.0.9 | **更新**: 2026-03-24
+**版本**: 2.0.0 | **更新**: 2026-03-30
