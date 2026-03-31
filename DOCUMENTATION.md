@@ -59,7 +59,7 @@ X-Open-Key: <your_open_key>
 
 ---
 
-### 2. product (v2.0.0) - 批量推送
+### 2. product-auto (v2.0.0) - 批量推送
 
 **用途**: 批量推送多个产品，不查重
 
@@ -76,7 +76,7 @@ X-Open-Key: <your_open_key>
 - 快速推送多个产品
 - 已在外部处理过查重
 
-**文档**: [product/SKILL.md](product/SKILL.md)
+**文档**: [product-auto/SKILL.md](product-auto/SKILL.md)
 
 ---
 
@@ -160,7 +160,7 @@ X-Open-Key: <your_open_key>
 
 ---
 
-## 📦 批量推送流程 (product)
+## 📦 批量推送流程 (product-auto)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -205,7 +205,7 @@ X-Open-Key: <your_open_key>
 | `limit` | number | 20 | 最大结果数 |
 | `skip` | number | 0 | 分页 |
 
-**注意**: `product` (批量推送) 技能不使用此工具
+**注意**: `product-auto` (批量推送) 技能不使用此工具
 
 ---
 
@@ -243,7 +243,7 @@ X-Open-Key: <your_open_key>
 - ✅ 用户明确指定某个产品
 - ✅ 精确控制发布内容
 
-### 使用 `product` 当：
+### 使用 `product-auto` 当：
 
 - ✅ 批量发布多个产品（5-20 个）
 - ✅ 已在外部处理过查重
@@ -257,7 +257,7 @@ X-Open-Key: <your_open_key>
 ### v0.0.9 (2026-03-30) - 技能拆分
 
 - ✅ 新增 `product-create` 技能（单个产品 + 查重）
-- ✅ 升级 `product` 技能为批量推送（无查重）
+- ✅ 升级 `product-auto` 技能为批量推送（无查重）
 - ✅ 明确技能使用场景
 
 ### v0.0.8 (2026-03-24)

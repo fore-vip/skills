@@ -1,5 +1,5 @@
 ---
-name: product
+name: product-auto
 description: Batch push AI products. Create multiple products from external sources (AI, search, GitHub, etc.) without duplicate check.
 version: 2.0.0
 license: MIT
@@ -238,7 +238,7 @@ async function batchFromSearch(topic, openKey) {
 
 ## 🔄 Skill Comparison
 
-| Feature | `product` (this) | `product-create` |
+| Feature | `product-auto` (this) | `product-create` |
 |---------|------------------|------------------|
 | **Purpose** | Batch push | Single create |
 | **Duplicate Check** | ❌ No | ✅ Yes |

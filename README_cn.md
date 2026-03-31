@@ -10,7 +10,7 @@
 | 技能 | 版本 | 说明 | 工具 |
 |------|------|------|------|
 | **product-create** | v1.0.0 | 创建单个产品，带重名检测 | `query_kl`, `create_kl` |
-| **product** | v2.0.0 | 批量推送多个产品（不查重） | `create_kl` |
+| **product-auto** | v2.0.0 | 批量推送多个产品（不查重） | `create_kl` |
 
 ---
 
@@ -32,7 +32,7 @@
 
 **批量推送（不查重）**：
 ```bash
-使用技能：product
+使用技能：product-auto
 工具：仅 create_kl
 ```
 
@@ -42,7 +42,7 @@
 
 - [完整文档](DOCUMENTATION.md)
 - [产品创建技能](product-create/SKILL_cn.md)
-- [产品批量推送技能](product/SKILL_cn.md)
+- [产品批量推送技能](product-auto/SKILL_cn.md)
 
 ---
 
@@ -62,9 +62,9 @@
 
 ### v0.0.9 (2026-03-30)
 
-- ✅ 拆分 `product` 技能为：
+- ✅ 拆分 `product` 技能为（已重命名为 product-auto）:
   - `product-create`（单个 + 查重）
-  - `product`（仅批量推送）
+  - `product-auto`（仅批量推送）
 - ✅ 明确技能分工
 - ✅ 更新文档
 

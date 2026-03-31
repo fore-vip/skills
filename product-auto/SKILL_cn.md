@@ -1,5 +1,5 @@
 ---
-name: product
+name: product-auto
 description: 批量推送 AI 产品。从外部来源创建多个产品，不查重。
 version: 2.0.0
 license: MIT

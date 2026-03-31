@@ -10,7 +10,7 @@
 | Skill | Version | Description | Tools |
 |-------|---------|-------------|-------|
 | **product-create** | v1.0.0 | Create single product with duplicate check | `query_kl`, `create_kl` |
-| **product** | v2.0.0 | Batch push multiple products (no duplicate check) | `create_kl` |
+| **product-auto** | v2.0.0 | Batch push multiple products (no duplicate check) | `create_kl` |
 
 ---
 
@@ -32,7 +32,7 @@ Tools: query_kl + create_kl
 
 **Batch Push (no duplicate check)**:
 ```bash
-Use skill: product
+Use skill: product-auto
 Tools: create_kl only
 ```
 
@@ -42,7 +42,7 @@ Tools: create_kl only
 
 - [Full Documentation](DOCUMENTATION.md)
 - [Product Create Skill](product-create/SKILL.md)
-- [Product Batch Push Skill](product/SKILL.md)
+- [Product Batch Push Skill](product-auto/SKILL.md)
 
 ---
 
@@ -62,9 +62,9 @@ Tools: create_kl only
 
 ### v0.0.9 (2026-03-30)
 
-- ✅ Split `product` skill into:
+- ✅ Split `product` skill into (renamed to product-auto):
   - `product-create` (single + duplicate check)
-  - `product` (batch push only)
+  - `product-auto` (batch push only)
 - ✅ Clear skill separation
 - ✅ Updated documentation
 

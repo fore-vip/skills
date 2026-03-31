@@ -41,7 +41,7 @@ your-repo/
 └── skills/              # 新增
     ├── product-create/
     │   └── SKILL.md
-    └── product/
+    └── product-auto/
         └── SKILL.md
 ```
 
@@ -93,7 +93,7 @@ skills/
 │   ├── SKILL_cn.md        # 中文版本
 │   ├── README.md          # 使用说明
 │   └── test.sh            # 测试脚本
-└── product/
+└── product-auto/
     ├── SKILL.md
     └── SKILL_cn.md
 ```

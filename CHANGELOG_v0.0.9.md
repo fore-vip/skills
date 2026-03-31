@@ -4,7 +4,7 @@
 
 ### 主要变更
 
-将原有的 `product` 技能拆分为两个独立技能，明确职责分工：
+将原有的 `product` 技能（批量推送）拆分为两个独立技能，明确职责分工：
 
 #### 1. ✅ 新增 `product-create` 技能 (v1.0.0)
 
@@ -32,7 +32,7 @@
 
 ---
 
-#### 2. ✅ 升级 `product` 技能 (v2.0.0)
+#### 2. ✅ 升级 `product-auto` 技能 (v2.0.0)
 
 **用途**: 批量推送多个产品，不查重
 
@@ -83,7 +83,7 @@ product-create/
 ### 修改文件
 
 ```
-product/
+product-auto/
 ├── SKILL.md          (升级) - 改为批量推送技能
 └── SKILL_cn.md       (升级) - 改为批量推送技能
 
@@ -97,14 +97,14 @@ CHANGELOG_v0.0.9.md   (新增) - 版本变更记录
 
 ## 🔧 迁移指南
 
-### 原 `product` 技能用户
+### 原 `product-auto` 技能用户
 
-**如果你之前使用 `product` 技能发布单个产品**:
+**如果你之前使用 `product-auto` 技能发布单个产品**:
 - ✅ 迁移到 `product-create` 技能
 - ✅ 自动享受重名检测功能
 
 **如果你需要批量发布产品**:
-- ✅ 继续使用 `product` 技能（已升级为批量推送）
+- ✅ 继续使用 `product-auto` 技能（已升级为批量推送）
 - ✅ 注意：不再自动查重，需在外部处理
 
 ---
@@ -123,7 +123,7 @@ if (existing.data.length > 0) {
 // 继续创建
 ```
 
-**`product` 技能**:
+**`product-auto` 技能**:
 ```javascript
 // 直接创建，不查重
 const result = await create_kl(product, openKey);
@@ -140,7 +140,7 @@ const result = await create_kl(product, openKey);
 ## 📖 文档链接
 
 - [product-create 技能文档](product-create/SKILL.md)
-- [product 技能文档](product/SKILL.md)
+- [product 技能文档](product-auto/SKILL.md)
 - [完整文档索引](DOCUMENTATION.md)
 
 ---
@@ -160,7 +160,7 @@ Agent:
 4. ✅ 发布成功
 ```
 
-### product (批量推送)
+### product-auto (批量推送)
 
 ```bash
 # 使用场景：批量发布 GitHub Trending Top 10
