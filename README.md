@@ -11,7 +11,6 @@
 |-------|---------|-------------|-------|
 | **product-create** | v1.0.0 | Create single product with duplicate check | `query_kl`, `create_kl` |
 | **product** | v2.0.0 | Batch push multiple products (no duplicate check) | `create_kl` |
-| **activity-create** | v0.0.5 | Create offline activities | `create_activity` |
 
 ---
 
@@ -37,12 +36,6 @@ Use skill: product
 Tools: create_kl only
 ```
 
-**Create Activity**:
-```bash
-Use skill: activity-create
-Tools: create_activity
-```
-
 ---
 
 ## 📖 Documentation
@@ -50,7 +43,6 @@ Tools: create_activity
 - [Full Documentation](DOCUMENTATION.md)
 - [Product Create Skill](product-create/SKILL.md)
 - [Product Batch Push Skill](product/SKILL.md)
-- [Activity Create Skill](activity-create/SKILL.md)
 
 ---
 
@@ -63,7 +55,6 @@ Tools: create_activity
 | `/tools/list` | GET | ❌ | List available tools |
 | `/mcp/query_kl` | POST | ❌ | Query products |
 | `/mcp/create_kl` | POST | 🔐 | Create product |
-| `/mcp/create_activity` | POST | 🔐 | Create activity |
 
 ---
 

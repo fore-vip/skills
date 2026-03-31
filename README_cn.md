@@ -11,7 +11,6 @@
 |------|------|------|------|
 | **product-create** | v1.0.0 | 创建单个产品，带重名检测 | `query_kl`, `create_kl` |
 | **product** | v2.0.0 | 批量推送多个产品（不查重） | `create_kl` |
-| **activity-create** | v0.0.5 | 创建线下活动 | `create_activity` |
 
 ---
 
@@ -37,12 +36,6 @@
 工具：仅 create_kl
 ```
 
-**创建活动**：
-```bash
-使用技能：activity-create
-工具：create_activity
-```
-
 ---
 
 ## 📖 文档
@@ -50,7 +43,6 @@
 - [完整文档](DOCUMENTATION.md)
 - [产品创建技能](product-create/SKILL_cn.md)
 - [产品批量推送技能](product/SKILL_cn.md)
-- [活动创建技能](activity-create/SKILL_cn.md)
 
 ---
 
@@ -63,7 +55,6 @@
 | `/tools/list` | GET | ❌ | 工具列表 |
 | `/mcp/query_kl` | POST | ❌ | 查询产品 |
 | `/mcp/create_kl` | POST | 🔐 | 创建产品 |
-| `/mcp/create_activity` | POST | 🔐 | 创建活动 |
 
 ---
 

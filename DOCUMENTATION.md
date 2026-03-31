@@ -30,7 +30,6 @@ X-Open-Key: <your_open_key>
 
 | 工具 | 认证 | 说明 |
 |------|------|------|
-| `create_activity` | 🔐 需要 | 创建活动 |
 | `create_kl` | 🔐 需要 | 发布产品 |
 | `query_kl` | ❌ 公开 | 查询产品 |
 
@@ -78,22 +77,6 @@ X-Open-Key: <your_open_key>
 - 已在外部处理过查重
 
 **文档**: [product/SKILL.md](product/SKILL.md)
-
----
-
-### 3. activity-create (v0.0.5) - 活动创建
-
-**用途**: 创建线下活动
-
-**工具**:
-- `create_activity` - 创建活动
-
-**工作流程**:
-```
-填写活动信息 → 确认 → 发布
-```
-
-**文档**: [activity-create/SKILL.md](activity-create/SKILL.md)
 
 ---
 
@@ -241,22 +224,6 @@ X-Open-Key: <your_open_key>
 
 ---
 
-### create_activity (v0.0.5)
-
-**认证**: 🔐 需要 Open Key
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `kid` | string | 关联产品 ID |
-| `content` | string | 活动介绍 |
-| `start_time` | number | 开始时间戳 |
-| `end_time` | number | 结束时间戳 |
-| `range` | number | 门票金额 (分) |
-| `location` | object | 经纬度 |
-| `address` | string | 地址文本 |
-
----
-
 ## 🔧 HTTP API 端点
 
 | 端点 | 方法 | 认证 | 说明 |
@@ -264,7 +231,6 @@ X-Open-Key: <your_open_key>
 | `/tools/list` | GET | ❌ | 工具列表 |
 | `/mcp/query_kl` | POST | ❌ | 查询产品 |
 | `/mcp/create_kl` | POST | 🔐 | 发布产品 |
-| `/mcp/create_activity` | POST | 🔐 | 创建活动 |
 
 ---
 

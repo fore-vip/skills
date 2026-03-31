@@ -20,8 +20,8 @@
 │              mcp Cloud Object (/mcp)                     │
 │  Role: Business Logic Layer                              │
 │  Methods:                                                │
-│  • create_activity() - Create activity                   │
 │  • query_kl() - Query products                           │
+│  • create_kl() - Create products                         │
 └────────────────────┬────────────────────────────────────┘
                      │
                      │ Method 2: Via tools protocol (MCP Standard)
@@ -56,8 +56,8 @@
 
 | Endpoint | Method | Usage | Recommended |
 |----------|--------|-------|-------------|
-| `/mcp/create_activity` | POST | Create activity | ⭐⭐⭐⭐⭐ |
 | `/mcp/query_kl` | POST | Query products | ⭐⭐⭐⭐⭐ |
+| `/mcp/create_kl` | POST | Create products | ⭐⭐⭐⭐⭐ |
 | `/tools/list` | GET | List tools | ⭐⭐⭐ |
 
 ---
@@ -67,7 +67,7 @@
 **Cloud Object URL Trigger**: POST body is a **string**, must `JSON.parse()`:
 
 ```javascript
-async create_activity() {
+async query_kl() {
   const httpInfo = this.getHttpInfo();
   const pm = JSON.parse(httpInfo.body);  // String → Object
 }
