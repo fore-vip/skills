@@ -58,33 +58,33 @@
     },
     {
       "name": "create_activity",
-      "description": "创建新活动。需在 HTTP Header 中传入 X-API-Key 鉴权。content 和 address 为必填。",
+      "description": "创建新活动。需在 HTTP Header 中传入 X-API-Key 鉴权。content/address/cover 必填。cover 自动下载转存至云存储。系统自动填充 open=1、type=ai。",
       "inputSchema": {
         "type": "object",
         "properties": {
           "content": { "type": "string", "description": "活动说明（必填，≤500 字）" },
           "address": { "type": "string", "description": "活动地址（必填，≤128 字）" },
-          "type": { "type": "string", "enum": ["sport", "culture", "volunteer", "other"], "description": "活动类型，默认 other" },
-          "cover": { "type": "string", "description": "封面图 URL（可选）" },
+          "cover": { "type": "string", "description": "封面图 URL（必填，自动转存至云存储）" },
           "tags": { "type": "array", "items": { "type": "string" }, "description": "标签列表，最多 10 个" },
           "latitude": { "type": "number", "description": "纬度（可选，与 longitude 配合生成 location）" },
           "longitude": { "type": "number", "description": "经度（可选，与 latitude 配合生成 location）" },
           "start_time": { "type": "number", "description": "开始时间 ms 时间戳（可选）" },
           "end_time": { "type": "number", "description": "结束时间 ms 时间戳（可选，null=不限）" },
           "max_participants": { "type": "integer", "description": "最大参与人数（默认 0=不限制）" },
-          "open": { "type": "integer", "enum": [0, 1], "description": "是否开放：0=仅分享可见，1=所有人可见（默认 1）" },
           "creator_name": { "type": "string", "description": "发布者昵称（可选）" }
         },
-        "required": ["content", "address"]
+        "required": ["content", "address", "cover"]
       },
       "outputSchema": {
         "type": "object",
         "properties": {
           "_id": { "type": "string", "description": "创建活动后的 _id" },
           "content": { "type": "string" }, "address": { "type": "string" },
-          "type": { "type": "string" }, "tags": { "type": "array" },
-          "cover": { "type": "string" }, "location": { "type": "object" },
-          "status": { "type": "number" }, "open": { "type": "number" },
+          "type": { "type": "string", "description": "系统填充为 ai" },
+          "tags": { "type": "array" },
+          "cover": { "type": "string", "description": "云存储 URL" },
+          "location": { "type": "object" },
+          "status": { "type": "number" }, "open": { "type": "number", "description": "系统填充为 1" },
           "view_count": { "type": "number" }, "participant_count": { "type": "number" },
           "create_time": { "type": "number" }, "update_time": { "type": "number" }
         }
@@ -101,7 +101,7 @@
     },
     "create": {
       "403": "Invalid or missing X-API-Key",
-      "-1": "content/address 必填字段缺失或超长",
+      "-1": "content/address/cover 必填字段缺失或超长",
       "-2": "数据库写入失败"
     }
   },
