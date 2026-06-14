@@ -1,24 +1,25 @@
-# act
+# act — 活动查询
 
-活动搜索与查询服务。通过 HTTP 调用 `mcp.fore.vip` 获取活动数据。
+让 AI 帮助用户发现和查询户外活动。
 
-## 端点
+## 功能
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `https://mcp.fore.vip/tools/list` | POST | 工具清单 |
-| `https://mcp.fore.vip/act/search` | POST | 搜索活动 |
-| `https://mcp.fore.vip/act/detail` | POST | 活动详情 |
+| 工具 | 说明 |
+|------|------|
+| `search_activities` | 搜索活动：按位置、关键词、类型，带距离排序或热度排序 |
+| `get_activity_detail` | 查看活动详情：时间、地址、参与信息 |
 
-## 使用方式
+## 接入
 
-Agent 直接 POST JSON 到对应端点即可，无需鉴权。
+服务地址：`https://mcp.fore.vip`
 
-## 活动数据字段
+工具声明见 `mcp.json`，Agent 读取后自动注册。
 
-返回的活动对象字段名与 DB 一致（未做映射）：
-- `_id` / `content` / `address` / `cover` / `type`
-- `start_time` / `end_time` (ms 时间戳)
-- `location.coordinates` [lng, lat]
-- `participant_count` / `view_count` / `tags` / `status`
-- `creator_name` / `create_time`
+## 搜索行为
+
+- **有位置** → 按距离由近到远
+- **无位置** → 按热度（浏览数）排序
+- **有关键词** → 叠加关键词匹配
+- **有类型** → 叠加类型筛选（运动/文化/志愿/其他）
+
+以上可自由组合。
