@@ -1,6 +1,6 @@
 {
   "name": "fore-vip-skills",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "火力打卡 Agent Skills — 让 AI 帮你发现和参与户外活动",
   "homepage": "https://github.com/fore-vip/skills",
   "repository": {
@@ -20,7 +20,7 @@
   "skills": [
     {
       "name": "act",
-      "description": "活动发现与查询：按位置/关键词搜索活动，查看详情",
+      "description": "活动发现与创建：搜索、查看详情、创建活动",
       "path": "act/",
       "mcp": "https://mcp.fore.vip",
       "geo": {
