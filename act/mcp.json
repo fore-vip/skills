@@ -1,0 +1,34 @@
+{
+  "servers": [
+    {
+      "name": "act",
+      "url": "https://mcp.fore.vip",
+      "description": "活动查询服务"
+    }
+  ],
+  "tools": [
+    {
+      "name": "search_activities",
+      "description": "搜索活动。带经纬度时按距离排序，不带时按热度排序。支持关键词和类型筛选。",
+      "endpoint": "/act/search",
+      "method": "POST",
+      "parameters": {
+        "keyword": { "type": "string", "description": "关键词，匹配内容/地址/标签" },
+        "type": { "type": "string", "enum": ["sport", "culture", "volunteer", "other"] },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "page": { "type": "integer", "default": 1 },
+        "pageSize": { "type": "integer", "default": 10, "maximum": 50 }
+      }
+    },
+    {
+      "name": "get_activity_detail",
+      "description": "获取活动详情，包括时间、地址、参与人数等",
+      "endpoint": "/act/detail",
+      "method": "POST",
+      "parameters": {
+        "id": { "type": "string", "required": true, "description": "活动 _id" }
+      }
+    }
+  ]
+}
