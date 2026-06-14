@@ -73,6 +73,7 @@ POST https://mcp.fore.vip/act/detail
 |------|---------|------|
 | 创建缺 Key | 403 | Header 未带 X-API-Key |
 | 字段缺失/超长 | -1 | content/address/cover 必填 |
+| 封面转存失败 | -3 | 下载/上传失败，活动不创建 |
 | DB 失败 | -2 | 数据库写入异常 |
 | ID 缺失 | -1 | detail 缺少 id |
 | 搜索无结果 | — | list=[], text 含提示 |

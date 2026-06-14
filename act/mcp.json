@@ -102,6 +102,7 @@
     "create": {
       "403": "Invalid or missing X-API-Key",
       "-1": "content/address/cover 必填字段缺失或超长",
+      "-3": "封面转存失败（下载/上传异常），活动不创建",
       "-2": "数据库写入失败"
     }
   },
