@@ -1,0 +1,31 @@
+{
+  "name": "fore-vip-skills",
+  "version": "2.0.1",
+  "description": "火力打卡 Agent Skills — 让 AI 帮你发现和参与户外活动",
+  "repository": "https://github.com/fore-vip/skills",
+  "keywords": [
+    "agent-skill",
+    "mcp",
+    "outdoor",
+    "activity",
+    "geo",
+    "shenzhen",
+    "local-life",
+    "o2o"
+  ],
+  "region": "CN-SZ",
+  "skills": [
+    {
+      "name": "act",
+      "description": "活动发现与查询：按位置/关键词搜索活动，查看详情",
+      "mcp": "https://mcp.fore.vip",
+      "endpoints": ["/act/search", "/act/detail", "/tools/list"],
+      "geo": {
+        "center": [114.058, 22.543],
+        "label": "深圳",
+        "radius_km": 50
+      }
+    }
+  ],
+  "license": "MIT"
+}

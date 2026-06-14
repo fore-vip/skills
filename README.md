@@ -1,65 +1,95 @@
 # 火力打卡 · Skills
 
-[![version](https://img.shields.io/badge/version-2.0.1-blue)](https://github.com/fore-vip/skills)
-[![repo](https://img.shields.io/badge/github-fore--vip%2Fskills-black)](https://github.com/fore-vip/skills)
+> 火力打卡 Agent Skills — 让 AI 帮你发现和参与户外活动。
 
-火力打卡 Agent Skills。让 AI 帮你发现和参与户外活动。
+[![skills.sh](https://img.shields.io/badge/skills.sh-fore--vip%2Fact-green?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMSAxNy45M2MtMy45NS0uNDktNy0zLjg1LTctNy45MyAwLS40NC4wNC0uODguMTEtMS4zMSA2Ljk2LjMgMTIuNDEtNC4xOSAxNi44NC04LjY5LjI2LjYzLjQxIDEuMzEuNDEgMi4wMSAwIDQuMDgtMy4wNSA3LjQ0LTcgNy45M1YxMkgxMXY3LjkzeiIvPjwvc3ZnPg==)](https://skills.sh/fore-vip/act)
+![version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffore-vip%2Fskills%2Fmain%2Fpackage.json&query=%24.version&label=version&color=blue)
+![license](https://img.shields.io/badge/license-MIT-green)
+![region](https://img.shields.io/badge/region-CN--SZ-red)
 
----
+## 🗺️ 项目标签
 
-## 产品定位
+| 标签 | 值 |
+|------|-----|
+| **类型** | Agent Skill / MCP Tool |
+| **领域** | 户外活动 · 本地生活 · O2O |
+| **覆盖** | 深圳 🇨🇳（geoNear 空间搜索） |
+| **协议** | MCP (HTTP POST JSON) |
+| **后端** | uniCloud + MongoDB |
+| **安装** | `npx skills add fore-vip/act` |
 
-**火力打卡** 是一个户外活动社交平台。你可以：
-
-- 发布、浏览、参与各类户外活动（徒步、骑行、露营、运动等）
-- 打卡签到、上传照片、留下足迹
-- 获取积分、兑换权益
-
-本仓库将火力打卡的核心能力封装为 **Agent Skill**，接入后 AI 即可用自然语言帮你搜活动、查详情。
-
----
-
-## 已接入 Skill
+## 📦 Skills 清单
 
 ### 🔍 act — 活动查询
 
-让 AI 帮你发现活动。
+搜索活动、查看详情。支持地理位置排序、关键词匹配、类型筛选。
 
-**能力**：
-- 按位置搜索附近活动
-- 按关键词搜索感兴趣的活动
-- 浏览热门活动
-- 查看活动详情
+```bash
+npx skills add fore-vip/act
+```
 
-**接入地址**：`https://mcp.fore.vip`
+| 能力 | 说明 |
+|------|------|
+| 📍 附近活动 | 传入经纬度，按距离由近到远排序 |
+| 🔤 关键词搜索 | 模糊匹配活动标题和地址 |
+| 🏷️ 类型筛选 | sport / culture / volunteer / other |
+| 📄 活动详情 | 查看完整信息 + 浏览量自增 |
 
----
+**API 端点：** `https://mcp.fore.vip`
 
-## 如何使用
+## 🚀 安装指引
 
-任何支持 MCP 协议的 Agent，读取本仓库的 `mcp.json` 后即可自动发现并调用活动查询能力。
+### 方式一：命令行
 
-以 OpenClaw 为例：
+```bash
+npx skills add fore-vip/act
+```
 
-1. 在技能市场搜索「火力打卡」
-2. 安装即可
+### 方式二：龙虾（OpenClaw）
 
-安装后，直接对 AI 说：
+在聊天中直接说：
 
-> 「附近的徒步活动有什么？」
-> 「帮我搜一下周末的骑行活动」
-> 「深圳美术馆的活动详情」
+> 安装 act 技能
 
-AI 会自动调用本 Skill 返回结果。
+### 安装后
 
----
+直接对 Agent 说话即可：
 
-## 版本
+- 🗣️「附近的爬山活动」
+- 🗣️「帮我找深圳的文化类活动」
+- 🗣️「这个活动详情是什么」
+- 🗣️「有什么好玩的推荐」
 
-`2.0.1` — 与火力打卡主项目版本同步。
+Agent 会读取 SKILL.md，自动调用 `https://mcp.fore.vip/act/search` 和 `/act/detail`。
 
----
+## 🌐 GEO 覆盖
+
+当前覆盖 **深圳**，使用 MongoDB geoNear 空间索引实现距离排序：
+
+```
+坐标基准：22.543°N, 114.058°E（深圳市民中心）
+数据范围：深圳市全域及周边
+```
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `POST /act/search` | geoNear / 热度 | 双模式自动切换 |
+| `POST /act/detail` | 单条查询 | 含浏览量自增 |
+| `POST /tools/list` | 工具清单 | MCP 发现协议 |
+
+## 📁 仓库结构
+
+```
+skills/
+├── README.md           ← 本文件
+├── act/                ← act Skill
+│   ├── SKILL.md        ← Agent 说明书
+│   └── README.md       ← 架构文档
+└── package.json        ← 版本信息
+```
+
+MCP 实现代码在 [fore-vip/base](https://github.com/fore-vip/base) 仓库 `uni_modules/act/`。
 
 ## 许可
 
-MIT
+MIT · Copyright © 2026 fore.vip
