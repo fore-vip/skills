@@ -79,6 +79,7 @@
         "type": "object",
         "properties": {
           "_id": { "type": "string", "description": "创建活动后的 _id" },
+          "url": { "type": "string", "description": "活动详情页链接" },
           "content": { "type": "string" }, "address": { "type": "string" },
           "type": { "type": "string", "description": "系统填充为 ai" },
           "tags": { "type": "array" },

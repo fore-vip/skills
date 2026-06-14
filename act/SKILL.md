@@ -47,7 +47,7 @@ X-API-Key: {key}
 }
 ```
 
-创建成功返回完整活动对象（含 `_id`，`cover` 为云存储 URL）。
+创建成功返回完整活动对象（含 `_id` 和 `url`，`cover` 为云存储 URL）。
 
 ## search_activities — 搜索活动
 
