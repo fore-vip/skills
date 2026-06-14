@@ -1,0 +1,105 @@
+{
+  "name": "act",
+  "version": "2.0.1",
+  "description": "活动发现与查询 — 按位置/关键词搜索活动，查看详情",
+  "mcp": "https://mcp.fore.vip",
+  "tools": [
+    {
+      "name": "search_activities",
+      "description": "搜索/查询活动。提供经纬度时按距离由近到远排序，不提供时按热度（浏览数）排序。支持关键词搜索和类型筛选。关键词仅匹配活动标题和地址。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "description": "搜索关键词，模糊匹配活动标题(content)和地址(address)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["sport", "culture", "volunteer", "other"],
+            "description": "活动类型筛选"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "用户纬度，触发 geoNear 距离排序"
+          },
+          "longitude": {
+            "type": "number",
+            "description": "用户经度，需配合 latitude"
+          },
+          "page": {
+            "type": "integer",
+            "description": "页码，默认 1",
+            "default": 1,
+            "minimum": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "每页条数，默认 10，上限 50",
+            "default": 10,
+            "minimum": 1,
+            "maximum": 50
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string", "description": "自然语言摘要，供语音播报/文字展示" },
+          "list": { "type": "array", "description": "结构化活动列表，geoNear 模式含 distance 字段" },
+          "total": { "type": "number", "description": "符合条件的总条数" },
+          "page": { "type": "integer", "description": "当前页码" },
+          "pageSize": { "type": "integer", "description": "每页条数" }
+        }
+      }
+    },
+    {
+      "name": "get_activity_detail",
+      "description": "查看活动详细信息，包括活动内容、地址、时间、参与人数、发布者信息等。调用后自动增加浏览量。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "活动 _id（MongoDB ObjectID）"
+          }
+        },
+        "required": ["id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "content": { "type": "string", "description": "活动内容/标题" },
+          "address": { "type": "string" },
+          "type": { "type": "string", "description": "sport/culture/volunteer/other" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "cover": { "type": "string", "description": "封面图URL" },
+          "location": { "type": "object", "description": "GeoJSON Point" },
+          "view_count": { "type": "number" },
+          "participant_count": { "type": "number" },
+          "creator_name": { "type": "string" },
+          "start_time": { "type": "number", "description": "开始时间(ms)" },
+          "end_time": { "type": "number", "description": "结束时间(ms)" }
+        }
+      }
+    }
+  ],
+  "errors": {
+    "search": {
+      "empty": "text 字段会提示「没有找到相关的活动」或「暂无可参与的活动」",
+      "invalid_params": "参数类型不做校验，静默降级（如非法经纬度忽略 geoNear）"
+    },
+    "detail": {
+      "-1": "Missing activity id — 缺少 id 参数",
+      "-1_alt": "Activity not found — _id 不存在于数据库"
+    }
+  },
+  "geo": {
+    "region": "CN-SZ",
+    "label": "深圳",
+    "center": [114.058, 22.543],
+    "note": "坐标格式为 [lng, lat]（GeoJSON 标准）",
+    "coverage": "深圳市全域（约 80km 半径）"
+  }
+}
