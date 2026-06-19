@@ -83,7 +83,7 @@ skills/
     └── mcp.json        ← MCP 工具声明
 ```
 
-MCP 实现代码在 [fore-vip/base](https://github.com/fore-vip/base) 仓库 `uni_modules/act/`。
+MCP 实现代码在 base 仓库 `uni_modules/act/`。
 
 ## 许可
 
