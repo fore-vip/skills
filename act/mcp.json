@@ -90,6 +90,28 @@
           "create_time": { "type": "number" }, "update_time": { "type": "number" }
         }
       }
+    },
+    {
+      "name": "list_activity_schedules",
+      "description": "查询指定活动下的行程列表，按开始时间升序。返回 schedule 表原始字段，不联表 guest 用户信息。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "activity_id": { "type": "string", "description": "活动 _id" },
+          "page": { "type": "integer", "description": "页码，默认 1", "default": 1, "minimum": 1 },
+          "pageSize": { "type": "integer", "description": "每页条数，默认 10，上限 50", "default": 10, "minimum": 1, "maximum": 50 }
+        },
+        "required": ["activity_id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "list": { "type": "array", "description": "行程列表，含 _id/activity_id/content/start_time/end_time/guest_id/in_progress/cps/creator/create_time" },
+          "total": { "type": "number", "description": "该活动下行程总数" },
+          "page": { "type": "integer" },
+          "pageSize": { "type": "integer" }
+        }
+      }
     }
   ],
   "errors": {

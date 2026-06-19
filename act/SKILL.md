@@ -1,8 +1,8 @@
 # act — 活动发现与创建
 
-> 通用 Agent SKILL · v2.1.1 · MCP Tool
+> 通用 Agent SKILL · v2.2.0 · MCP Tool
 >
-> 安装后 Agent 可搜索活动、查看详情、创建活动。
+> 安装后 Agent 可搜索活动、查看详情、创建活动、查询活动行程。
 >
 > **MCP 后端：** `https://mcp.fore.vip` · **区域：** 深圳 (CN-SZ)
 
@@ -15,6 +15,7 @@
 | `search_activities` | `POST /act/search` | 无 | 搜索活动：距离/热度双模式 |
 | `get_activity_detail` | `POST /act/detail` | 无 | 查详情 + 浏览量自增 |
 | `create_activity` | `POST /act/create` | `X-API-Key` | 创建新活动 |
+| `list_activity_schedules` | `POST /act/schedules` | 无 | 按活动 ID 查行程列表 |
 
 ## 安装
 
@@ -250,6 +251,37 @@ POST https://mcp.fore.vip/act/detail
 
 返回完整活动文档。
 
+## list_activity_schedules — 活动行程列表
+
+```
+POST https://mcp.fore.vip/act/schedules
+{ activity_id: "6a0a...", page: 1, pageSize: 10 }
+```
+
+按活动 ID 查行程列表，`start_time` 升序。返回 schedule 表原始字段（不联表 guest）：
+
+```json
+{
+  "list": [
+    {
+      "_id": "...",
+      "activity_id": "...",
+      "content": "集合出发",
+      "start_time": 1718000000000,
+      "end_time": 1718003600000,
+      "guest_id": "uni-id-users._id 或 null",
+      "in_progress": true,
+      "cps": { "appId": "...", "path": "...", "url": "...", "icon": "..." },
+      "creator": "...",
+      "create_time": 1718000000000
+    }
+  ],
+  "total": 25,
+  "page": 1,
+  "pageSize": 10
+}
+```
+
 ## 错误码
 
 | 场景 | errCode | 说明 |
@@ -259,6 +291,7 @@ POST https://mcp.fore.vip/act/detail
 | 封面转存失败 | -3 | 下载/上传失败，活动不创建 |
 | DB 失败 | -2 | 数据库写入异常 |
 | ID 缺失 | -1 | detail 缺少 id |
+| 行程 activity_id 缺失 | -1 | schedules 缺少 activity_id |
 | 搜索无结果 | — | list=[], text 含提示 |
 
 ## 使用示例
@@ -269,3 +302,38 @@ POST https://mcp.fore.vip/act/detail
 | "批量搜深圳未来活动和发布" | **模式2**：确认Key→搜索3维度→提取候补→搜封面→解析坐标→循环 create_activity→汇总汇报 |
 | "附近的爬山活动" | search_activities({ keyword:"爬山", latitude, longitude }) |
 | "这个活动详情" | get_activity_detail({ id }) |
+| "这个活动有哪些行程" | list_activity_schedules({ activity_id }) |
+
+---
+
+## 提示
+
+- **时间戳格式**：所有 `start_time` / `end_time` 字段均为 Unix 毫秒时间戳（13 位），不是秒。
+- **行程不联表 guest**：`list_activity_schedules` 返回 `guest_id`（uni-id-users._id 字符串）但不返回嘉宾昵称/头像。若需展示嘉宾信息，由调用方另行查询用户表。
+- **分页上限**：`pageSize` 最大 50，超过会被截断到 50；建议默认 10。
+- **空行程处理**：新活动可能无行程，`list` 返回 `[]`、`total: 0` 属正常，应提示用户"该活动暂无行程，可去小程序内推荐"。
+- **MCP 与前端双路线**：`schedules()` 同时服务于 MCP（URL 化云对象 HTTP 接口 `POST /act/schedules`）和小程序/H5 直连（`uniCloud.importObject`），两条路线返回结构一致。
+- **后端实现风格**：base 仓库的 act 云对象是 URL 化云对象风格，方法直接读取 `this.getHttpInfo().body` 解析参数，返回业务对象或 `{errCode, errMsg}`，不是 JSON-RPC `tools/call` 路由风格。
+- **创建活动封面**：`cover` 必填，必须是可公网访问的图片 URL，后端会下载转存到云存储，原 URL 不再保留。
+- **`create_activity` 鉴权**：每次调用都要在 HTTP Header 传 `X-API-Key`，不缓存、不存储，每轮重问。
+- **`get_activity_detail` 副作用**：调用即自增 `view_count`，Agent 不要为同一活动重复调用详情接口。
+- **坐标格式**：GeoJSON 标准 `[lng, lat]`（经度在前），与大部分地图 SDK 的 `[lat, lng]` 相反，注意转换。
+
+---
+
+## 引用
+
+| 项 | 路径 / 链接 |
+|----|-------------|
+| MCP 后端源码 | `~/git/base/uni_modules/act/uniCloud/cloudfunctions/act/index.obj.js` |
+| MCP 工具契约 | `skills/act/mcp.json` |
+| schedule 集合 schema | `~/git/base/uniCloud-aliyun/database/schedule.schema.json` |
+| schedule 云对象（订阅消息） | `~/git/base/uniCloud-aliyun/cloudfunctions/schedule/index.obj.js` |
+| 前端行程查询参考实现 | `~/git/base/pages/activity/detail.vue#loadScheduleList` |
+| MCP 服务地址 | `https://mcp.fore.vip` |
+| skills 仓库 | `https://github.com/fore-vip/skills` |
+| 活动详情页（H5） | `https://fore.vip/pages/activity/detail?id={_id}` |
+| 行程详情页（H5） | `https://fore.vip/pages/activity/schedule?activity_id={_id}` |
+| 项目主域 | `https://fore.vip` |
+| 区域定位 | 深圳 (CN-SZ)，中心 [114.058, 22.543]，覆盖约 80km 半径 |
+
