@@ -20,3 +20,13 @@ node_modules/
 # Build
 dist/
 build/
+
+# Local workspace / agent files (never commit)
+.workbuddy/
+.workbuddy
+AGENTS.md
+AGENT.md
+MEMORY.md
+.codebuddy/
+.claude/
+.agent/

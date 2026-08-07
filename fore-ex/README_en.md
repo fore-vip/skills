@@ -1,241 +1,102 @@
-# Qianling Zhixuan Chrome Extension
+# Qianling Zhixuan Chrome Extension (fore-ex)
 
-[![Version](https://img.shields.io/badge/version-v1.1-orange)](https://f.fore.vip/download/fore-ex-v1.1.zip)
-[![Download](https://img.shields.io/badge/download-Static%20Site-blue)](https://f.fore.vip/download/fore-ex-v1.1.zip)
-[![Website](https://img.shields.io/badge/website-fore.vip-green)](https://fore.vip)
+A Chrome browser extension to browse outdoor activities, discover great content, jump to activity details in one click, and open the key management page to get your API key.
 
-**Qianling Zhixuan** Chrome browser extension. Create activities with one click and publish them to the Qianling Zhixuan platform quickly.
-
----
-
-## 📦 Download
+## Download & Install
 
 ### China Users (Recommended)
 
-Download the latest version from static website:
+Download the latest version from the static site:
 
-```
-https://f.fore.vip/download/fore-ex-v1.1.zip
-```
+- Download: https://f.fore.vip/download/fore-ex-v2.0.zip
+- Size: ~90KB
 
-[👉 Download v1.1](https://f.fore.vip/download/fore-ex-v1.1.zip)
+If the download link is not yet updated, you can load the source folder in "Developer mode" (see tutorial below).
 
 ### International Users
 
-Download from GitHub Releases (if available).
+Get the source from GitHub: https://github.com/fore-vip/fore-ex
 
----
-
-## 🚀 Installation
+## Installation
 
 ### Method 1: Developer Mode (Recommended)
 
-1. **Extract the Plugin Package**
-   - Download `fore-ex-v1.1.zip`
-   - Extract to any directory, e.g., `/Users/your-username/fore-ex`
+1. Download the extension package and extract it to any folder
+2. Open Chrome extensions page: visit `chrome://extensions/`, or Menu → More Tools → Extensions
+3. Toggle "Developer mode" on (top right)
+4. Click "Load unpacked", then select the `fore-ex` folder containing `manifest.json`
+5. Verify: the extension appears in the list, its icon shows in the toolbar, status is "Enabled"
+6. (Optional) Click the "🧩" icon → find "Qianling Zhixuan" → click "📌" to pin it to the toolbar
 
-2. **Open Chrome Extensions Page**
-   - Visit: `chrome://extensions/`
-   - Or: Menu → More Tools → Extensions
+### Method 2: Git Clone (Developers)
 
-3. **Enable Developer Mode**
-   - Toggle the "Developer mode" switch in the top right corner
+```bash
+git clone git@github.com:fore-vip/fore-ex.git
+cd fore-ex
+# Then follow Method 1, steps 2-4 to load
+```
 
-4. **Load the Plugin**
-   - Click "Load unpacked"
-   - Select the extracted `fore-ex` folder
-   - Plugin installed successfully, icon appears in the browser toolbar
-
-5. **Use the Plugin**
-   - Click the Qianling Zhixuan icon in the top right corner
-   - Fill in activity information
-   - Click "Create Activity"
-   - Automatically jump to the activity detail page
-
-### Method 2: Drag & Drop Installation (.crx file)
-
-If you have a `.crx` file:
-
-1. Visit `chrome://extensions/`
-2. Enable "Developer mode"
-3. Drag the `.crx` file to the page
-4. Confirm installation
-
----
-
-## 📖 Features
-
-### ✨ Core Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 🎯 Quick Activity Creation | Fill form, publish to Qianling Zhixuan platform |
-| 📍 Activity Location | Support detailed address input |
-| 💰 Ticket Settings | Free/paid activity flexible configuration |
-| 📱 Contact Information | Automatically collect organizer WeChat |
-| 🔗 Auto Redirect | Automatically open activity detail page after creation |
+| Activity Search | Search activities by keyword |
+| Activity List | Shows cover, content, address, tags, view/participant counts |
+| Cover Image | Cover shown on top of card (auto-hidden if load fails) |
+| Click to Open | Tap a card to jump to the activity detail page |
+| Infinite Scroll | More activities load automatically as you scroll |
+| Publish Guide | "Publish" menu opens the key management page to get an API key |
 
-### 🎨 UI Optimizations
+## User Guide
 
-- ✅ Logo and title displayed in same row
-- ✅ Click logo/title to jump to official website
-- ✅ Simple form, no redundant fields
-- ✅ Responsive layout, adapts to different screens
+1. Click the extension icon in the toolbar
+2. Type a keyword in the search box (optional)
+3. Browse the auto-loaded activity list
+4. Click a card to open the detail page — screenshot or copy the link
+5. Scroll down to load more
 
----
+### How to publish an activity?
 
-## 📋 User Guide
+The extension does not create activities by itself. Click "Publish" in the menu → open the key management page → sign in to generate / copy your API key, then create your own activity via the web app or an AI assistant.
 
-### Activity Creation Flow
+## FAQ
 
-```
-1. Click the Qianling Zhixuan plugin icon in browser toolbar
-        ↓
-2. Fill in activity information:
-   - Activity Title (required, min 2 characters)
-   - Start Time (required)
-   - End Time (optional)
-   - Activity Address (required)
-   - Contact/WeChat (required)
-   - Ticket Price (optional, 0 = free)
-        ↓
-3. Click "Create Activity" button
-        ↓
-4. Wait for submission (loading animation shown)
-        ↓
-5. Success → Auto redirect to activity detail page
-```
+### Extension fails to load?
 
-### Form Fields
+- Extract the ZIP first; don't load directly from the archive
+- Select the folder that contains `manifest.json`
+- "Developer mode" is enabled
+- Folder path has no Chinese or special characters
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| Activity Title | ✅ | Min 2 characters, keep it concise |
-| Start Time | ✅ | Activity start date and time |
-| End Time | ⚪ | Optional, default 2 hours later |
-| Activity Address | ✅ | Detailed activity location |
-| Contact Info | ✅ | WeChat or other contact method |
-| Ticket Price | ⚪ | 0 = free, unit: CNY |
+### Activity list is blank?
 
----
+- Check your network connection
+- After editing source, click the refresh button on `chrome://extensions/`
 
-## 🔧 Technical Architecture
+### How to update?
 
-### Tech Stack
+Download the latest ZIP, extract over the old folder, then click "Refresh" on the extension card at `chrome://extensions/`.
 
-| Technology | Description |
-|------------|-------------|
-| **Manifest V3** | Latest Chrome extension specification |
-| **HTML5 + CSS3** | Modern interface |
-| **Vanilla JavaScript** | Lightweight, no framework dependencies |
-| **MCP Protocol** | Communication with Qianling Zhixuan API |
+### Is my data safe?
 
-### Project Structure
-
-```
-fore-ex/
-├── manifest.json      # Extension configuration file
-├── popup.html         # Popup page HTML
-├── popup.js           # Form logic handler
-├── icon.png           # Extension icon
-├── activity.html      # Activity page
-├── check.html         # Check page
-├── test.html          # Test page
-└── index.html         # Main page
-```
-
-### API Endpoints
-
-| Endpoint | Description |
-|----------|-------------|
-| `https://api.fore.vip/mcp/tools/call` | MCP tool call |
-| `https://api.fore.vip/mcp/tools/list` | Available tools list |
-| `https://fore.vip/st?id={id}` | Activity detail page |
-
----
-
-## 🔄 Changelog
-
-### v1.1 (2026-03-21)
-
-**Optimizations**
-- ✅ Logo and title displayed in same row
-- ✅ Removed title emoji, cleaner interface
-- ✅ Logo and title clickable to official website
-- ✅ Removed external link field, simplified form
-- ✅ Optimized form layout, improved user experience
-
-### v1.0 (2025-12-25)
-
-**Initial Release**
-- ✅ Basic activity creation feature
-- ✅ MCP protocol integration
-- ✅ Form validation
-- ✅ Auto redirect
-
----
-
-## ❓ FAQ
-
-### Q: Plugin fails to load?
-
-**A**: Please ensure:
-1. ZIP file is extracted, don't load directly from archive
-2. Selected folder contains `manifest.json`
-3. "Developer mode" is enabled
-
-### Q: Activity creation failed?
-
-**A**: Check the following:
-1. Is network connection normal?
-2. Are all required fields filled?
-3. Is activity title at least 2 characters?
-4. Is start time later than current time?
-5. Is end time later than start time?
-
-### Q: How to update the plugin?
-
-**A**: 
-1. Download the latest ZIP package
-2. Extract and overwrite the original directory
-3. Click "Refresh" button on the plugin in `chrome://extensions/`
-
-### Q: Is data secure?
-
-**A**: 
-- Plugin only collects minimum information required for activity creation
-- All data transmission uses HTTPS encryption
+- Only reads the minimum info needed for the activity list
+- All transfers use HTTPS encryption
 - No user privacy data is stored
 
----
+### How to uninstall?
 
-## 📞 Support
+`chrome://extensions/` → find "Qianling Zhixuan" → click "Remove".
+
+## Support
 
 | Channel | Link |
 |---------|------|
-| **Website** | https://fore.vip |
-| **API Docs** | https://api.fore.vip/mcp |
-| **Project Docs** | https://doc.fore.vip |
-| **GitHub** | https://github.com/fore-ex |
+| Website | https://fore.vip |
+| GitHub | https://github.com/fore-vip/fore-ex |
+| Issues | https://github.com/fore-vip/fore-ex/issues |
 
----
+## License
 
-## 📄 License
+MIT License · Copyright (c) 2026 Qianling Zhixuan
 
-MIT License
-
----
-
-## 🌟 Screenshots
-
-### Plugin Interface
-
-![Plugin Interface](./icon.png)
-
-1. Click icon in browser toolbar
-2. Fill activity form
-3. Create activity with one click
-
----
-
-**Enjoy the convenient activity creation experience!** 🎉
+Last updated: 2026-08-07
