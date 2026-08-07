@@ -1,5 +1,18 @@
 # Changelog
 
+## [fore-ex v2.0.0] — 2026-08-07
+
+### Changed
+- 重构为活动发现器：对接 `mcp.fore.vip/act/search`（免鉴权），移除产品列表
+- 活动卡片显示封面图（加载失败自动隐藏），点击跳 `fore.vip/pages/activity/detail`
+- 菜单「发布活动」跳转 Open Key 管理页 `fore.vip/web/key`
+- 移除「发布产品」菜单；删除废弃 activity.html
+- manifest `host_permissions` 增加 `mcp.fore.vip` / `fore.vip`
+
+### Removed
+- 产品搜索能力（旧端点 `api.fore.vip/mcp/query_kl`）
+- 插件内活动创建表单
+
 ## [2.1.1] — 2026-06-14
 
 ### Added

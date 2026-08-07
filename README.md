@@ -1,3 +1,5 @@
+> **工作空间身份**：fore.vip 五大单元之一 —— 与 base 对接的 MCP 接口实现库（act/cps）。声明在此仓库，实现在 `base/uni_modules/`。全局设定见 [../README.md](../README.md)。
+
 # 火力打卡 · Skills
 
 > 火力打卡 Agent Skills — 让 AI 帮你发现和参与户外活动。
@@ -36,6 +38,25 @@ npx skills add fore-vip/act
 | 📄 活动详情 | 查看完整信息 + 浏览量自增 |
 
 **MCP 端点：** `https://mcp.fore.vip`
+
+### 🧩 fore-ex — 活动发现浏览器插件（运营 / 达人工具）
+
+> 给**运营、达人、团队成员**用的 Chrome 插件：在电脑浏览器里直接逛平台活动、找优质内容做素材、一键进活动详情，并引导发布活动获取 Open Key（用于活动创建与 CPS 分发）。
+
+**它能帮你做什么**
+- 📋 在浏览器侧边随时看平台**活动列表**（带封面、地址、标签、热度）
+- 🔍 按关键词快速找目标活动
+- 📱 点卡片直达**活动详情页**，方便截图、分享、做内容
+- 🔑 菜单「发布活动」直达 **Open Key 管理页**，登录后即可生成 / 复制密钥，用来创建自己的活动
+
+**适合谁用**
+- 运营同学：日常巡检活动、找选题、做活动复盘
+- 达人 / 队长：发现优质活动，引导粉丝参与或自行发布
+- 商务 / 渠道：快速查看活动规模与分布
+
+**怎么拿到**
+- 开发者模式加载 `skills/fore-ex/` 源码目录（详见 [fore-ex/README.md](fore-ex/README.md)）
+- 或等团队发布安装包后一键安装
 
 ## 🚀 安装
 
@@ -77,13 +98,20 @@ skills/
 ├── CHANGELOG.md
 ├── .gitignore
 ├── package.json
-└── act/
-    ├── SKILL.md       ← Agent 说明书（AI 读取）
-    ├── README.md       ← 开发文档（人读）
-    └── mcp.json        ← MCP 工具声明
+├── act/
+│   ├── SKILL.md       ← Agent 说明书（AI 读取）
+│   ├── README.md       ← 开发文档（人读）
+│   └── mcp.json        ← MCP 工具声明
+└── fore-ex/
+    ├── manifest.json   ← 插件配置（MV3）
+    ├── popup.html       ← 弹出页（活动列表）
+    ├── popup.js         ← 活动检索逻辑
+    ├── styles.css       ← 样式
+    └── README.md        ← 插件文档（人读）
 ```
 
-MCP 实现代码在 base 仓库 `uni_modules/act/`。
+- MCP 实现代码在 base 仓库 `uni_modules/act/`
+- fore-ex 浏览器插件为独立前端，直连 `mcp.fore.vip`，无后端代码
 
 ## 许可
 
