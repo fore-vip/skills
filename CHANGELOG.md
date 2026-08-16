@@ -18,6 +18,10 @@
 ### Added
 - 模式1：原子级交互创建（多轮收集 Key→封面→主题→地址→坐标→时间→确认→单次MCP）
 - 模式2：自动化批量创建（搜索→封面→坐标→循环 create_activity→汇总）
+
+## 2026-08-15 08:33
+
+- 创建 SKILL: fore-vip-industrial-modeling-solution (来源: 前凌智创/3D/工业建模)
 - 创建返回 url 链接字段
 
 ### Changed
@@ -50,3 +54,19 @@
 ### Fixed
 - POST body 解析（this.getHttpInfo().body）
 - keyword 匹配条件（dbCmd.or 逐参传递）
+
+---
+
+- [2026-08-14 17:52] 创建 SKILL: fore-vip-light-entertainment (来源: 前凌智创/轻娱)
+- [2026-08-14 18:49] 创建 SKILL: fore-vip-manufacturing (来源: 前凌智创/制造业)
+- [2026-08-14 19:18] 重构 SKILL: fore-vip-manufacturing + fore-vip-light-entertainment，从"市场调研模板"改为"行业从业者落地工具"；同步更新自动化任务 prompt
+- [2026-08-14 19:48] 创建 SKILL: fore-vip-ebike-community-service (来源: 前凌智创/两轮电动车)
+- [2026-08-14 20:47] 创建 SKILL: fore-vip-sharing-economy (来源: 前凌智创/共享)
+- [2026-08-14 21:45] 创建 SKILL: fore-vip-parent-child-business (来源: 前凌智创/母婴·儿童)
+- [2026-08-14 22:49] 创建 SKILL: fore-vip-agriculture-business (来源: 前凌智创/农业)
+- [2026-08-14 23:49] 创建 SKILL: fore-vip-insurance-broker-assistant (来源: 前凌智创/保险)
+- [2026-08-15 01:43] 创建 SKILL: fore-vip-social-community-business (来源: 前凌智创/社交·社区)
+- [2026-08-15 02:40] 创建 SKILL: fore-vip-emerging-sports-operator (来源: 前凌智创/体育)
+- [2026-08-15 03:39] 创建 SKILL: fore-vip-printing-paper-service (来源: 前凌智创/印刷·造纸)
+- [2026-08-15 04:37] 创建 SKILL: fore-vip-erp-consultant (来源: 前凌智创/软件/ERP)
+- [2026-08-15 07:27] 创建 SKILL: fore-vip-low-altitude-operator (来源: 前凌智创/低空经济)

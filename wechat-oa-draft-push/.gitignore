@@ -1,0 +1,3 @@
+# 本地凭据与缓存，禁止提交
+.credentials.json
+.token_cache.json

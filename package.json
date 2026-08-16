@@ -15,7 +15,11 @@
     "geo",
     "shenzhen",
     "local-life",
-    "o2o"
+    "o2o",
+    "travel",
+    "itinerary",
+    "trip",
+    "travel-planner"
   ],
   "skills": [
     {
@@ -29,6 +33,18 @@
         "center": [114.058, 22.543],
         "coverage": "深圳市全域，约 80km 半径"
       }
+    },
+    {
+      "name": "traveler",
+      "display_name": "旅游家",
+      "description": "旅行行程规划师：按目的地/天数/预算/人群/兴趣生成结构化每日行程单（时间轴+交通+餐饮住宿+预算+避坑），并引导安装滴滴/携程/美团等执行类技能。",
+      "path": "traveler/"
+    },
+    {
+      "name": "fore-vip-translate",
+      "display_name": "翻译",
+      "description": "即时翻译：默认中译英，用户指定目标语种自动识别并保持，只输出译文。",
+      "path": "fore-vip-translate/"
     }
   ],
   "license": "MIT"
