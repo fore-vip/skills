@@ -51,6 +51,12 @@
       "display_name": "DSH 傻瓜式启动",
       "description": "DeepSeek Harness 傻瓜式本地启动：科普 DSH、引导获取 API Key、按系统装 Node/npm 镜像/dsh，并生成打开 http://localhost:3080 的桌面快捷方式。",
       "path": "fore-vip-ds-harness/"
+    },
+    {
+      "name": "fore-vip-kids-science",
+      "display_name": "十万个为什么",
+      "description": "儿童科普问答（生图优先·每段配图·图文排版·可分享）：用准确、适龄、有趣的方式回答孩子的好奇提问，每节配一张 AI 生图、图文成对，排版为图文页，并默认沉淀到资料库、可选上传 IMA 知识库/腾讯文档分享，覆盖自然/动物/人体/太空/生活常识/科技。",
+      "path": "fore-vip-kids-science/"
     }
   ],
   "license": "MIT"
