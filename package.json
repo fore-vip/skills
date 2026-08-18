@@ -45,6 +45,12 @@
       "display_name": "翻译",
       "description": "即时翻译：默认中译英，用户指定目标语种自动识别并保持，只输出译文。",
       "path": "fore-vip-translate/"
+    },
+    {
+      "name": "fore-vip-ds-harness",
+      "display_name": "DSH 傻瓜式启动",
+      "description": "DeepSeek Harness 傻瓜式本地启动：科普 DSH、引导获取 API Key、按系统装 Node/npm 镜像/dsh，并生成打开 http://localhost:3080 的桌面快捷方式。",
+      "path": "fore-vip-ds-harness/"
     }
   ],
   "license": "MIT"
