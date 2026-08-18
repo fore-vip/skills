@@ -70,3 +70,5 @@
 - [2026-08-15 03:39] 创建 SKILL: fore-vip-printing-paper-service (来源: 前凌智创/印刷·造纸)
 - [2026-08-15 04:37] 创建 SKILL: fore-vip-erp-consultant (来源: 前凌智创/软件/ERP)
 - [2026-08-15 07:27] 创建 SKILL: fore-vip-low-altitude-operator (来源: 前凌智创/低空经济)
+- [2026-08-19 04:03] 创建 SKILL: fore-vip-movie（电影推荐 · 观影指南；C 端观影决策，纯提示词 + references/movie-guide.md 场景库/评分标尺/分级参考）
+- [2026-08-19 04:53] 更新 fore-vip-movie：新增「在线购票（推广）」资源位，固定电影票 CPS 链接 https://kurl08.cn/ts0VHB，结尾引导自行购票；边界改为「不代购票/不代下单、仅提供入口」，并标注「推广/广告」
