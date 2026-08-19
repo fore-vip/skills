@@ -19,7 +19,12 @@
     "travel",
     "itinerary",
     "trip",
-    "travel-planner"
+    "travel-planner",
+    "anti-fraud",
+    "fraud",
+    "scam",
+    "security",
+    "防骗"
   ],
   "skills": [
     {
@@ -57,6 +62,18 @@
       "display_name": "十万个为什么",
       "description": "儿童科普问答（生图优先·每段配图·图文排版·可分享）：用准确、适龄、有趣的方式回答孩子的好奇提问，每节配一张 AI 生图、图文成对，排版为图文页，并默认沉淀到资料库、可选上传 IMA 知识库/腾讯文档分享，覆盖自然/动物/人体/太空/生活常识/科技。",
       "path": "fore-vip-kids-science/"
+    },
+    {
+      "name": "fore-vip-anti-fraud",
+      "display_name": "反诈助手",
+      "description": "反诈识别与避险：识别骗局特征、检索同类案例、推演新型骗局、输出风险清单与即时应对，并给出公安/政府部门求助举报渠道（96110/110/国家反诈中心/12377/12315/银行紧急止付）。",
+      "path": "fore-vip-anti-fraud/"
+    },
+    {
+      "name": "fore-vip-career-starter",
+      "display_name": "职场新人求职助手",
+      "description": "职场新人求职助手：面向应届生/转行/待业等低经验群体，从零采集信息、轮询打磨简历（doc/pdf/html+资料库可链接）、推荐岗位与目标企业、未达标给学习成长路线，并附主流求职平台入口与备选路径。",
+      "path": "fore-vip-career-starter/"
     }
   ],
   "license": "MIT"
