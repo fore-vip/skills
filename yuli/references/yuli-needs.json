@@ -1,0 +1,40 @@
+{
+  "name": "get_yuli_needs",
+  "source": "yuli (专属，支付子级)",
+  "description": "查某鱼里频道(活动)内的全部本地生活需求(行程推荐 schedule)。免费频道或已带 X-Unlocked 有效解锁凭证时直接返回需求列表；付费频道且未解锁时返回 errCode:402 + WeixinPay-Required 支付码（SkillHub X402 范式），由调用方代理用户支付。",
+  "endpoint": "POST https://mcp.fore.vip/yuli/needs",
+  "auth": { "header": "X-API-Key", "note": "复用 ai-mcp 动态 Key 体系（ai-key 集合），与 act 一致" },
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "channel_id": { "type": "string", "description": "频道(活动) _id，必填（即 act 创建的 yuli_channel==true 的活动 _id）" },
+      "page": { "type": "integer", "description": "页码，默认 1", "default": 1, "minimum": 1 },
+      "pageSize": { "type": "integer", "description": "每页条数，默认 20，上限 50", "default": 20, "minimum": 1, "maximum": 50 }
+    },
+    "required": ["channel_id"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "list": { "type": "array", "description": "需求列表（schedule 表：_id/content/price/contact/images/start_time）" },
+      "total": { "type": "number", "description": "该频道内需求总数" },
+      "page": { "type": "integer" },
+      "pageSize": { "type": "integer" },
+      "unlocked": { "type": "boolean", "description": "是否已解锁（付费频道支付后为 true）" },
+      "pay_required": { "type": "boolean", "description": "是否为付费频道" },
+      "WeixinPay": {
+        "type": "object",
+        "description": "仅付费未解锁时返回。WeixinPay-Required 为 payment_code，交给 weixinpay_pay 代理支付",
+        "properties": {
+          "WeixinPay-Required": { "type": "string", "description": "X402 支付码，作为 paymentCode 传给微信支付 Agent" },
+          "prompt": { "type": "string", "description": "面向 Agent 的支付引导文案" }
+        }
+      }
+    }
+  },
+  "errors": {
+    "403": "Invalid or missing X-API-Key",
+    "-1": "Missing channel_id / Channel not found",
+    "402": "付费闸：返回 WeixinPay-Required，需调用方代理用户支付后重试（带 X-Unlocked）"
+  }
+}

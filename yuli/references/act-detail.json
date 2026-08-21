@@ -1,0 +1,30 @@
+{
+  "name": "get_activity_detail",
+  "source": "act (内联副本，yuli 独立维护，不引用 ../act)",
+  "description": "查看活动详细信息，含内容、地址、时间、参与人数、发布者。调用后自动增加浏览量。",
+  "endpoint": "POST https://mcp.fore.vip/act/detail",
+  "inputSchema": {
+    "type": "object",
+    "properties": { "id": { "type": "string", "description": "活动 _id" } },
+    "required": ["id"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "_id": { "type": "string" },
+      "content": { "type": "string" }, "address": { "type": "string" },
+      "type": { "type": "string" }, "tags": { "type": "array" },
+      "cover": { "type": "string" }, "location": { "type": "object" },
+      "view_count": { "type": "number" }, "participant_count": { "type": "number" },
+      "creator_name": { "type": "string" },
+      "start_time": { "type": "number" }, "end_time": { "type": "number" },
+      "fee": { "type": "number", "description": "活动费用，单位：分（100=1元），0=免费" },
+      "pay_required": { "type": "boolean", "description": "是否付费活动（fee>0 时为 true）；true 时 H5 详情页展示「¥X 加入」拉起支付" },
+      "yuli_channel": { "type": "boolean", "description": "鱼里频道标记（非 schema 字段，写入即存）；true 即鱼里频道" }
+    }
+  },
+  "yuli_usage": "查看频道详情，确认 yuli_channel / fee / pay_required",
+  "errors": {
+    "-1": "Missing activity id / Activity not found"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "search_activities",
+  "source": "act (内联副本，yuli 独立维护，不引用 ../act)",
+  "description": "搜索/查询活动。提供经纬度时按距离由近到远排序，不提供时按热度（浏览数）排序。支持关键词搜索和类型筛选。关键词仅匹配活动标题和地址。",
+  "endpoint": "POST https://mcp.fore.vip/act/search",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "keyword": { "type": "string", "description": "搜索关键词，模糊匹配内容(content)和地址(address)" },
+      "type": { "type": "string", "enum": ["sport", "culture", "volunteer", "other"], "description": "活动类型筛选" },
+      "latitude": { "type": "number", "description": "用户纬度，触发 geoNear 距离排序" },
+      "longitude": { "type": "number", "description": "用户经度，需配合 latitude" },
+      "page": { "type": "integer", "description": "页码，默认 1", "default": 1, "minimum": 1 },
+      "pageSize": { "type": "integer", "description": "每页条数，默认 10，上限 50", "default": 10, "minimum": 1, "maximum": 50 }
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "text": { "type": "string", "description": "自然语言摘要" },
+      "list": { "type": "array", "description": "结构化列表，geoNear 模式含 distance" },
+      "total": { "type": "number" },
+      "page": { "type": "integer" },
+      "pageSize": { "type": "integer" }
+    }
+  },
+  "yuli_usage": "搜鱼里频道：结果中筛 yuli_channel==true 即为鱼里频道；keyword 匹配本地生活需求语义",
+  "errors": {
+    "empty": "text 字段提示「没有找到相关的活动」或「暂无可参与的活动」",
+    "invalid_params": "静默降级忽略"
+  }
+}
