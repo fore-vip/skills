@@ -1,7 +1,7 @@
 ---
 name: yuli
-version: 1.2.0
-description: 鱼里同城 — 独立 skill，内联 act 工具副本 + yuli 专属付费闸
+version: 1.2.2
+description: 鱼里同城 — 独立 skill，内联 act 工具副本 + yuli 专属付费闸（C 端付费生效，X402 Agent 代付当前故障）
 author: fore.vip
 license: UNLICENSED
 tags:
@@ -9,7 +9,7 @@ tags:
   - pay-skill
   - city-discovery
   - mcp
-  - act-submodule
+  - act-compatible
 triggers:
   - "搜鱼里频道"
   - "看鱼里频道的需求"
@@ -19,8 +19,8 @@ triggers:
   - "在鱼里发个频道"
   - "鱼里建个本地生活频道"
 negative_triggers:
-  - "创建普通活动"
-  - "发布免费活动"
+  - "创建与鱼里/本地生活无关的活动"
+  - "发布非鱼里频道的免费活动"
 compatibility:
   - Marvis
   - WorkBuddy
@@ -40,7 +40,14 @@ compatibility:
 - **频道检索与选择**：搜/选鱼里频道（`activity.yuli_channel==true`），调用内联的 `search_activities` / `get_activity_detail`（见 references/act-*.json）。
 - **无结果引导创建频道**：当没有匹配频道时，引导用户创建——调用内联的 `create_activity`，约束 **`type=ai`（沿用默认）+ `fee=100`（¥1 付费解锁）+ 打 `yuli_channel=true` 标记**（见 references/act-create.json）。
 - **组织推送需求（行程推荐）**：频道内需求 = 行程（`schedule` 表），调用内联的 `list_activity_schedules` 查询；发布需求走 act 的创建行程接口（见 references/act-schedules.json）。
-- **付费解锁（支付子级）**：付费频道（¥1 / 100 分）解锁后，Agent 可读取该频道内**全部**需求；付费经微信支付 Agent Pay X402 协议触发，返回 `WeixinPay-Required` 支付码，由调用方代理用户支付授权。
+- **付费解锁（支付子级）**：付费频道（¥1 / 100 分）解锁后，可读取该频道内**全部**需求；付费经微信支付 Agent Pay X402 协议触发，返回 `WeixinPay-Required` 支付码，由调用方代理用户支付授权。
+
+> **⚠️ 付费范围说明（计费边界）**
+> - **C 端用户（小程序 / H5）**：经 `pages/yuli/needs.vue` → `payChannel()` 走微信 Native 扫码付（¥1），**付费真实生效**，是唯一强制计费的路径。
+> - **Agent / MCP 调用方**：需求数据等同于 act 的 `schedule`，亦可通过 `list_activity_schedules`（`/act/schedules`，同 `X-API-Key`、无付费校验）直接读取——即 `get_yuli_needs` 的 ¥1 闸对 Agent 侧**不强制**（属运营 / 组织视角，不触发计费）。
+> - **因此 yuli 作为 Pay Skill 的付费价值锚定「C 端用户侧」**；X402 付费范式（Agent 代付）为**可选增强**，当前因 SkillHub 预下单端点（`payapp.weixin.qq.com/.../preorder`）被微信网关 302 拦截而**暂不可用**，返回 `402 + blocked + PAY_NOT_READY`（非 `WeixinPay-Required`）。恢复需回 SkillHub 官方文档核实端点，属平台侧事项。
+
+> **🔒 隐私红线（列表不暴露联系方式）**：需求列表（`get_yuli_needs` / 前端 `needs.vue`）**不返回联系方式类字段**（`contact` / `phone` / `mobile` / `wechat` / `wxid`），仅展示 `content` / `price` / `images` / `start_time` 等非隐私信息。联系方式属发布者隐私，需在「联系发布者」类的明确动作下按需提供（当前版本列表层一律过滤）。该过滤在 yuli 云对象 `queryNeeds()` 以 `.field()` 投影实现，覆盖免费与已解锁两种返回路径。
 
 **解决的问题**：让 Agent 生态能按次计费检索/运营本地生活需求，企业侧无需重构 act 业务逻辑，仅在原服务上叠加开发者签名 + X402 预下单 + 支付触发返回。
 
@@ -96,6 +103,8 @@ create_activity({
 
 ### 步骤 4 — 付费解锁（支付子级，yuli 专属 X402）
 
+> **状态**：以下为 X402 付费闸的**目标态**。当前因 SkillHub 预下单端点（`payapp.weixin.qq.com/.../preorder`）被微信网关 302 拦截，`needs(付费)` 实际返回 `402 + blocked:true + PAY_NOT_READY`（**无** `WeixinPay-Required` 支付码），Agent 代付闭环暂不可用，需平台侧核实端点。C 端用户付费不受影响（见步骤 5 / 前端直付）。
+
 付费频道未解锁时，yuli 的 `get_yuli_needs` 返回 `402` + `WeixinPay-Required`：
 
 ```json
@@ -110,7 +119,7 @@ create_activity({
 }
 ```
 
-调用方将 `WeixinPay-Required` 的值作为 `paymentCode` 交给微信支付 Agent（`weixinpay_pay`），由 Agent 向用户申请支付授权。支付成功后再请求同一频道并带 `X-Unlocked: <orderId>` 头即可解锁：
+调用方将 `WeixinPay-Required` 的值作为 `paymentCode` 交给微信支付 Agent（`weixinpay_pay`），由 Agent 向用户申请支付授权。**支付成功后，用该笔订单的 `orderId` 作为 `X-Unlocked` 头重请求即可解锁**（`orderId` 随目标态 `402 + WeixinPay-Required` 一并返回；前端路径的 `orderId` 来自 `payChannel()` 的返回值）：
 
 ```js
 const res = await fetch('https://mcp.fore.vip/yuli/needs', {
@@ -118,7 +127,7 @@ const res = await fetch('https://mcp.fore.vip/yuli/needs', {
   headers: {
     'Content-Type': 'application/json',
     'X-API-Key': '<your-api-key>',
-    'X-Unlocked': '<orderId>'   // 已支付订单 ID
+    'X-Unlocked': '<orderId>'   // 已支付订单 ID（随 402 响应返回 / 或 payChannel() 返回）
   },
   body: JSON.stringify({ channel_id: 'act_xxxx' })
 })
@@ -174,9 +183,11 @@ POST /act/schedules  { activity_id: "<鱼里频道 _id>" }
 
 **例 4：付费解锁**
 
+> 以下为目标态；当前实际返回 `402 + blocked + PAY_NOT_READY`（X402 端点故障，见步骤 4 说明）。
+
 ```
 POST /yuli/needs  { channel_id: "act_pay_xxx" }  + X-API-Key
-→ 402 + WeixinPay-Required(payment_code)
+→ 402 + WeixinPay-Required(payment_code)   # 当前为 PAY_NOT_READY（故障）
 → 交 weixinpay_pay 代理支付
 → 再次 POST /yuli/needs + X-Unlocked: <orderId>
 → { errCode: 0, unlocked: true, list: [...] }
@@ -196,8 +207,8 @@ POST /yuli/needs  { channel_id: "act_pay_xxx" }  + X-API-Key
 | 现象 | 原因 | 处理 |
 |------|------|------|
 | `403 Invalid or missing X-API-Key` | 未带 / Key 无效 | 检查 `X-API-Key` 头，复用 ai-mcp 动态 Key |
-| `402 + WeixinPay-Required` | 付费频道未解锁 | 按范式交 `weixinpay_pay` 代理支付，再带 `X-Unlocked` 重请求 |
-| `402 + blocked: true + PAY_NOT_READY` | V3 凭证未配置 | 补全 `skill.js` 的 `wxpayV3` 段后重试（见 `doc/YULI_DEPLOY.md`） |
+| `402 + WeixinPay-Required` | 付费频道未解锁（X402 目标态；当前因端点故障改为返回 PAY_NOT_READY） | 按范式交 `weixinpay_pay` 代理支付，再带 `X-Unlocked` 重请求 |
+| `402 + blocked: true + PAY_NOT_READY` | X402 预下单端点故障（`payapp.weixin.qq.com/.../preorder` 被微信网关 302 拦截；**非** V3 凭证问题，V3 Native 正常） | 属平台侧事项，需回 SkillHub 官方文档核实端点；C 端用户付费（`payChannel`）不受影响 |
 | 创建的频道不在鱼里列表 | 未打 `yuli_channel=true` / `fee≠100` | 确认创建时 fee=100，后端自动标记 yuli_channel |
 | `Channel not found` | `channel_id` 错 / 非 yuli 频道 | 确认 `activity._id` 且 `yuli_channel==true` |
 | 解锁后仍返回 402 | `X-Unlocked` 订单校验失败 | 确认 `oid==频道ID && type==5 && pay==true` |
@@ -220,6 +231,19 @@ POST /yuli/needs  { channel_id: "act_pay_xxx" }  + X-API-Key
 | SkillHub Pay Skill 范式 | `https://skillhub.cn/tutorials#agent-pay-upgrade` |
 
 ## Changelog
+
+### 1.2.2
+
+- 隐私红线：yuli 云对象 `queryNeeds()` 以 `.field()` 投影**过滤联系方式类字段**（contact/phone/mobile/wechat/wxid），需求列表（免费 + 已解锁两路径）不再泄露发布者隐私。对应 `references/yuli-needs.json` 列表字段说明同步更新，并在正文新增「隐私红线」段落。
+
+### 1.2.1
+
+- 文档/声明层收敛（不动后端）：
+  - 增补「付费范围说明」：明确 ¥1 付费仅对 C 端用户（needs.vue + payChannel）强制生效；Agent/MCP 侧经 `act/schedules` 读需求不触发计费（运营视角）。
+  - X402 付费闸标注为「目标态」，当前因 SkillHub 预下单端点被微信网关 302 拦截返回 `PAY_NOT_READY`，Agent 代付闭环暂不可用。
+  - 修正 Troubleshooting：`PAY_NOT_READY` 归因由「V3 凭证未配置」改为「X402 端点故障（非 V3 问题）」。
+  - 补全 `X-Unlocked` 流程中 `orderId` 来源说明。
+  - frontmatter：`tags` 移除过时 `act-submodule`、改 `act-compatible`；`negative_triggers` 收紧为「非鱼里/本地生活类」；版本升 1.2.1。
 
 ### 1.2.0
 

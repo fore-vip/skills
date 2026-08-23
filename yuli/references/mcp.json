@@ -1,9 +1,10 @@
 {
   "name": "yuli",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "鱼里同城 — 独立 skill，内联 act 工具副本 + yuli 专属付费闸（不引用 ../act）",
   "mcp": "https://mcp.fore.vip",
   "model": "yuli 为独立 skill：act 底层工具以内联副本拆分在 references/ 分目录，yuli 自包含、不跨 skill 引用。act 文件/后端保持不变。",
+  "maintenance": "references/act-*.json 为 act 工具契约内联副本，act 侧变更需同步更新此处副本，避免漂移。",
   "auth": {
     "create": {
       "header": "X-API-Key",

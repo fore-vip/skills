@@ -74,6 +74,18 @@
       "display_name": "职场新人求职助手",
       "description": "职场新人求职助手：面向应届生/转行/待业等低经验群体，从零采集信息、轮询打磨简历（doc/pdf/html+资料库可链接）、推荐岗位与目标企业、未达标给学习成长路线，并附主流求职平台入口与备选路径。",
       "path": "fore-vip-career-starter/"
+    },
+    {
+      "name": "fore-vip-pc-clear",
+      "display_name": "PC清理优化",
+      "description": "电脑系统清理与优化：读取系统信息后按风险分级做性能优化（敏感/系统级操作必征询）、缓存与硬盘清理（全程记录并生成桌面一键清理脚本）、环境优化（分析工具列表与工作性质，推荐更优工具并引导配置到最佳状态），支持 macOS/Windows/Linux。",
+      "path": "fore-vip-pc-clear/"
+    },
+    {
+      "name": "fore-vip-contract",
+      "display_name": "合同助手",
+      "description": "中文合同起草、生成与审阅：把「写份合作协议/代理合同/保密协议/租赁合同/劳动合同/授权委托书/报价单/借条」或「审下这份合同」转化为结构规范、条款完整、符合《民法典》与广告法合规要求的中文合同，并输出可填写的 HTML→DOCX。内置通用民事商事模板库并支持动态扩展任意类型，覆盖个人/小团队/本地生活 O2O/CPS 推广场景。",
+      "path": "fore-vip-contract/"
     }
   ],
   "license": "MIT"

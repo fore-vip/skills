@@ -16,7 +16,7 @@
   "outputSchema": {
     "type": "object",
     "properties": {
-      "list": { "type": "array", "description": "需求列表（schedule 表：_id/content/price/contact/images/start_time）" },
+      "list": { "type": "array", "description": "需求列表（schedule 表：_id/content/price/images/start_time 等；联系方式 contact/phone/wechat 等隐私字段已在列表层过滤，不返回）" },
       "total": { "type": "number", "description": "该频道内需求总数" },
       "page": { "type": "integer" },
       "pageSize": { "type": "integer" },
