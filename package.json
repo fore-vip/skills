@@ -86,6 +86,13 @@
       "display_name": "合同助手",
       "description": "中文合同起草、生成与审阅：把「写份合作协议/代理合同/保密协议/租赁合同/劳动合同/授权委托书/报价单/借条」或「审下这份合同」转化为结构规范、条款完整、符合《民法典》与广告法合规要求的中文合同，并输出可填写的 HTML→DOCX。内置通用民事商事模板库并支持动态扩展任意类型，覆盖个人/小团队/本地生活 O2O/CPS 推广场景。",
       "path": "fore-vip-contract/"
+    },
+    {
+      "name": "fore-vip-bot",
+      "display_name": "硬件中控",
+      "description": "本地硬件设备控制中控：安装后在本机统一控制家里/环境里的所有硬件——智能家居、创客硬件（树莓派/Arduino/ESP32）、本机外设、环境物联网。采用设备抽象层+指令范式+动态驱动框架，不绑死协议，按环境加载 MCP/HTTP/MQTT/BLE/串口/系统驱动。",
+      "path": "fore-vip-bot/",
+      "category": "iot-control"
     }
   ],
   "license": "MIT"

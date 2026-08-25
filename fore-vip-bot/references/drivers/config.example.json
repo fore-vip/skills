@@ -1,0 +1,64 @@
+{
+  "drivers": [
+    {
+      "name": "home-assistant",
+      "type": "mcp",
+      "enabled": true,
+      "config": {
+        "mcp_url": "http://homeassistant.local:8123/mcp",
+        "token_env": "HA_LONG_LIVED_TOKEN"
+      }
+    },
+    {
+      "name": "local-mqtt",
+      "type": "mqtt",
+      "enabled": false,
+      "config": {
+        "broker": "mqtt://192.168.1.50:1883",
+        "username_env": "MQTT_USER",
+        "password_env": "MQTT_PASS"
+      }
+    },
+    {
+      "name": "esp32-serial",
+      "type": "serial",
+      "enabled": false,
+      "config": {
+        "port": "/dev/cu.usbserial-0001",
+        "baud": 115200
+      }
+    },
+    {
+      "name": "system-peripherals",
+      "type": "system",
+      "enabled": true,
+      "config": {}
+    }
+  ],
+  "devices": [
+    {
+      "id": "livingroom_light_01",
+      "name": "客厅主灯",
+      "type": "light",
+      "driver": "home-assistant",
+      "location": "客厅",
+      "capabilities": ["on/off", "dim", "color"]
+    },
+    {
+      "id": "bedroom_thermostat",
+      "name": "卧室空调",
+      "type": "thermostat",
+      "driver": "home-assistant",
+      "location": "卧室",
+      "capabilities": ["on/off", "set_temp"]
+    },
+    {
+      "id": "farm_soil_sensor",
+      "name": "大棚土壤湿度",
+      "type": "sensor",
+      "driver": "local-mqtt",
+      "location": "大棚",
+      "capabilities": ["read"]
+    }
+  ]
+}
