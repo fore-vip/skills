@@ -1,15 +1,15 @@
 {
   "name": "get_auto_theme",
   "source": "auto (专属)",
-  "description": "AUTO 顶级执行技能入口：输入主题(活动标题)，从 mcp.auto 取该主题「最优秀执行步骤」（schedule 集合=步骤；content 为步骤文本）。频道不存在时自动以主题建一条 auto 频道(type='ai', fee=990)。付费频道(¥9.9)未解锁时以集成响应返回 HTTP 402 + WeixinPay-Required 响应头 + body.order_id + body.secret 凭证；调用方代理用户支付后，将其持久化到固定位置 ~/.agent/skill/auto/config.json，下次同主题调用带回（order_id 参数 / X-Order-Id 头 + secret 参数 / X-Auto-Secret 头）即解锁（SkillHub A2M 范式）。auto 无需 API Key，凭证即订单 = order._id + order.secret。当 mcp.auto 无结果（空/错/不可达）时，调用方按 SKILL 主流程兜底检索技能市场/社区/开源/搜索逐步执行，解决后回写步骤到 mcp.auto（主题ID关联）。",
+  "description": "AUTO 执行技能入口：输入主题，从 mcp.auto 取该主题「最优秀执行步骤」。无沉淀频道时由服务端按主题建频道。付费未解锁时返回 HTTP 402 + WeixinPay-Required 头 + body.order_id + body.secret 凭证；调用方代理支付后持久化到 ~/.agent/skill/auto/config.json，下次同主题携凭证重试即解锁。无需 API Key，凭证即订单 = order_id + secret。当 mcp.auto 无结果（空/错/不可达）时，由 SKILL 主流程兜底检索技能市场/社区/开源/搜索逐步执行，解决后回写。",
   "endpoint": "POST https://mcp.fore.vip/auto/theme",
-  "auth": { "note": "auto 无需 X-API-Key；凭证 = order._id + order.secret（生成订单时写入 order.secret），经 order_id(+secret) 参数或 X-Order-Id / X-Auto-Secret 头回传解锁" },
+  "auth": { "$ref": "./auto-pay.json", "note": "支付鉴权统一见 auto-pay.json（无 API Key；凭证=order_id+secret）；调用前须确认支付态" },
   "inputSchema": {
     "type": "object",
     "properties": {
-      "theme": { "type": "string", "description": "主题/活动标题，必填；按 activity.content 精确匹配频道，无则自动建 auto 频道(type='ai', fee=990)" },
-      "order_id": { "type": "string", "description": "可选。已付凭证①（支付成功重试带回）；也可经 X-Order-Id 头传递。云对象按 order._id 回查已支付解锁" },
-      "secret": { "type": "string", "description": "可选。订单密钥，凭证②（与 order_id 配对）；生成订单时写入 order.secret。也可经 X-Auto-Secret 头传递。secret 配对不符会被拒绝，仅持 order_id 无 secret 仍兼容解锁" },
+      "theme": { "type": "string", "description": "主题/活动标题，必填；按主题匹配频道，无则自动建频道" },
+      "order_id": { "type": "string", "description": "可选。已付凭证①（支付成功重试带回）；也可经 X-Order-Id 头传递" },
+      "secret": { "type": "string", "description": "可选。订单密钥凭证②（与 order_id 配对）；也可经 X-Auto-Secret 头传递。仅持 order_id 无 secret 仍兼容解锁" },
       "page": { "type": "integer", "description": "页码，默认 1", "default": 1, "minimum": 1 },
       "pageSize": { "type": "integer", "description": "每页条数，默认 20，上限 50", "default": 20, "minimum": 1, "maximum": 50 }
     },
@@ -18,34 +18,33 @@
   "outputSchema": {
     "type": "object",
     "properties": {
-      "list": { "type": "array", "description": "执行步骤列表（schedule 集合：_id/content/price/images/create_time 等；每条即一条执行步骤。联系方式 contact/phone/wechat 等隐私字段已在列表层过滤，不返回）" },
-      "total": { "type": "number", "description": "该频道内步骤总数" },
+      "list": { "type": "array", "description": "执行步骤列表（每条即一条步骤：content / price / images / 时间等；联系方式等隐私字段不返回）" },
+      "total": { "type": "number", "description": "步骤总数" },
       "page": { "type": "integer" },
       "pageSize": { "type": "integer" },
-      "unlocked": { "type": "boolean", "description": "是否已解锁（付费频道支付后为 true）" },
-      "pay_required": { "type": "boolean", "description": "是否为付费频道" },
+      "unlocked": { "type": "boolean", "description": "是否已解锁（付费后为 true）" },
+      "pay_required": { "type": "boolean", "description": "是否为付费主题" },
       "responseHeaders": {
         "type": "object",
-        "description": "付费未解锁态（HTTP 402 集成响应）注入的响应头",
+        "description": "付费未解锁态（HTTP 402）注入的响应头",
         "properties": {
-          "WeixinPay-Required": { "type": "string", "description": "X402 支付码（= payment_code），作为 paymentCode 传给微信支付 Agent 调 weixinpay_pay" }
+          "WeixinPay-Required": { "type": "string", "description": "支付码，作为 paymentCode 传给 weixinpay_pay" }
         }
       },
-      "order_id": { "type": "string", "description": "付费未解锁态（HTTP 402 body）= 本 SKILL 凭证①（order._id）；与 secret 一并持久化到 ~/.agent/skill/auto/config.json 后重试带回即解锁" },
-      "secret": { "type": "string", "description": "付费未解锁态（HTTP 402 body）= 本 SKILL 凭证②（order.secret，生成订单时写入）；与 order_id 配对回传解锁" },
-      "out_trade_no": { "type": "string", "description": "= payment_code，X402 支付码" },
+      "order_id": { "type": "string", "description": "付费未解锁态（HTTP 402 body）= 凭证①；与 secret 一并持久化后重试带回即解锁" },
+      "secret": { "type": "string", "description": "付费未解锁态（HTTP 402 body）= 凭证②；与 order_id 配对回传解锁" },
+      "out_trade_no": { "type": "string", "description": "= payment_code，支付码" },
       "amount": { "type": "integer", "description": "金额（分），¥9.9 = 990" },
       "currency": { "type": "string", "description": "货币，CNY" },
-      "prompt": { "type": "string", "description": "仅状态串：'pay_required'(付费闸) / 'unlocked'(已解锁)。凭证存储与重试指引不在响应体，见 SKILL.md「凭证管理（SKILL 提示词）」" }
+      "prompt": { "type": "string", "description": "仅状态串：'pay_required' / 'unlocked'" }
     }
   },
   "errors": {
     "-1": "Missing theme / Channel resolve failed",
-    "402": "付费闸（HTTP 402 集成响应）：响应头 WeixinPay-Required=payment_code，body.order_id+body.secret=凭证；调用方代理用户支付后持久化 ~/.agent/skill/auto/config.json，携 order_id(+secret)（X-Order-Id / X-Auto-Secret 头或参数）重试解锁"
+    "402": "付费闸（HTTP 402）：WeixinPay-Required=payment_code，body.order_id+body.secret=凭证；代理支付后持久化 ~/.agent/skill/auto/config.json，携凭证重试解锁"
   },
   "notes": {
-    "role": "auto 是顶级执行技能：本工具是其『知识面』入口；mcp.auto 无结果时由 SKILL 主流程兜底检索+执行，解决后回写（见 references/auto-writeback.json）",
-    "step_model": "schedule.content 即一条执行步骤文本；可附 price/images 等既有字段",
-    "writeback": "回写端点 POST /auto/save 【已实现】：调用 save() 云方法，按主题回写执行步骤到 mcp.auto（schedule 集合，主题ID经 activity 频道关联）。写入对称鉴权——仅持已付凭证(order_id+secret 回查 order 解锁)才写入并回传 order_id/secret 配置；无/无效凭证返回 HTTP 402 支付表单并拒绝写入。契约见 references/auto-writeback.json"
+    "role": "auto 是执行技能：本工具是其『知识面』入口；mcp.auto 无结果时由 SKILL 主流程兜底检索+执行，解决后回写（见 auto-writeback.json）",
+    "writeback": "回写端点 POST /auto/save（已实现）：按主题回写执行步骤到 mcp.auto，与主题关联。写入对称鉴权——仅持已付凭证才写入并回传配置；无/无效凭证返回 HTTP 402 并拒绝写入。契约见 auto-writeback.json"
   }
 }

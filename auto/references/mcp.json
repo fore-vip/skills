@@ -1,26 +1,13 @@
 {
   "name": "auto",
-  "version": "1.1.0",
-  "description": "auto — 顶级执行技能 MCP（pay-skill）：输入主题从 mcp.auto 取该主题最优秀执行步骤（¥9.9 付费解锁）；mcp.auto 无结果时调用方兜底检索技能市场/社区/开源/搜索逐步执行并回写步骤（save 写操作同样需已付凭证，无/无效凭证→402 拒绝）",
+  "version": "1.3.0",
+  "description": "auto — 执行技能 MCP（pay-skill）：输入主题从 mcp.auto 取最优秀执行步骤（¥9.9 付费解锁）；无结果时调用方兜底检索并回写。读取与回写均走付费闸，无/无效凭证→402 拒绝。",
   "tools": [
-    { "$ref": "./auto-theme.json", "note": "auto 专属『知识面』入口：主题→执行步骤，¥9.9 付费闸，凭证=order._id+secret" },
-    { "$ref": "./auto-writeback.json", "note": "auto 专属『沉淀面』入口：回写步骤到 mcp.auto；写操作需已付凭证，无/无效→402拒绝" }
+    { "$ref": "./auto-theme.json", "note": "主题→执行步骤（知识面入口），¥9.9 付费闸，凭证=order_id+secret" },
+    { "$ref": "./auto-writeback.json", "note": "回写步骤（沉淀面），写操作需已付凭证，无/无效→402 拒绝" }
   ],
   "pay": {
-    "model": "type=6 订单（oid=频道ID, price=990分=¥9.9）",
-    "auth": "auto 无需 X-API-Key；凭证 = order._id + order.secret（生成订单时一次性写入 order.secret）",
-    "credential": "order._id + order.secret 为本 SKILL 凭证：402 响应体回显 order_id + secret，Agent 持久化到固定位置 ~/.agent/skill/auto/config.json（{order_id, secret}），下次同主题调用带回（order_id/X-Order-Id 头 + secret/X-Auto-Secret 头）即直读已付内容，无需重复付费；凭证存储指引以 SKILL 提示词形式存在，不塞进响应体",
-    "unlock": "支付回调 uni-skill-pay-notify 置 order.pay=true 后，Agent 携 order_id(+secret) 重请求即解锁（order._id+order.secret 配对校验，仅 order_id 无 secret 亦兼容）；payment_code=preorder 返回的 WeixinPay-Required 供 X402 重试头 X-Out-Trade-No",
-    "note": "前端页面走 payChannel() 直付（Native code_url 扫码），不经 X402；activity 来源分类复用 type 字段（写 'ai'），不另加 auto_channel 之类布尔标记"
-  },
-  "frontend": {
-    "note": "auto 暂仅云对象+MCP SKILL（无前端页）；payChannel() 方法预留，前端后续接"
-  },
-  "writeback": {
-    "status": "implemented",
-    "tool": "save_auto_steps",
-    "endpoint": "POST https://mcp.fore.vip/auto/save",
-    "contract": "./auto-writeback.json",
-    "note": "已实现的回写入口：写操作同样需已付凭证（order._id+secret），与 theme() 对称；已付→批量写 schedule 并回传支付配置，无/无效凭证→402 表单拒绝不写。云端 auto.save() 已实现，需 URL化 /auto/save + SkillHub 注册 skillId auto 后线上生效"
+    "$ref": "./auto-pay.json",
+    "note": "支付契约（单一事实源）：付费闸/凭证/402/代理支付/重试解锁。调用前须先确认支付态"
   }
 }

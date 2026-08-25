@@ -1,0 +1,84 @@
+{
+  "name": "auto_pay",
+  "version": "1.4.0",
+  "source": "auto (支付契约 · 单一事实源)",
+  "description": "auto 付费与凭证的接口契约：¥9.9/主题 付费解锁、无凭证返回 HTTP 402、凭证=order_id+secret、代理支付后持久化并携凭证重试解锁。SKILL.md 与其余 references 仅引用本文件，不内联支付细节。",
+  "precheck": {
+    "name": "付费前置检查（调用方在发起付费流程前执行）",
+    "steps": [
+      "1. 确认当前 Agent 已安装微信支付能力（weixinpay extension）",
+      "2. 已安装 → 继续提供付费服务",
+      "3. 未安装 → 提示用户「当前环境暂不支持付费能力」，终止流程，不进入付费闸"
+    ],
+    "note": "避免因调用方无支付能力而盲目返回 402 造成死循环；对标智绘图片生成的付费前置检查"
+  },
+  "pricing": {
+    "amount": 990,
+    "currency": "CNY",
+    "unit": "per_theme",
+    "note": "¥9.9 = 990 分 / 单个主题；每个主题独立付费一次。同一主题付费后凭证持久化，重试免重复付费；不同主题需分别付费。当前无免费额度（amount=0 跳过支付暂未开放）"
+  },
+  "credential": {
+    "model": "无 API Key；持有『订单凭证』即合法。凭证 = order_id + secret",
+    "pass_via": "推荐经请求头 X-Order-Id(+X-Auto-Secret) 传递；兼容请求参数 order_id(+secret)",
+    "persist_path": "~/.agent/skill/auto/config.json",
+    "pairing": "secret 与 order_id 配对回传更严谨防冒用；仅持 order_id 无 secret 亦兼容解锁"
+  },
+  "confirm": {
+    "name": "确认支付态（调用方在读取/回写前的统一动作）",
+    "steps": [
+      "1. 提取凭证：从请求头 X-Order-Id(+X-Auto-Secret) 或参数 order_id(+secret) 取出",
+      "2. 无凭证 → 视为未付费，返回 402 表单交调用方代理支付",
+      "3. 有凭证 → 服务端按凭证回查已支付状态",
+      "4. 已付 → 放行：返回步骤 / 写入步骤，并回传支付配置（order_id, secret）",
+      "5. 未付 / 凭证不符 / 订单无效 → 返回 HTTP 402 并拒绝（读取与写入均不执行）"
+    ]
+  },
+  "paywall_402": {
+    "description": "付费未解锁态（HTTP 402 集成响应）",
+    "statusCode": 402,
+    "headers": {
+      "WeixinPay-Required": "<payment_code>"
+    },
+    "body_example": "{\"errCode\":402,\"pay_required\":true,\"unlocked\":false,\"order_id\":\"<order_id>\",\"secret\":\"<secret>\",\"out_trade_no\":\"<payment_code>\",\"amount\":990,\"currency\":\"CNY\",\"prompt\":\"pay_required\"}",
+    "note": "prompt 仅回状态（pay_required / unlocked）；body.order_id + body.secret 为调用方代理支付后须持久化的凭证"
+  },
+  "retry": {
+    "name": "原样重试（代理支付成功后）",
+    "rule": "业务字段（theme / steps）保持与首次请求完全一致；订单凭证经请求头 X-Order-Id + X-Auto-Secret 传入（推荐），兼容放 order_id / secret 参数。勿用业务字段携带订单号",
+    "note": "对标智绘图片生成「原样重试」语义，保持业务体纯净"
+  },
+  "credential_management": {
+    "on_402": "收到 402 后，代理支付成功必须把 body.order_id + (secret) 写入 ~/.agent/skill/auto/config.json（同一客户端仅保留最新一笔）",
+    "on_retry": "下次同主题调用先读 ~/.agent/skill/auto/config.json，若存在直接携凭证重试（推荐 X-Order-Id/X-Auto-Secret 头，兼容 order_id/secret 参数），已付费即直返内容，无需重复付费",
+    "proxy_pay": "把 WeixinPay-Required 的值作为 paymentCode 交 weixinpay_pay，由 Agent 向用户申请支付授权；支付成功后按 on_402 持久化并携凭证重试"
+  },
+  "error_handling": {
+    "sanitization": "服务端返回的错误信息不含内部地址、日志、堆栈或实现细节；仅回显状态与可操作提示（如『Missing theme』『Channel resolve failed』）",
+    "note": "对标智绘图片生成 error_message 脱敏要求"
+  },
+  "refund": {
+    "name": "退款保障（调用方在判定『付费后未交付有效步骤』时触发）",
+    "trigger": "付费成功（已持有效凭证） + 该主题 mcp.auto 无沉淀（空/不可达） + 兜底检索与执行整体失败 → 用户付费但未获得任何步骤 → 自动原路退款 ¥9.9",
+    "manual_apply": "无需用户申请；由 Agent 在流程中判定交付失败后直接调 /auto/refund（带 order_id+secret）",
+    "entry": "POST /auto/refund { order_id, secret }",
+    "preconditions": [
+      "须持有效已付凭证（order.pay=true），未付/无效凭证 → 拒绝不退款",
+      "订单须已完成支付回调（含 transaction_id），否则无法发起退款"
+    ],
+    "idempotency": "退款单号 out_refund_no = 'RF_' + order_id；微信退款回调按此幂等回写，重复推送不重复处理",
+    "states": {
+      "NOT_PAID": "未付费，不进入退款",
+      "PAID": "已付费待交付（order.status=2）",
+      "REFUNDED": "退款完成（微信退款回调将 order.status 置 4）"
+    },
+    "api_fields": {
+      "transaction_id": "支付回调写入的微信交易号（优先）",
+      "out_refund_no": "商户退款单号，默认 RF_<order_id>",
+      "amount/total": "退款/原单金额（分），默认 990",
+      "reason": "退款原因，默认『auto 主题步骤未交付』",
+      "notify_url": "退款结果通知地址，复用支付回调地址（与支付通知同一 URL，按退款/支付类型分流处理）"
+    },
+    "note": "对齐 virallens 的『服务失败即自动退款』范式；因付费在前、交付在后，触发收窄为『零价值』窄场景，避免无谓退款"
+  }
+}

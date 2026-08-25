@@ -1,0 +1,11 @@
+{
+  "slug": "fore-vip-auto",
+  "name": "AUTO",
+  "version": "1.4.0",
+  "installedAt": 0,
+  "source": "local",
+  "labels": {
+    "pricing_type": "paid",
+    "requires_api_key": "false"
+  }
+}
