@@ -1,6 +1,6 @@
 {
   "name": "search_activities",
-  "source": "act (内联副本，yuli 独立维护，不引用 ../act)",
+  "source": "act (内联副本，huoli 独立维护，不引用 ../act)",
   "description": "搜索/查询活动。提供经纬度时按距离由近到远排序，不提供时按热度（浏览数）排序。支持关键词搜索和类型筛选。关键词仅匹配活动标题和地址。",
   "endpoint": "POST https://mcp.fore.vip/act/search",
   "inputSchema": {
@@ -24,7 +24,7 @@
       "pageSize": { "type": "integer" }
     }
   },
-  "yuli_usage": "搜鱼里频道：结果中筛 yuli_channel==true 即为鱼里频道；keyword 匹配本地生活需求语义",
+  "huoli_usage": "搜火力频道：结果中筛 huoli_channel==true 即为火力频道；keyword 匹配本地生活需求语义",
   "errors": {
     "empty": "text 字段提示「没有找到相关的活动」或「暂无可参与的活动」",
     "invalid_params": "静默降级忽略"

@@ -1,0 +1,43 @@
+{
+  "name": "get_huoli_needs",
+  "source": "huoli (专属，支付子级)",
+  "description": "查某火力频道(活动)内的全部本地生活需求(行程推荐 schedule)。免费频道或已带 X-Out-Trade-No 有效解锁凭证时直接返回需求列表；付费频道且未解锁时以集成响应模式返回 HTTP 402 + `WeixinPay-Required` 响应头（= payment_code），由调用方代理用户支付（SkillHub A2M 范式）。",
+  "endpoint": "POST https://mcp.fore.vip/huoli/needs",
+  "auth": { "header": "X-API-Key", "note": "复用 ai-mcp 动态 Key 体系（ai-key 集合），与 act 一致" },
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "channel_id": { "type": "string", "description": "频道(活动) _id，必填（即 act 创建的 huoli_channel==true 的活动 _id）" },
+      "page": { "type": "integer", "description": "页码，默认 1", "default": 1, "minimum": 1 },
+      "pageSize": { "type": "integer", "description": "每页条数，默认 20，上限 50", "default": 20, "minimum": 1, "maximum": 50 }
+    },
+    "required": ["channel_id"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "list": { "type": "array", "description": "需求列表（schedule 表：_id/content/price/images/start_time 等；联系方式 contact/phone/wechat 等隐私字段已在列表层过滤，不返回）" },
+      "total": { "type": "number", "description": "该频道内需求总数" },
+      "page": { "type": "integer" },
+      "pageSize": { "type": "integer" },
+      "unlocked": { "type": "boolean", "description": "是否已解锁（付费频道支付后为 true）" },
+      "pay_required": { "type": "boolean", "description": "是否为付费频道" },
+      "responseHeaders": {
+        "type": "object",
+        "description": "付费未解锁态（HTTP 402 集成响应）注入的响应头",
+        "properties": {
+          "WeixinPay-Required": { "type": "string", "description": "X402 支付码（= payment_code），作为 paymentCode 传给微信支付 Agent 调 weixinpay_pay" }
+        }
+      },
+      "out_trade_no": { "type": "string", "description": "付费未解锁态（HTTP 402 body）= payment_code，与响应头 WeixinPay-Required 同值" },
+      "amount": { "type": "integer", "description": "金额（分），¥1 = 100" },
+      "currency": { "type": "string", "description": "货币，CNY" },
+      "prompt": { "type": "string", "description": "面向 Agent 的支付引导文案" }
+    }
+  },
+  "errors": {
+    "403": "Invalid or missing X-API-Key",
+    "-1": "Missing channel_id / Channel not found",
+    "402": "付费闸（HTTP 402 集成响应）：响应头 WeixinPay-Required=payment_code，需调用方代理用户支付后携 X-Out-Trade-No:<payment_code> 重试解锁"
+  }
+}

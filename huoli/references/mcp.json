@@ -1,9 +1,9 @@
 {
-  "name": "yuli",
-  "version": "1.2.2",
-  "description": "鱼里同城 — 独立 skill，内联 act 工具副本 + yuli 专属付费闸（不引用 ../act）",
+  "name": "huoli",
+  "version": "1.2.5",
+  "description": "火力同城 — 独立 skill，内联 act 工具副本 + huoli 专属付费闸（不引用 ../act）",
   "mcp": "https://mcp.fore.vip",
-  "model": "yuli 为独立 skill：act 底层工具以内联副本拆分在 references/ 分目录，yuli 自包含、不跨 skill 引用。act 文件/后端保持不变。",
+  "model": "huoli 为独立 skill：act 底层工具以内联副本拆分在 references/ 分目录，huoli 自包含、不跨 skill 引用。act 文件/后端保持不变。",
   "maintenance": "references/act-*.json 为 act 工具契约内联副本，act 侧变更需同步更新此处副本，避免漂移。",
   "auth": {
     "create": {
@@ -25,20 +25,20 @@
   "tools": [
     { "$ref": "./act-search.json", "note": "act search_activities 内联副本" },
     { "$ref": "./act-detail.json", "note": "act get_activity_detail 内联副本" },
-    { "$ref": "./act-create.json", "note": "act create_activity 内联副本（含 yuli 创建约束）" },
+    { "$ref": "./act-create.json", "note": "act create_activity 内联副本（含 huoli 创建约束）" },
     { "$ref": "./act-schedules.json", "note": "act list_activity_schedules 内联副本" },
-    { "$ref": "./yuli-needs.json", "note": "yuli 专属：付费闸 get_yuli_needs" }
+    { "$ref": "./huoli-needs.json", "note": "huoli 专属：付费闸 get_huoli_needs" }
   ],
   "pay": {
     "model": "type=5 订单（oid=频道ID, price=100分=¥1）",
-    "unlock": "支付回调 yuli-notify 置 order.pay=true 后，带 X-Unlocked:<orderId> 重请求即解锁",
+    "unlock": "支付回调 uni-skill-pay-notify 置 order.pay=true 后，Agent 携 X-Out-Trade-No:<payment_code> 重请求即解锁（payment_code=preorder 返回的 WeixinPay-Required）",
     "note": "前端页面走 payChannel() 直付（Native code_url 扫码），不经 X402"
   },
   "frontend": {
     "note": "以下为 uni-app 前端页面直连云对象方法，非 MCP 工具；X402 仅对 MCP/Agent 调用方生效",
     "methods": [
       {
-        "object": "yuli",
+        "object": "huoli",
         "method": "payChannel",
         "description": "前端直付：直接生成微信 Native 支付码（code_url），不经 X402",
         "inputSchema": {
@@ -53,7 +53,7 @@
           "properties": {
             "errCode": { "type": "integer", "description": "0=成功" },
             "unlocked": { "type": "boolean", "description": "频道免费时为 true（无需支付）" },
-            "orderId": { "type": "string", "description": "鱼里解锁订单 _id，作 out_trade_no" },
+            "orderId": { "type": "string", "description": "火力解锁订单 _id，作 out_trade_no" },
             "codeUrl": { "type": "string", "description": "微信 Native 支付二维码内容，vk-uni-qrcode 展示" },
             "amount": { "type": "integer", "description": "金额（分），付费频道固定 100" }
           }

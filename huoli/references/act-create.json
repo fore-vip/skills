@@ -1,6 +1,6 @@
 {
   "name": "create_activity",
-  "source": "act (内联副本，yuli 独立维护，不引用 ../act)",
+  "source": "act (内联副本，huoli 独立维护，不引用 ../act)",
   "description": "创建新活动。需在 HTTP Header 中传入 X-API-Key 鉴权。content/address/cover 必填。cover 自动下载转存至云存储。系统自动填充 open=1、type=ai。可选 fee（单位：分，100=1元）用于付费活动，非 0 时必须 ≥0（负值/非法值回退为免费）；fee>0 时后端自动标记付费活动。",
   "endpoint": "POST https://mcp.fore.vip/act/create",
   "auth": { "header": "X-API-Key", "note": "临时静态 Key，后续升级为数据库动态管理" },
@@ -17,7 +17,8 @@
       "end_time": { "type": "number", "description": "结束时间 ms 时间戳（可选，null=不限）" },
       "max_participants": { "type": "integer", "description": "最大参与人数（默认 0=不限制）" },
       "creator_name": { "type": "string", "description": "发布者昵称（可选）" },
-      "fee": { "type": "number", "description": "活动费用，单位：分（100=1元），默认 0=免费；fee>0 时后端自动标记付费活动。校验规则：默认 0（免费）；仅当传入非 0 值时做非负校验，负值或非法值将被忽略并回退为 0（免费）" }
+      "fee": { "type": "number", "description": "活动费用，单位：分（100=1元），默认 0=免费；fee>0 时后端自动标记付费活动。校验规则：默认 0（免费）；仅当传入非 0 值时做非负校验，负值或非法值将被忽略并回退为 0（免费）" },
+      "huoli_channel": { "type": "boolean", "description": "火力频道标记（可选）：火力 SKILL 创建频道时传 true，后端原样持久化（非 schema 字段，写入即存）。不传则按普通活动创建，不在火力频道列表出现。" }
     },
     "required": ["content", "address", "cover"]
   },
@@ -36,14 +37,14 @@
       "create_time": { "type": "number" }, "update_time": { "type": "number" },
       "fee": { "type": "number", "description": "活动费用，单位：分（100=1元），0=免费" },
       "pay_required": { "type": "boolean", "description": "是否付费活动（fee>0 时为 true）" },
-      "yuli_channel": { "type": "boolean", "description": "鱼里频道标记，后端对鱼里创建自动打 true" }
+      "huoli_channel": { "type": "boolean", "description": "火力频道标记，火力 SKILL 创建时显式传 true，后端原样持久化（非 schema 字段，写入即存）；不传则按普通活动创建" }
     }
   },
-  "yuli_usage": "无结果时引导用户创建鱼里频道",
-  "yuli_constraints": {
+  "huoli_usage": "无结果时引导用户创建火力频道",
+  "huoli_constraints": {
     "type": "ai（沿用 act 默认，不改后端 enum）",
     "fee": "100（单位：分，¥1 付费解锁，强制）",
-    "yuli_channel": "后端自动打 true 标记（非 schema 字段，写入即存）",
+    "huoli_channel": "火力 SKILL 显式传 true，后端原样透传（非 schema 字段，写入即存）；不传则普通活动",
     "required": ["content", "address", "cover"],
     "auth": "X-API-Key"
   },

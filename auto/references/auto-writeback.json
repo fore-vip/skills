@@ -1,0 +1,58 @@
+{
+  "name": "save_auto_steps",
+  "source": "auto (专属)",
+  "status": "implemented",
+  "description": "AUTO 回写入口（已实现）：任务经兜底检索+执行解决后，将本次形成的执行步骤写回 mcp.auto，与主题ID关联。写操作同样需要已支付凭证（order._id + order.secret），与 theme() 对称——已带有效已付凭证 → 直接把 steps 批量写入主题频道（activity）的 schedule 集合，并回传支付配置(order_id, secret)；无凭证 / 凭证无效未付 → 回传 HTTP 402 支付表单（WeixinPay-Required + order_id + secret）并直接拒绝，不写。关联键=主题→activity 频道（content==theme，_id 即主题ID）；步骤→该频道 schedule 集合（与 get_auto_theme 读取同源）。",
+  "endpoint": "POST https://mcp.fore.vip/auto/save",
+  "auth": {
+    "note": "写操作需要已支付凭证（order._id + order.secret），与 theme() 同一套。无凭证 / 凭证无效未付 → 402 支付表单拒绝（不写）；已付有效 → 直接写 + 回传支付配置。读路径 get_auto_theme 同样无 X-API-Key"
+  },
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "theme": { "type": "string", "description": "主题/活动标题，必填；按 activity.content 精确匹配频道，无则自动建 auto 频道(type='ai', fee=990) 以承载步骤" },
+      "steps": {
+        "type": "array",
+        "description": "执行步骤数组，必填；每条写入对应频道的 schedule 集合",
+        "items": {
+          "type": "object",
+          "properties": {
+            "content": { "type": "string", "description": "步骤文本：可执行结论 / 命令 / 要点" },
+            "type": { "type": "string", "description": "可选。步骤类型标记（如 'cmd' / 'note' / 'link'）" },
+            "order": { "type": "integer", "description": "可选。步骤序号，缺省按数组顺序" },
+            "price": { "type": "number", "description": "可选。若步骤含价格/预算信息" },
+            "images": { "type": "array", "description": "可选。步骤配套图片 URL 列表" }
+          },
+          "required": ["content"]
+        }
+      },
+      "order_id": { "type": "string", "description": "已付凭证①（写操作必须）；也可经 X-Order-Id 头传递。云对象按 order._id 回查 module=='auto' && pay==true" },
+      "secret": { "type": "string", "description": "订单密钥凭证②，与 order_id 配对；也可经 X-Auto-Secret 头传递" }
+    },
+    "required": ["theme", "steps"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "errCode": { "type": "integer", "description": "0=写成功；-1=缺参/空有效步骤；402=付费闸（无/无效凭证，已拒绝未写）；'PAY_NOT_READY'/'V3_ERROR'=支付底座故障" },
+      "saved": { "type": "integer", "description": "实际写入 schedule 的步骤条数" },
+      "channel_id": { "type": "string", "description": "主题关联频道（activity）_id，即主题ID" },
+      "theme": { "type": "string" },
+      "order_id": { "type": "string", "description": "回传支付配置①（与请求凭证一致，确认有效已付）" },
+      "secret": { "type": "string", "description": "回传支付配置②" },
+      "unlocked": { "type": "boolean", "description": "写成功时恒为 true" },
+      "prompt": { "type": "string", "description": "写成功='saved'；付费闸='pay_required'" }
+    }
+  },
+  "errors": {
+    "-1": "Missing theme / steps / Empty valid steps",
+    "402": "付费闸（无凭证/凭证无效未付）：集成响应 HTTP 402 + WeixinPay-Required 头 + body.order_id + body.secret，直接拒绝不写；调用方代理支付后携凭证重试 save 即写入",
+    "PAY_NOT_READY": "X402 预下单端点故障（payapp.weixin.qq.com/.../preorder 被微信网关 302 拦截），需 SkillHub 后台注册 skillId auto 并绑定商户",
+    "V3_ERROR": "微信支付 V3 凭证或 Native 下单失败（uni-config-center/uni-skill-pay/config.json wxpayV3 段）"
+  },
+  "notes": {
+    "flow": "save() 与 theme() 共用 resolveChannel/checkUnlocked/buildPaywallResponse；付费闸逻辑统一抽取为模块级 buildPaywallResponse(theme, orderId, secret)，避免与 theme() 内联块漂移",
+    "association": "主题ID = activity._id（content==theme 频道），steps 落该频道 schedule，与 get_auto_theme 读取同源，保证下次同主题直接命中缓存",
+    "cloud_impl": "base/uni_modules/ai-mcp/uniCloud/cloudfunctions/auto/index.obj.js 已新增 save() + 模块级 buildPaywallResponse()；需 URL化 /auto/save 并 SkillHub 注册 skillId auto 后线上生效"
+  }
+}
