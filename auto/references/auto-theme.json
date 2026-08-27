@@ -8,7 +8,7 @@
     "type": "object",
     "properties": {
       "theme": { "type": "string", "description": "主题/活动标题，必填；按主题匹配频道，无则自动建频道" },
-      "order_id": { "type": "string", "description": "可选。已付凭证①（支付成功重试带回）；也可经 X-Order-Id 头传递" },
+      "order_id": { "type": "string", "description": "可选。已付凭证①（支付成功重试带回）；也可经 X-Order-Id 或 X-Out-Trade-No(=payment_code) 头传递" },
       "secret": { "type": "string", "description": "可选。订单密钥凭证②（与 order_id 配对）；也可经 X-Auto-Secret 头传递。仅持 order_id 无 secret 仍兼容解锁" },
       "page": { "type": "integer", "description": "页码，默认 1", "default": 1, "minimum": 1 },
       "pageSize": { "type": "integer", "description": "每页条数，默认 20，上限 50", "default": 20, "minimum": 1, "maximum": 50 }

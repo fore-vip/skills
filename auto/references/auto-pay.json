@@ -1,6 +1,6 @@
 {
   "name": "auto_pay",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "source": "auto (支付契约 · 单一事实源)",
   "description": "auto 付费与凭证的接口契约：¥9.9/主题 付费解锁、无凭证返回 HTTP 402、凭证=order_id+secret、代理支付后持久化并携凭证重试解锁。SKILL.md 与其余 references 仅引用本文件，不内联支付细节。",
   "precheck": {
@@ -20,14 +20,14 @@
   },
   "credential": {
     "model": "无 API Key；持有『订单凭证』即合法。凭证 = order_id + secret",
-    "pass_via": "推荐经请求头 X-Order-Id(+X-Auto-Secret) 传递；兼容请求参数 order_id(+secret)",
+    "pass_via": "推荐经请求头 X-Order-Id(+X-Auto-Secret) 传递；兼容官方 A2M 规范的 X-Out-Trade-No 头（值=payment_code）；兼容请求参数 order_id(+secret)",
     "persist_path": "~/.agent/skill/auto/config.json",
     "pairing": "secret 与 order_id 配对回传更严谨防冒用；仅持 order_id 无 secret 亦兼容解锁"
   },
   "confirm": {
     "name": "确认支付态（调用方在读取/回写前的统一动作）",
     "steps": [
-      "1. 提取凭证：从请求头 X-Order-Id(+X-Auto-Secret) 或参数 order_id(+secret) 取出",
+      "1. 提取凭证：从请求头 X-Order-Id(+X-Auto-Secret) 或 X-Out-Trade-No(=payment_code)，或参数 order_id(+secret) 取出",
       "2. 无凭证 → 视为未付费，返回 402 表单交调用方代理支付",
       "3. 有凭证 → 服务端按凭证回查已支付状态",
       "4. 已付 → 放行：返回步骤 / 写入步骤，并回传支付配置（order_id, secret）",
@@ -45,12 +45,12 @@
   },
   "retry": {
     "name": "原样重试（代理支付成功后）",
-    "rule": "业务字段（theme / steps）保持与首次请求完全一致；订单凭证经请求头 X-Order-Id + X-Auto-Secret 传入（推荐），兼容放 order_id / secret 参数。勿用业务字段携带订单号",
+    "rule": "业务字段（theme / steps）保持与首次请求完全一致；订单凭证经请求头 X-Order-Id + X-Auto-Secret 传入（推荐），兼容官方 A2M 规范的 X-Out-Trade-No 头（值=payment_code），或放 order_id / secret 参数。勿用业务字段携带订单号",
     "note": "对标智绘图片生成「原样重试」语义，保持业务体纯净"
   },
   "credential_management": {
     "on_402": "收到 402 后，代理支付成功必须把 body.order_id + (secret) 写入 ~/.agent/skill/auto/config.json（同一客户端仅保留最新一笔）",
-    "on_retry": "下次同主题调用先读 ~/.agent/skill/auto/config.json，若存在直接携凭证重试（推荐 X-Order-Id/X-Auto-Secret 头，兼容 order_id/secret 参数），已付费即直返内容，无需重复付费",
+    "on_retry": "下次同主题调用先读 ~/.agent/skill/auto/config.json，若存在直接携凭证重试（推荐 X-Order-Id/X-Auto-Secret 头，兼容官方 A2M 规范的 X-Out-Trade-No 头= payment_code，或 order_id/secret 参数），已付费即直返内容，无需重复付费",
     "proxy_pay": "把 WeixinPay-Required 的值作为 paymentCode 交 weixinpay_pay，由 Agent 向用户申请支付授权；支付成功后按 on_402 持久化并携凭证重试"
   },
   "error_handling": {
@@ -70,7 +70,8 @@
     "states": {
       "NOT_PAID": "未付费，不进入退款",
       "PAID": "已付费待交付（order.status=2）",
-      "REFUNDED": "退款完成（微信退款回调将 order.status 置 4）"
+      "REFUNDED": "退款完成（微信退款回调将 order.status 置 4）",
+      "FULFILL_AND_REFUND_FAILED": "服务异常且退款失败，建议用户联系客服"
     },
     "api_fields": {
       "transaction_id": "支付回调写入的微信交易号（优先）",

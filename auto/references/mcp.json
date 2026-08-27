@@ -1,6 +1,6 @@
 {
   "name": "auto",
-  "version": "1.3.0",
+  "version": "1.4.2",
   "description": "auto — 执行技能 MCP（pay-skill）：输入主题从 mcp.auto 取最优秀执行步骤（¥9.9 付费解锁）；无结果时调用方兜底检索并回写。读取与回写均走付费闸，无/无效凭证→402 拒绝。",
   "tools": [
     { "$ref": "./auto-theme.json", "note": "主题→执行步骤（知识面入口），¥9.9 付费闸，凭证=order_id+secret" },

@@ -24,7 +24,7 @@
           "required": ["content"]
         }
       },
-      "order_id": { "type": "string", "description": "已付凭证①（写操作必须）；也可经 X-Order-Id 头传递" },
+      "order_id": { "type": "string", "description": "已付凭证①（写操作必须）；也可经 X-Order-Id 或 X-Out-Trade-No(=payment_code) 头传递" },
       "secret": { "type": "string", "description": "订单密钥凭证②，与 order_id 配对；也可经 X-Auto-Secret 头传递" }
     },
     "required": ["theme", "steps"]
@@ -48,6 +48,6 @@
   },
   "notes": {
     "association": "主题关联频道（content==theme），步骤落该频道，与 get_auto_theme 读取同源，保证下次同主题直接命中缓存",
-    "cloud_impl": "云端 save() 已实现；需服务端将 /auto/save 上线后生效"
+    "cloud_impl": "云端 save() 已实现并随 auto 云对象上线，调用 POST {base}/auto/save 即生效（写操作需已付凭证，无/无效→402 拒绝不写）"
   }
 }

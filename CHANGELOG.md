@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-27
+
+- 创建 SKILL: fore-vip-oss（OSS 对象存储助手）— 概念科普 / 弹窗选供应商（6 家带 CLI）/ 安装 CLI / 引导 AK/SK / 域名绑定 / 场景建议
+
 ## [fore-ex v2.0.0] — 2026-08-07
 
 ### Changed
