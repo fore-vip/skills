@@ -24,7 +24,16 @@
     "fraud",
     "scam",
     "security",
-    "防骗"
+    "防骗",
+    "购物超省",
+    "shopping",
+    "比价",
+    "优惠券",
+    "deal-finder",
+    "gossip",
+    "entertainment",
+    "八卦",
+    "吃瓜"
   ],
   "skills": [
     {
@@ -93,6 +102,19 @@
       "description": "本地硬件设备控制中控：安装后在本机统一控制家里/环境里的所有硬件——智能家居、创客硬件（树莓派/Arduino/ESP32）、本机外设、环境物联网。采用设备抽象层+指令范式+动态驱动框架，不绑死协议，按环境加载 MCP/HTTP/MQTT/BLE/串口/系统驱动。",
       "path": "fore-vip-bot/",
       "category": "iot-control"
+    },
+    {
+      "name": "fore-vip-shopping-saver",
+      "display_name": "购物超省",
+      "description": "购物超省：输入商品名称或图片，从用户配置的 ≥3 个购物/导购/联盟接口汇聚商品链接、样图/SKU图、价格与领券地址，按质量评分/价格/券后价排序，生成简洁大气的高端 HTML 比价清单（图片缺失/跨域自动占位）。",
+      "path": "fore-vip-shopping-saver/"
+    },
+    {
+      "name": "fore-vip-gossip",
+      "display_name": "八卦吃瓜",
+      "description": "娱乐八卦聚合与求证：输入主题或明星人名，从微博/知乎/豆瓣/小红书/权威娱乐媒体多平台检索，交叉验证后按「已证实/待核实/纯传闻」三级标注真实性，输出吃瓜时间线、各方回应与瓜点分级，满足八卦心态但不造谣不传谣。",
+      "path": "fore-vip-gossip/",
+      "category": "entertainment"
     }
   ],
   "license": "MIT"

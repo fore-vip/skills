@@ -1,0 +1,124 @@
+{
+  "_note": "购物超省 · providers 配置模板。复制为 providers.json 后填入你自己的密钥（推荐用环境变量，见各 provider 的 ${ENV}）。脚本按 SKILL_DIR/config/providers.json 或 ~/.workbuddy/fore-vip-shopping-saver/providers.json 或 $SHOPPING_SAVER_CONFIG 查找。任务要求至少配置 3 个来源（下方示例已含 3 个，且全部为 key-based，开箱即用）。",
+  "secrets": {
+    "_note": "此处可放密钥，但更易泄露。推荐：留空，改在环境变量中设置（脚本会优先读 ${ENV} 对应的环境变量）。"
+  },
+  "providers": [
+    {
+      "id": "jutuike",
+      "name": "聚推客",
+      "enabled": true,
+      "adapter": "generic",
+      "_note": "注册 https://www.jutuike.com/ 拿 apikey。商品搜索覆盖 京东/淘宝/拼多多/唯品会/饿了么。下方 endpoint / 字段名以官方文档为准，请核对后填入。",
+      "request": {
+        "method": "GET",
+        "url": "https://api.jutuike.com/goods/search",
+        "query": {
+          "apikey": "${JUTUIKE_APIKEY}",
+          "keyword": "{keyword}",
+          "page": 1,
+          "page_size": 20
+        },
+        "headers": {}
+      },
+      "response": {
+        "items_path": "data",
+        "fields": {
+          "title": "title",
+          "image": "img",
+          "sku_images": "sku_imgs",
+          "price": "price",
+          "coupon_amount": "coupon_price",
+          "coupon_url": "coupon_url",
+          "score": "score",
+          "product_url": "item_url"
+        }
+      }
+    },
+    {
+      "id": "zhetaoke",
+      "name": "折淘客",
+      "enabled": true,
+      "adapter": "generic",
+      "_note": "注册 https://www.zhetaoke.com/ 拿 sid + 淘宝联盟 pid。免费 淘宝/天猫 商品与优惠券 API。endpoint / 字段名以官方文档为准。",
+      "request": {
+        "method": "GET",
+        "url": "https://api.zhetaoke.com:10001/api/open_item_search.ashx",
+        "query": {
+          "sid": "${ZHETAOKE_SID}",
+          "appkey": "${ZHETAOKE_APPKEY}",
+          "pid": "${TAOBAO_PID}",
+          "keyword": "{keyword}",
+          "page": 1,
+          "page_size": 20
+        },
+        "headers": {}
+      },
+      "response": {
+        "items_path": "content.data",
+        "fields": {
+          "title": "title",
+          "image": "pic_url",
+          "sku_images": "skus",
+          "price": "zk_final_price",
+          "coupon_amount": "coupon_amount",
+          "coupon_url": "coupon_share_url",
+          "score": "shop_dsr",
+          "product_url": "item_url"
+        }
+      }
+    },
+    {
+      "id": "demo_source",
+      "name": "导购API示例",
+      "enabled": true,
+      "adapter": "generic",
+      "_note": "第三端的占位模板。替换为你的可达导购来源（如 大淘客/选单网/好单库 等），按其文档填 endpoint 与字段路径。保持 3 端来源即可满足任务要求。",
+      "request": {
+        "method": "GET",
+        "url": "https://YOUR-DAOGOU-API.example.com/goods/search",
+        "query": {
+          "apikey": "${DEMO_APIKEY}",
+          "q": "{keyword}",
+          "page": 1,
+          "size": 20
+        },
+        "headers": {}
+      },
+      "response": {
+        "items_path": "data.list",
+        "fields": {
+          "title": "title",
+          "image": "img",
+          "sku_images": "sku_imgs",
+          "price": "price",
+          "coupon_amount": "coupon",
+          "coupon_url": "coupon_url",
+          "score": "rank",
+          "product_url": "url"
+        }
+      }
+    },
+    {
+      "id": "jd_union",
+      "name": "京东联盟（签名开放平台·示例）",
+      "enabled": false,
+      "adapter": "custom:adapters/jd_union.py",
+      "_note": "京东联盟等签名类开放平台（淘宝联盟/拼多多多多进宝同理）走 custom 适配器：把签名请求写在 adapters/jd_union.py 的 request() 里，返回解析后的响应 JSON，其余 items_path/fields 映射仍在本文件配置。启用前需先实现该适配器。",
+      "request": {},
+      "response": {
+        "items_path": "data",
+        "fields": {
+          "title": "skuName",
+          "image": "imageInfo.imageList[0].url",
+          "sku_images": "imageInfo.imageList",
+          "price": "priceInfo.lowestCouponPrice",
+          "coupon_amount": "priceInfo.price",
+          "coupon_url": "materialUrl",
+          "score": "comments",
+          "product_url": "materialUrl"
+        }
+      }
+    }
+  ]
+}

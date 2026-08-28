@@ -30,3 +30,7 @@ MEMORY.md
 .codebuddy/
 .claude/
 .agent/
+
+# Shopping saver provider secrets (local only, never commit)
+fore-vip-shopping-saver/config/providers.json
+providers.json
