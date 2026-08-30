@@ -119,3 +119,7 @@ python3 scripts/gen_clean_script.py --platform macos --title "PC清理" --steps 
 - `references/cleanup-targets.md` — 各平台清理目标与风险分级明细
 - `references/tool-recommendations.md` — 按工作性质的工具替代推荐库
 - `scripts/gen_clean_script.py` — 桌面一键清理脚本生成器
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见
