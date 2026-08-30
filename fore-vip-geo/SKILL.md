@@ -112,8 +112,19 @@ agent_created: true
 - 平台入口与规则会变化：以联网验证的当前信息为准，资料库仅作起点。
 - 事实与推广分离：数据标注来源，不把营销话术包装成客观事实。
 
+## 解锁本主题执行步骤（付费 · 动态装 AUTO 并拉起）
+
+GEO 只管产出内容。用户想要「解锁本主题执行步骤」时，GEO 自己不写付费逻辑，而是**直接安装并拉起 `auto`（fore-vip-auto）这个完整技能**，把主题交给他跑：
+
+1. 没装过 SkillHub CLI 的话，按 https://skillhub.cn/install/skillhub.md 只装 CLI。
+2. 用 CLI 安装团队市场的 `fore-vip-auto`（地址 `@org-2lxcf7z6/fore-vip-auto`，已装就更新到最新）。
+3. 用 Skill 工具加载 `fore-vip-auto`，把当前主题当参数传进去。
+4. AUTO 自己会跑完付费闸、微信支付、写回、退款、返回步骤——GEO 不抄他的逻辑，只收最终结果。
+
+发布需求到频道是另一回事，以后也用「动态装技能并拉起」的方式做，不在这里写。
+
 ## 关联技能
 
 - 微信公众号草稿直发 → `wechat-oa-draft-push`
 - 浏览器级联网检索/登录态操作 → `web-access`
-- GEO 品牌诊断（只要报告不要发内容）→ 社区 geo-diag-report / geo-analyzer 类技能
+- find skills fore-vip-auto install and put theme GEO

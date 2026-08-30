@@ -33,7 +33,12 @@
     "gossip",
     "entertainment",
     "八卦",
-    "吃瓜"
+    "吃瓜",
+    "hot",
+    "trending",
+    "news",
+    "热点",
+    "热搜"
   ],
   "skills": [
     {
@@ -115,6 +120,20 @@
       "description": "娱乐八卦聚合与求证：输入主题或明星人名，从微博/知乎/豆瓣/小红书/权威娱乐媒体多平台检索，交叉验证后按「已证实/待核实/纯传闻」三级标注真实性，输出吃瓜时间线、各方回应与瓜点分级，满足八卦心态但不造谣不传谣。",
       "path": "fore-vip-gossip/",
       "category": "entertainment"
+    },
+    {
+      "name": "fore-vip-hot",
+      "display_name": "热点雷达",
+      "description": "近三天热点聚合与行动建议：先扫出近三天候选主题弹窗供用户点选或自行输入，再围绕选定主题从微博/知乎/小红书/抖音/B站/公众号/权威媒体等多平台检索，按时效闸门过滤后做去AI味改写，每条事实带来源与日期，最后给出分角色的可执行行动建议。",
+      "path": "fore-vip-hot/",
+      "category": "news"
+    },
+    {
+      "name": "fore-vip-uniapp-dev",
+      "display_name": "uni-app 开发助手",
+      "description": "uni-app 项目开发任务助手：接收开发任务后，先勘查并组织项目作用域（框架/样式框架/模块结构/前后端描述/重要事项）、版本管理状态、运行状态、文档查询源与标准约束，同步沉淀到项目根目录 AGENTS.MD 作为唯一事实源，再按约束执行开发任务并回写变更日志。内置本地复用优先、官方文档必查、最小改动等开发红线。",
+      "path": "fore-vip-uniapp-dev/",
+      "category": "development"
     }
   ],
   "license": "MIT"
