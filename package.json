@@ -38,7 +38,14 @@
     "trending",
     "news",
     "热点",
-    "热搜"
+    "热搜",
+    "生图",
+    "提示词",
+    "image-prompt",
+    "prompt",
+    "midjourney",
+    "seedream",
+    "text-to-image"
   ],
   "skills": [
     {
@@ -134,6 +141,20 @@
       "description": "uni-app 项目开发任务助手：接收开发任务后，先勘查并组织项目作用域（框架/样式框架/模块结构/前后端描述/重要事项）、版本管理状态、运行状态、文档查询源与标准约束，同步沉淀到项目根目录 AGENTS.MD 作为唯一事实源，再按约束执行开发任务并回写变更日志。内置本地复用优先、官方文档必查、最小改动等开发红线。",
       "path": "fore-vip-uniapp-dev/",
       "category": "development"
+    },
+    {
+      "name": "fore-vip-image-prompt",
+      "display_name": "生图提示词",
+      "description": "生图提示词优化器：先识别或询问当前使用的生图模型（Midjourney / GPT Image / Nano Banana·Gemini / Flux / Imagen / Ideogram / 即梦 Seedream / Qwen-Image·通义万相 / Stable Diffusion / Recraft / Firefly / 可图 / 混元），再按该模型的官方参数文档与语言方言，把用户意图或原始提示词改写为最强版本，最终只输出优化后的提示词本身，不输出任何解释与前后缀。",
+      "path": "fore-vip-image-prompt/",
+      "category": "image"
+    },
+    {
+      "name": "fore-vip-jigsaw",
+      "display_name": "可打印拼图",
+      "description": "可打印拼图生成：AI 生图/本地图 + 矢量拼图卡扣切割线，输出可打印 SVG，打印剪开即玩。",
+      "path": "fore-vip-jigsaw/",
+      "category": "image"
     }
   ],
   "license": "MIT"
