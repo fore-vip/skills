@@ -77,7 +77,7 @@ create_activity({
 ## 安装
 
 ```bash
-npx skills add fore-vip/act
+npx skills add fore-vip/skills --skill act
 ```
 
 外部 MCP client（Claude Desktop / Cursor 等）可直接用仓库根 `mcp-standard.json`（声明 `https://mcp.fore.vip/act/mcp`）接入，无需经 skills 机制。

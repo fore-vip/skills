@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-02
+
+- 优化 SKILL: fore-vip-movie（v1.0.0→v1.1.0 · 来源: todo 电影优化）：① 补齐 frontmatter 规范字段（display_name/display_name_en/category:entertainment/version/author/agent_created）；② 步骤 3「调研与采集」改为硬规则「实时取数，禁止凭记忆编造」，明确 WebSearch(带 freshness)+WebFetch 取数 + 权威源清单，场景库只给逻辑不预填片目；③ 恢复并落地 CHANGELOG 记录过但丢失的「在线购票（推广）」资源位 `https://kurl08.cn/ts0VHB`（影划算电影票，已验证跳转，标注「推广/广告」、不代购不代付）；④ references/movie-guide.md 新增「二·5 实时数据获取清单」（端点+检索词模板）与场景库不预填片目说明；⑤ 新增「不可为（边界）」一节
+
 ## 2026-08-29
 
 - 创建 SKILL: fore-vip-hot（热点雷达 · 来源: todo 热点；用户想看热点 → 先快扫近三天候选主题 → AskUserQuestion 弹出 4 个热门主题供点选或用户自输 → 选定主题后从微博/知乎/小红书/抖音/B站/公众号/权威媒体多平台深挖（WebSearch 必带 freshness=d3）→ 时效闸门硬过滤 >3 天 + 信源 S/A/B/C/D 分级交叉验证（✅已确认/⚠️多方报道/💬舆论/❓传闻）→ 去 AI 味可读性改写 → 输出「一句话结论/时间线/各方说法/事实核对表/跟你有什么关系/你可以现在做的几件事/信源清单」；涉政军事一票否决，投资医疗法律只做风险提示）
