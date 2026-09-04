@@ -3,6 +3,8 @@ name: fore-vip-ds-harness
 display_name: DSH 傻瓜式启动
 display_name_en: DeepSeek Harness One-Click
 description: DeepSeek Harness（dsh）傻瓜式本地启动助手。一句话讲清 DSH 是什么，引导在 DeepSeek 开放平台获取 API Key，按本机系统（macOS/Windows/Linux）实时装好 Node、配置 npm 国内镜像、安装并启动 dsh，并就地生成桌面快捷方式（启动服务并打开 http://localhost:3080）。运行脚本由 Agent 按系统环境实时写出，不依赖任何随包文件。触发词：DSH、DeepSeek Harness、dsh、本地部署 DeepSeek、DeepSeek Agent 框架、傻瓜式启动。
+description_zh: DeepSeek Harness（dsh）傻瓜式本地启动助手。讲清 DSH 是什么，引导获取 DeepSeek 开放平台 API Key，按本机系统（macOS / Windows / Linux）实时安装 Node、配置 npm 国内镜像、安装并启动 dsh，并就地生成桌面快捷方式（启动服务并打开 http://localhost:3080）。运行脚本由 Agent 按系统环境实时写出，不依赖任何随包文件。
+description_en: A one-click local launcher for DeepSeek Harness (dsh). Explains what dsh is, walks through obtaining a DeepSeek Open Platform API key, then installs Node, configures a China npm mirror, installs and starts dsh according to the host OS (macOS / Windows / Linux), and creates a desktop shortcut that starts the service and opens http://localhost:3080. All run scripts are generated on the fly by the agent, with no bundled files required.
 category: devtools
 version: 1.0.0
 author: WISE

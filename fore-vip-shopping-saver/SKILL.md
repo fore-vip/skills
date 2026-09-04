@@ -3,6 +3,8 @@ name: fore-vip-shopping-saver
 display_name: 购物超省
 display_name_en: Shopping Super-Save
 description: 购物超省（fore.vip）— 输入商品名称或图片，从用户配置的 ≥3 个购物/导购/联盟接口汇聚商品链接、样图/SKU 图、价格与领券地址，按质量评分/价格/券后价排序，生成简洁大气的高端 HTML 比价清单；图片缺失或跨域时自动占位。当用户说"购物超省""帮我找 XX 的优惠/优惠券""XX 哪里买最便宜""全网比价""搜 XX 优惠券""识别这张图找同款优惠"时使用。
+description_zh: 全网比价优惠聚合。输入商品名称或图片，从用户配置的 ≥3 个购物 / 导购 / 联盟接口汇聚商品链接、样图与 SKU 图、价格与领券地址，按质量评分 / 价格 / 券后价排序，生成简洁大气的高端 HTML 比价清单；图片缺失或跨域时自动占位。
+description_en: Cross-store price comparison and deal aggregator. Given a product name or image, it pulls product links, sample and SKU images, prices and coupon URLs from three or more user-configured shopping, deal and affiliate sources, sorts by quality score, price and post-coupon price, and generates a clean, premium HTML comparison page. Missing or cross-origin images fall back to placeholders.
 category: ecommerce
 version: 1.0.0
 author: fore.vip

@@ -3,6 +3,8 @@ name: fore-vip-hot
 display_name: 热点雷达
 display_name_en: Hot Radar
 description: 近三天热点聚合与行动建议（fore.vip）。用户想看热点时，先扫出近三天的候选主题并弹出让用户点选或自行输入，再围绕选定主题从微博、知乎、小红书、抖音、B站、微信公众号、权威媒体等多平台检索最新素材，按时效闸门过滤后做去 AI 味的可读性改写，每条事实带来源与日期，最后给出分角色的可执行行动建议。当用户说「热点 / 热搜 / 最近有什么新鲜事 / 今天有什么新闻 / 最近在讨论什么 / 帮我看看 XX 最近怎么样 / 追个热点 / 有什么大事发生」时触发。
+description_zh: 近三天热点聚合与行动建议。先扫出近三天候选主题让用户点选或自输，再围绕选定主题从微博、知乎、小红书、抖音、B站、微信公众号与权威媒体检索最新素材，按时效闸门过滤后做去 AI 味的可读性改写，每条事实带来源与日期，最后给出分角色的可执行行动建议。
+description_en: Aggregates the last three days of trending topics with actionable takeaways. Surfaces candidate topics for the user to pick from or type their own, gathers the freshest material from Weibo, Zhihu, Xiaohongshu, Douyin, Bilibili, WeChat official accounts and authoritative media, filters by a recency gate, and rewrites it into human-sounding prose. Every fact carries a source and date, followed by role-specific recommended actions.
 category: news
 version: 1.0.0
 author: fore.vip

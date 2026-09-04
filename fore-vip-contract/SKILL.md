@@ -3,6 +3,8 @@ name: fore-vip-contract
 display_name: 合同助手
 display_name_en: Contract Assistant
 description: 中文合同起草、生成与审阅助手（fore.vip）。把「帮我写一份合作协议 / 代理合同 / 保密协议 / 租赁合同 / 劳动合同 / 授权委托书 / 报价单 / 借条」「审一下这份合同」「这份协议有没有坑 / 帮我把关」转化为结构规范、条款完整、符合《民法典》与广告法合规要求的中文合同，并输出可填写的 HTML→DOCX。内置通用民事商事合同模板库并支持动态扩展任意类型，覆盖个人 / 小团队 / 本地生活 O2O / CPS 推广常见场景。当用户请求起草、生成、拟定、审阅、审查、把关、修改合同或协议，或上传合同文本要求风险审查时使用。
+description_zh: 中文合同起草、生成与审阅助手。覆盖合作协议、代理合同、保密协议、租赁合同、劳动合同、授权委托书、报价单、借条等类型，输出结构规范、条款完整、符合《民法典》与广告法合规要求的中文合同，并生成可填写的 HTML→DOCX。内置通用民事商事模板库并支持动态扩展。
+description_en: Chinese contract drafting, generation and review assistant. Covers partnership, agency, NDA, lease, employment, power of attorney, quotation and IOU agreements, producing well-structured, clause-complete Chinese contracts compliant with the Civil Code and advertising law, plus a fillable HTML to DOCX output. Includes a general civil and commercial template library that extends to arbitrary contract types.
 category: legal-document
 version: 1.0.0
 author: fore.vip

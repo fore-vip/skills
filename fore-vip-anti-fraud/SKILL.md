@@ -3,6 +3,8 @@ name: fore-vip-anti-fraud
 display_name: 反诈助手
 display_name_en: Anti-Fraud Assistant
 description: 反诈识别与避险助手（fore.vip）。用户输入遇到的事情或关键词（陌生来电/短信/链接/兼职刷单/投资理财/网恋/冒充公检法/客服理赔/中奖免费送/贷款解冻/裸聊/游戏交易等），先对照已知骗局特征库识别是否为诈骗；无法识别时检索各大平台、社区、搜索引擎的同类型案例；疑似新型骗局时推演利益点、骗子可能扮演的身份、利益损害途径；最后输出风险清单与即时应对方式，并给出最近的公安与政府部门求助举报渠道（96110/110/国家反诈中心/12381/12377/12315/银行紧急止付）。当用户问「这是不是诈骗/帮我看看这个/这个链接安全吗/我遇到了…/反诈/防骗/杀猪盘/刷单/解冻/我被骗了怎么办」时启用。
+description_zh: 反诈识别与避险助手。输入遇到的情况或关键词，先对照骗局特征库识别；无法识别时跨平台检索同类案例；疑似新型骗局则推演利益点与损害途径。输出风险清单、即时应对方式与公安及政府部门举报渠道（96110 / 110 / 国家反诈中心 / 12381 / 12377 / 12315 / 银行紧急止付）。
+description_en: Anti-fraud identification and risk-avoidance assistant. Describe a situation or keyword to match it against a scam pattern library; unmatched cases trigger a cross-platform search for similar reports. Suspected new scams get a motive-and-damage-path analysis. Outputs a risk checklist, immediate response steps, and official reporting channels (96110 / 110 / National Anti-Fraud Center / 12381 / 12377 / 12315 / emergency bank freeze).
 category: security
 version: 1.0.0
 author: fore.vip

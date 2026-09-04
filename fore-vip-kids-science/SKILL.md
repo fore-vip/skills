@@ -1,6 +1,8 @@
 ---
 name: fore-vip-kids-science
 description: Children's popular-science Q&A skill with per-section AI illustrations and a typeset illustrated page (Ten Thousand Whys / 十万个为什么). Answers kids' curiosity questions with accurate, age-appropriate structured explanations, generates ONE child-safe AI picture (ImageGen) per answer section, pairs each image with its text, and outputs a typeset picture-book HTML page. Use when a user asks "why" questions for or on behalf of a child, requests children's science explanations, mentions 十万个为什么 / 儿童科普 / 为什么 / 小朋友问, or wants 带配图 / 生图 / 排版.
+description_zh: 儿童科普问答技能（十万个为什么）。用准确、适龄的结构化讲解回答孩子的好奇提问，为答案的每个段落生成一张儿童安全的 AI 配图，图文一一对应，最终输出排版精美的绘本式 HTML 页面。
+description_en: Children's popular-science Q&A skill (Ten Thousand Whys). Answers kids' curiosity questions with accurate, age-appropriate structured explanations, generates one child-safe AI illustration per answer section, pairs each image with its matching text, and outputs a typeset picture-book HTML page.
 display_name: 十万个为什么
 display_name_en: Ten Thousand Whys
 category: education

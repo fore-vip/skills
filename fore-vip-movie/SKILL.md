@@ -3,6 +3,8 @@ name: fore-vip-movie
 display_name: 观影指南
 display_name_en: Movie Guide
 description: 电影推荐与观影指南（fore.vip）。把模糊的「看什么电影 / 周末看啥 / 适合 X 的电影 / 最近有什么好片 / 想看一部治愈系」转化为按类型·心情·评分·档期·场景分层的观影推荐与可执行片单，并附避坑、正版观看渠道与在线购票入口指引。当用户请求电影推荐、片单、观影指南、某心情/场合/类型该看什么、新片或经典重温、家庭/情侣/朋友观影规划时触发。
+description_zh: 电影推荐与观影指南。把模糊的「看什么电影 / 周末看啥 / 适合 X 的电影 / 最近有什么好片」转化为按类型、心情、评分、档期与场景分层的观影推荐与可执行片单，并附避坑提示、正版观看渠道与在线购票入口指引。
+description_en: Movie recommendation and viewing guide. Turns vague requests such as what should I watch, weekend picks, something for X, or what is good lately into layered recommendations and an actionable watchlist organized by genre, mood, rating, release window and occasion, with pitfalls to avoid, legitimate streaming sources, and online ticketing entry points.
 category: entertainment
 version: 1.1.0
 author: fore.vip

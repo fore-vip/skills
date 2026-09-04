@@ -1,6 +1,11 @@
 ---
 name: fore-vip-career-starter
 description: 职场新人求职助手（fore.vip）。面向社会经验相对薄弱的群体（应届生 / 转行 / 待业 / 低经验者），从零采集基础信息、学历、性格、特长，逐项轮询打磨简历模板，支持 doc / pdf / html 输出并引导存入资料库可链接访问；基于综合信息推荐合适岗位与目标企业，条件未达标时给出学习成长路线，并附主流求职平台投递入口与其余可行路径。当用户说「帮我写简历 / 我没经验怎么求职 / 推荐适合我的岗位 / 给我个成长路线 / 应届生求职 / 找工作投哪个平台」时触发。
+description_zh: 职场新人求职助手。面向应届生、转行与低经验群体，从零采集基础信息、学历、性格与特长，逐项打磨简历并输出 doc / pdf / html；基于综合信息推荐岗位与目标企业，条件未达标时给出学习成长路线，并附主流求职平台投递入口。
+description_en: Job-search assistant for early-career users. For graduates, career switchers and low-experience candidates, it collects background, education, personality and strengths from scratch, refines the resume section by section, and exports doc / pdf / html. Recommends roles and target companies from the full profile, offers a learning roadmap when requirements are not met, and lists major job-platform entry points.
+category: career
+version: 1.0.0
+author: fore.vip
 agent_created: true
 ---
 

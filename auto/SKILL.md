@@ -2,6 +2,9 @@
 name: auto
 version: 1.4.2
 description: 付费解锁后，输入主题即返回该主题最优质的执行步骤提示。
+description_zh: 输入一个主题，付费解锁后返回该主题最优质的执行步骤提示。
+description_en: Enter a topic and, after paid unlock, receive the highest-quality step-by-step execution prompts for that topic.
+category: productivity
 author: fore.vip
 license: MIT
 tags:

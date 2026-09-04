@@ -1,6 +1,11 @@
 ---
 name: fore-vip-product-recommend
 description: 通用产品调研与推荐框架（fore.vip）。把模糊的「帮我推荐个产品 / 该买哪个 / 选型对比 / 适合我的 X / 测评对比 / 选型清单 / 帮我选」转化为有依据、可溯源、分层的结构化推荐。覆盖全行业全品类，暂不涉及 CPS 选品。标准流程：① 需求澄清（使用者/诉求/约束/优先级）② 构建评估维度并赋权（必选四维：需求匹配·性能质量·TCO·风险合规；可选：口碑·售后·易用·扩展）③ 多渠道调研采集（竞品清单/评测/社区/官方，标注来源·时间·适用范围）④ 加权评分矩阵横向对比 ⑤ 结构化产出（首选/备选/避坑 + 事实依据 + 来源 + 行动建议）。遵循 fore.vip 核心准则：先结论后依据、事实/分析/建议三级分离、数据可溯源。当用户请求产品推荐、测评对比、选型决策、采购清单时使用。
+description_zh: 通用产品调研与推荐框架。把模糊的「帮我推荐个产品 / 该买哪个 / 选型对比 / 适合我的 X / 测评对比 / 选型清单」转化为有依据、可溯源、分层的结构化推荐。流程为需求澄清 → 构建评估维度并赋权（需求匹配 / 性能质量 / TCO / 风险合规四维必选）→ 多渠道调研采集（标注来源与时间）→ 加权评分矩阵横向对比 → 产出首选 / 备选 / 避坑清单。事实、分析、建议三级分离，数据可溯源。
+description_en: "A general framework for product research and recommendation. Converts vague asks such as recommend a product, which should I buy, compare options, best X for me, reviews, or shortlist into evidence-based, traceable, tiered recommendations. Pipeline: clarify requirements; build and weight evaluation dimensions (four mandatory: need fit, performance and quality, TCO, risk and compliance); multi-channel research with source and timestamp tagging; weighted scoring matrix for side-by-side comparison; output a first-choice, alternatives and pitfalls list. Facts, analysis and recommendations are kept strictly separate; every data point is traceable."
+category: product-research
+version: 1.0.0
+author: fore.vip
 ---
 
 # 产品推荐 · 通用调研与推荐框架

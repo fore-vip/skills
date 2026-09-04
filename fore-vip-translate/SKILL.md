@@ -3,6 +3,8 @@ name: fore-vip-translate
 display_name: 翻译
 display_name_en: Translator
 description: 即时翻译全球语种。默认把用户输入的内容中译英；用户明确指定目标语种时自动识别并在后续对话中保持该语种。只输出译文本身，不输出任何解释、提示、前缀后缀或多余内容。触发词：翻译、translate、译一下、中译英、英译中、译成、翻译成、用X语怎么说、怎么说。
+description_zh: 即时翻译全球语种。默认把用户输入的内容中译英；用户明确指定目标语种时自动识别并在后续对话中保持该语种。只输出译文本身，不输出任何解释、提示或前后缀。
+description_en: Instant translation across world languages. Defaults to Chinese-to-English; when the user names a target language, it auto-detects and keeps that language for the rest of the conversation. Outputs only the translated text, with no explanations, hints, prefixes or suffixes.
 category: language
 version: 1.0.1
 author: fore.vip

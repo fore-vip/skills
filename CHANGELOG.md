@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-04
+
+- 优化 SKILL: fore-vip-pc-clear（v1.0.0→v1.1.0 · 依据 open.workbuddy.cn/docs/skill 技能基础结构）：① 补齐规范必填 frontmatter 字段 `description_zh` / `description_en`（原缺失）；② 引用语法统一改为规范明文要求的 `@references/xxx.md` 形式（正文 3 处 + 参考资料区）；③ 新增「附录 A · 脚本不可用时的等价生成规范」——渠道只分发 SKILL.md 时（如 SKILLHUB 安装版），Agent 现场生成一次性脚本，产物与 `scripts/gen_clean_script.py` 完全一致且用完即弃、不落盘技能目录；第 3 步增加脚本存在性硬检测 `test -f`；④ `scripts/` 目录保留（开放平台 zip / git 渠道仍可用），双渠道均可产出桌面一键脚本
+
+- 首层 29 个 SKILL 的 frontmatter 全量补齐（依据 open.workbuddy.cn/docs/skill 字段规范）：① 补官方必填字段 `description_zh` / `description_en`（26 个缺失，逐一按技能定位撰写中文简介与英文对应，非 description 复制）；② 补 `version`（6 个缺失，默认 1.0.0）与 `author`（7 个缺失，fore.vip）；③ 补 `category`（8 个缺失：activity / productivity / career / sales / marketing / product-research / design）；④ `jingwei` 的 `version: "1.0"` 规范为 `1.0.0`；⑤ 修复 10 个文件 `description_en` 含半角「冒号+空格」导致的 YAML 解析失败（mapping values are not allowed here），值改为双引号包裹。最终 **29/29 通过 yaml.safe_load 严格校验，必填五字段全齐、category 全覆盖**。`cps` / `fore-vip-ds-harness` / `wechat-oa-draft-push` 保留原 `author: WISE` 未改
+
+- 创建 SKILL: fore-vip-skill-lint（技能规范校验 · 来源: 首层 frontmatter 批量补齐实战沉淀）：按 open.workbuddy.cn 官方字段表批量校验并补齐 SKILL.md frontmatter。四步流程（扫描差距 → **yaml.safe_load 严格解析实测** → 幂等批量补齐 → 全量复验）；内置四大已踩坑：① 长文本裸写遇半角「冒号+空格」炸 YAML（最高频，须双引号包裹）② `description: |` 块标量的插入点须退到 frontmatter 末尾 ③ BOM 与行尾符须原样回填 ④ `description_zh` 是简短介绍而非 description 复制。附可直接运行的补齐脚本骨架
+
 ## 2026-09-02
 
 - 优化 SKILL: fore-vip-movie（v1.0.0→v1.1.0 · 来源: todo 电影优化）：① 补齐 frontmatter 规范字段（display_name/display_name_en/category:entertainment/version/author/agent_created）；② 步骤 3「调研与采集」改为硬规则「实时取数，禁止凭记忆编造」，明确 WebSearch(带 freshness)+WebFetch 取数 + 权威源清单，场景库只给逻辑不预填片目；③ 恢复并落地 CHANGELOG 记录过但丢失的「在线购票（推广）」资源位 `https://kurl08.cn/ts0VHB`（影划算电影票，已验证跳转，标注「推广/广告」、不代购不代付）；④ references/movie-guide.md 新增「二·5 实时数据获取清单」（端点+检索词模板）与场景库不预填片目说明；⑤ 新增「不可为（边界）」一节
@@ -93,3 +101,4 @@
 - [2026-08-19 08:59] 创建 SKILL: fore-vip-career-starter（来源: fore.vip 求职 · 职场新人求职助手；C 端低经验用户从零写简历/定岗/补能力/找渠道/备选路径，纯提示词 + references 简历模板/平台/成长路线/备选路径）
 - [2026-08-26 03:15] 更新 SKILL: auto（v1.0.1→v1.1.0 角色重定义：顶级执行技能，主题→mcp.auto 取最优秀执行步骤；新增工作空间权限读取+auto.config 维护；进入已有¥9.9付费流程；mcp.auto 无结果时兜底检索技能市场/社区/开源/搜索逐步执行+解决后回写步骤到 mcp.auto(主题ID关联)；回写云端方法 auto.save() 已实现）
 - [2026-08-26 03:25] 实现 SKILL auto 回写云端方法 auto.save()（base/uni_modules/ai-mcp/uniCloud/cloudfunctions/auto/index.obj.js）：写操作同样需已支付凭证(order._id+secret)，与 theme() 对称——已付→批量写 steps 到主题频道 schedule 并回传支付配置(order_id,secret)；无凭证/凭证无效未付→回传 HTTP 402 支付表单直接拒绝不写。抽 module 级 buildPaywallResponse(theme,orderId,secret) 复用付费闸（与 theme() 内联块同源）。references/auto-writeback.json 改 status=implemented+支付门控+输出 order_id/secret；mcp.json 加 save_auto_steps 到 tools+version→1.1.0+writeback.status=implemented。聚焦单测 13/13 PASS（无凭证→402不写/无效→402/已付→写2条+回传/secret不符→402/新主题自动建频道写入）。部署待用户侧：URL化 /auto/save + SkillHub 注册 skillId auto。
+- [2026-09-03 06:24] 创建 SKILL: fore-vip-mom-says（听妈妈的话 · 育儿应对顾问；C 端育儿场景，纯提示词单文件：年龄阶段定性表(0-1/1-3/3-6/6-12/12-18) + 成因 ABC 分叉推演 + 当下话术/本周三件事/环境调整/家长自稳四层落地 + 两周观察复盘表；安全红线优先停机并指向 12356(国家卫健委 7x24) / 12355(青少年) / 120 / 110 / 12338，转介给儿童心理科·儿童保健科并附首诊准备清单；不诊断、不体罚、不评判家长）

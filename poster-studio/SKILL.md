@@ -1,6 +1,11 @@
 ---
 name: poster-studio
 description: 当用户要生成可实际发布的海报/服务图/封面（闲鱼、公众号、小红书等），且需要导出 PNG 时触发。先按极简排版设计哲学（Algorithmic Poster Philosophy）构建系统，再用 show_widget 渲染内联 SVG 预览，并通过 scripts/render_poster.py 生成高分 PNG（白底/黑字/单色强调，CJK 字体跨平台自适应）。适用于闲鱼服务海报、极简活动海报、作品集封面、品牌视觉图等"系统美学 + 可下载成品"的场景。
+description_zh: 极简排版海报生成器。为可实际发布的海报、服务图与封面（闲鱼、公众号、小红书等）构建设计系统，用 show_widget 渲染内联 SVG 预览，并导出高清 PNG（白底 / 黑字 / 单色强调，CJK 字体跨平台自适应）。适用于闲鱼服务海报、极简活动海报、作品集封面与品牌视觉图等「系统美学 + 可下载成品」场景。
+description_en: "A minimalist, typography-driven poster generator. Builds a design system for publish-ready posters, service images and covers (Xianyu, WeChat, Xiaohongshu), renders an inline SVG preview via show_widget, and exports a high-resolution PNG (white background, black type, single accent color, cross-platform CJK font handling). Built for systematic aesthetics plus a downloadable deliverable: service posters, minimal event posters, portfolio covers, brand visuals."
+category: design
+version: 1.0.0
+author: fore.vip
 ---
 
 # Poster Studio

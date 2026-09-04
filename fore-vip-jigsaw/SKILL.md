@@ -3,6 +3,8 @@ name: fore-vip-jigsaw
 display_name: 可打印拼图
 display_name_en: Printable Jigsaw Puzzle
 description: 可打印拼图生成助手（fore.vip）。先用 AI 生成一张动漫/插画底图（ImageGen 等环境可用生图工具），再用矢量 SVG 叠加经典拼图卡扣切割线，输出自带底图的可打印 SVG——打印后沿黑线剪开即得互补拼块，直接可玩。支持用户指定网格难度（默认 5×5=25 片）、卡扣随机布局种子，也支持用户直接提供本地图片跳过生图。触发词：拼图、可打印拼图、动漫拼图、打印拼图、生成拼图、剪开玩、jigsaw、图片拼图、拼图线、puzzle。
+description_zh: 可打印拼图生成助手。先用 AI 生成动漫 / 插画底图，再用矢量 SVG 叠加经典拼图卡扣切割线，输出自带底图的可打印 SVG——打印后沿黑线剪开即得互补拼块，直接可玩。支持指定网格难度（默认 5×5=25 片）与卡扣随机布局种子，也支持直接提供本地图片跳过生图。
+description_en: "Printable jigsaw puzzle generator. Creates an anime or illustration base image with AI, then overlays classic interlocking puzzle cut lines as vector SVG, producing a print-ready SVG with the artwork embedded: print it, cut along the black lines, and you get complementary pieces ready to assemble. Supports grid difficulty (default 5x5 = 25 pieces) and a random seed for tab placement, or supply your own image to skip generation."
 category: image
 version: 1.0.0
 author: fore.vip

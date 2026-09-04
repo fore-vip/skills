@@ -3,6 +3,8 @@ name: fore-vip-image-stitch
 display_name: 图片拼接
 display_name_en: Image Stitch
 description: 图片拼接助手（fore.vip）。按用户给定的主题与内容先用 AI 生成图片（ImageGen 等环境可用生图工具），再把多张图拼接为一张：纵向长图拼接或宫格拼图（按张数自动优化行列布局），支持用户追加/替换本地图片。技能不内置任何脚本，运行时自动查找拼接工具（Pillow / ImageMagick），缺失时现场安装。触发词：图片拼接、拼图、拼长图、长图拼接、宫格、九宫格、多图拼成一张、把这几张图拼起来、拼接图片。
+description_zh: 图片拼接助手。按给定主题与内容先用 AI 生成图片，再把多张图拼接为纵向长图或宫格拼图（按张数自动优化行列布局），支持追加或替换本地图片。技能不内置脚本，运行时自动查找拼接工具（Pillow / ImageMagick），缺失时现场安装。
+description_en: "Image stitching assistant. Generates images from a given theme, then combines multiple images into a vertical long strip or a grid collage with row and column layout auto-optimized by image count. Supports adding or replacing local images. Ships no bundled scripts: it locates a stitching tool (Pillow / ImageMagick) at runtime and installs one if missing."
 category: image
 version: 1.0.0
 author: fore.vip

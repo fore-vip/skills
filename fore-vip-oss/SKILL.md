@@ -3,6 +3,8 @@ name: fore-vip-oss
 display_name: OSS 对象存储助手
 display_name_en: fore.vip Object Storage Setup Assistant
 description: 对象存储（OSS）入门与配置助手。向用户介绍 OSS 是什么、可应用场景，弹出窗口让用户从主流云供应商（阿里云 OSS/腾讯云 COS/AWS S3/华为云 OBS/MinIO/七牛云）中选择，然后按所选供应商完成三件事：安装官方 CLI、引导获取 AK/SK 访问凭证、辅助配置自定义域名（CNAME）。当用户说"什么是OSS""帮我配置对象存储""上传文件到 OSS""绑定存储域名""装 ossutil/coscli/aws cli/obsutil/mc/qshell"时使用。
+description_zh: 对象存储（OSS）入门与配置助手。介绍 OSS 概念与应用场景，弹窗让用户从主流云供应商（阿里云 OSS / 腾讯云 COS / AWS S3 / 华为云 OBS / MinIO / 七牛云）中选择，然后按所选供应商完成三件事：安装官方 CLI、引导获取 AK/SK 访问凭证、辅助配置自定义域名（CNAME）。
+description_en: "Object storage (OSS) intro and setup assistant. Explains what OSS is and when to use it, prompts the user to pick a provider (Alibaba Cloud OSS / Tencent Cloud COS / AWS S3 / Huawei Cloud OBS / MinIO / Qiniu), then completes three tasks for that provider: install the official CLI, guide AK/SK credential setup, and help configure a custom domain via CNAME."
 category: cloud-storage
 version: 1.0.0
 author: fore.vip

@@ -3,6 +3,8 @@ name: fore-vip-image-prompt
 display_name: 生图提示词
 display_name_en: Image Prompt Optimizer
 description: 生图提示词优化器（fore.vip）。先识别或询问用户当前使用的生图模型（Midjourney / GPT Image / Nano Banana·Gemini / Flux / Imagen / Ideogram / 即梦 Seedream / Qwen-Image·通义万相 / Stable Diffusion / Recraft / Firefly / 可图 / 混元等），再按该模型的参数文档与语言方言，把用户意图或原始提示词改写为最强版本，最终只输出优化后的提示词本身，不输出任何解释、前后缀与废话。触发词：生图提示词、优化提示词、写个生图 prompt、帮我写绘图提示词、image prompt、画图咒语、垫图提示词、Midjourney 提示词、即梦提示词、生图咒语、prompt 优化、提示词改写。
+description_zh: 生图提示词优化器。先识别或询问用户使用的生图模型（Midjourney / GPT Image / Nano Banana·Gemini / Flux / Imagen / Ideogram / 即梦 Seedream / 通义万相 / Stable Diffusion / Recraft / Firefly / 可图 / 混元等），再按该模型的参数文档与语言方言把意图改写为最强版本。只输出优化后的提示词本身，不带任何解释与前后缀。
+description_en: Image-prompt optimizer. Identifies or asks for the target image model (Midjourney, GPT Image, Nano Banana/Gemini, Flux, Imagen, Ideogram, Jimeng Seedream, Qwen-Image, Stable Diffusion, Recraft, Firefly, Kolors, Hunyuan), then rewrites the intent into the strongest possible prompt following that model's parameter docs and prompt dialect. Outputs only the optimized prompt, with no explanation or wrapper text.
 category: image
 version: 1.0.0
 author: fore.vip

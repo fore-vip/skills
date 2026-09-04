@@ -3,6 +3,8 @@ name: fore-vip-tts
 display_name: 文字转语音
 display_name_en: Text to Speech
 description: 文字转语音（TTS）助手（fore.vip）。把用户输入的文字直接合成为语音文件，不总结、不分析、不加任何多余内容，拿到文字就转。引擎按「环境默认 → 免费方案（edge-tts / macOS say）→ 付费方案兜底（引导用户配置）」三级选择；多音色时弹窗让用户挑选；生成的语音文件优先存入资料库，无资料库时引导配置 IMA 或文档提供方后转存。触发词：转语音、文字转语音、语音合成、TTS、朗读、念一下、读出来、转成音频、配音、生成语音、把这段话变成语音。
+description_zh: 文字转语音（TTS）助手。把输入的文字直接合成为语音文件，不总结、不分析、不加任何多余内容。引擎按「环境默认 → 免费方案（edge-tts / macOS say）→ 付费方案兜底」三级选择；多音色时弹窗让用户挑选；生成的语音文件优先存入资料库，无资料库时引导配置 IMA 或文档提供方后转存。
+description_en: "Text-to-speech (TTS) assistant. Converts input text straight into an audio file with no summarization, analysis or filler. Engines are selected in three tiers: environment default, free options (edge-tts / macOS say), then paid fallback with setup guidance. When multiple voices are available the user picks via a prompt. Generated audio is stored in the library when available, otherwise the user is guided to configure IMA or another document provider first."
 category: audio
 version: 1.0.0
 author: fore.vip

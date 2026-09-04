@@ -3,6 +3,8 @@ name: fore-vip-gossip
 display_name: 八卦吃瓜
 display_name_en: Gossip Radar
 description: 娱乐八卦聚合与求证（fore.vip）。用户输入一个主题或明星人名（如「XX 怎么了」「最近有什么瓜」「XX 和 XX 分手是真的吗」），从微博、知乎、豆瓣、小红书、权威娱乐媒体等多平台检索相关内容，交叉验证后按「已证实 / 待核实 / 纯传闻」三级标注真实性，输出吃瓜时间线、各方回应与瓜点分级，满足八卦心态的同时不造谣不传谣。当用户问「有什么瓜 / 吃瓜 / 八卦 / 娱乐圈最近发生什么 / 某某怎么了 / 某某最新消息 / 瓜」时触发。
+description_zh: 娱乐八卦聚合与求证助手。输入主题或明星人名，从微博、知乎、豆瓣、小红书与权威娱乐媒体多平台检索，交叉验证后按「已证实 / 待核实 / 纯传闻」三级标注真实性，输出吃瓜时间线、各方回应与瓜点分级。不挖素人隐私，不造谣不传谣。
+description_en: Entertainment gossip aggregator and fact-checker. Given a topic or celebrity name, it searches Weibo, Zhihu, Douban, Xiaohongshu and authoritative entertainment media, cross-verifies findings, and labels each claim as confirmed / unverified / pure rumor. Outputs a timeline, responses from all parties, and a ranked breakdown of the key points. Never digs into private individuals' privacy; never fabricates or spreads rumors.
 category: entertainment
 version: 1.0.0
 author: fore.vip

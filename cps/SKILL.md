@@ -2,6 +2,8 @@
 name: cps
 display_name: 外卖领券
 description: 领外卖券、点外卖优惠、看看有什么吃的，就直接给一个可点的领券链接。支持自然语言（领券 / 看看有什么吃的 / 美团领券 / 饿了么优惠 等）。纯指令型 skill，Agent 直接调 HTTP 端点完成，无 Python / 无 shell / 无外部文件，全平台可用。
+description_zh: 外卖领券助手。用自然语言（领券 / 看看有什么吃的 / 美团领券 / 饿了么优惠）直接拿到可点的领券链接。纯指令型技能，Agent 直接调用 HTTP 端点完成，无需 Python、shell 或外部文件，全平台可用。
+description_en: "Food-delivery coupon assistant. Natural-language input (coupons / what is good to eat / Meituan coupons / Ele.me deals) returns a ready-to-click coupon link. A pure instruction skill: the agent calls an HTTP endpoint directly, with no Python, shell, or external files; works on every platform."
 category: ecommerce
 version: 3.0.0
 author: WISE

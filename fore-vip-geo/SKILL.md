@@ -1,6 +1,11 @@
 ---
 name: fore-vip-geo-optimizer
 description: GEO 生成式引擎引用占位（fore.vip）。输入一个主题或产品名称，执行五步流水线：① 以真实用户问句联网检索 AI 搜索（豆包/Kimi/DeepSeek/秘塔等）并收集回答的引用来源 ② 分析来源站点：主站网址、创作者中心入口、可发布性与权重，优选可入驻发布的高权重阵地并给出内容输出参考 ③ 按 SEO 模板一次性收集补充主题/产品信息（关键词/人群/卖点/背书/CTA）④ 结合各来源站点风格输出合规、营销指数高的 Markdown 文档（GEO 写作：结构化+可摘录结论+FAQ）⑤ 给出各平台发布引导，公众号可走草稿推送直发。当用户要做 GEO、AI 搜索优化、生成式引擎优化、让 AI 引擎/大模型提到或推荐自己的品牌与产品时使用。
+description_zh: GEO 生成式引擎引用占位助手。输入主题或产品名称，执行五步流水线：用真实用户问句检索 AI 搜索（豆包 / Kimi / DeepSeek / 秘塔等）并收集引用来源 → 分析来源站点的可发布性与权重、优选高权重阵地 → 按 SEO 模板一次性收集关键词 / 人群 / 卖点 / 背书 / CTA → 输出结构化、可摘录、带 FAQ 的合规 Markdown 文档 → 给出各平台发布引导（公众号可走草稿推送直发）。
+description_en: "GEO (Generative Engine Optimization) assistant for earning citations in AI answers. Given a topic or product name, it runs a five-stage pipeline: query AI search engines (Doubao / Kimi / DeepSeek / Metaso) with real user questions and collect cited sources; analyze each source site for publishability and authority, prioritizing high-authority outlets; collect keywords / audience / selling points / proof / CTA via an SEO template; produce structured, quotable, FAQ-ready Markdown; give per-platform publishing guidance, with WeChat official accounts pushable directly as drafts."
+category: marketing
+version: 1.0.0
+author: fore.vip
 agent_created: true
 ---
 

@@ -1,6 +1,11 @@
 ---
 name: act
 description: 活动发现与创建 MCP 工具集。当用户需要让 Agent 搜索活动、查看活动详情、创建活动（含付费定价）、或查询活动行程时使用。活动创建需 X-API-Key 鉴权，支持原子级多轮收集与自动化批量两种模式；付费活动经 create_activity 传 fee（分）自动标记并接入 H5 支付。
+description_zh: 活动发现与创建 MCP 工具集。支持活动搜索、详情查看、活动创建（含付费定价，fee 以分为单位并接入 H5 支付）与行程查询。创建接口需 X-API-Key 鉴权，提供原子级多轮收集与自动化批量两种模式。
+description_en: MCP toolset for activity discovery and creation. Search activities, view details, create activities (with paid pricing via fee in cents and H5 checkout), and query itineraries. Creation endpoints require X-API-Key auth; supports both atomic multi-turn collection and automated batch modes.
+category: activity
+version: 1.0.0
+author: fore.vip
 agent_created: true
 ---
 

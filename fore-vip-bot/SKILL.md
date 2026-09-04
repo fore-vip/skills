@@ -3,6 +3,8 @@ name: fore-vip-bot
 display_name: 硬件中控
 display_name_en: fore.vip Hardware Control Hub
 description: 本地硬件设备控制中控（fore.vip）。用户安装后，在自己的电脑上统一控制家里或环境里的所有硬件设备——智能家居（灯/插座/空调/窗帘/传感器）、创客硬件（树莓派/Arduino/ESP32+继电器/舵机/摄像头）、本机外设（音量/屏幕/电源）、环境物联网（PLC/农业/养殖传感器与执行器）。采用"设备抽象层 + 指令范式 + 动态驱动"框架：SKILL 不绑定任何协议，运行时按用户环境加载对应驱动（MCP/HTTP-MQTT-BLE-串口/系统API），把自然语言意图翻译为设备指令并回传状态。当用户说"打开客厅灯""把卧室温度调到26""读取土壤湿度""关掉所有设备""家里有哪些设备能控制"时使用。
+description_zh: 本地硬件设备控制中控。在自有电脑上统一控制智能家居（灯 / 插座 / 空调 / 窗帘 / 传感器）、创客硬件（树莓派 / Arduino / ESP32 / 舵机 / 摄像头）、本机外设（音量 / 屏幕 / 电源）与环境物联网设备。采用「设备抽象层 + 指令范式 + 动态驱动」框架，不绑定任何协议，运行时按环境加载驱动（MCP / HTTP-MQTT-BLE-串口 / 系统 API），把自然语言意图翻译为设备指令并回传状态。
+description_en: "A local hub for controlling hardware devices. Unify smart home devices (lights / plugs / AC / curtains / sensors), maker boards (Raspberry Pi / Arduino / ESP32 / servos / cameras), local peripherals (volume / display / power) and environmental IoT gear. Built on a device abstraction layer plus command paradigm plus dynamic driver framework that binds to no protocol: drivers (MCP / HTTP-MQTT-BLE-serial / system APIs) load at runtime, translating natural-language intent into device commands and returning state."
 category: iot-control
 version: 1.0.0
 author: fore.vip

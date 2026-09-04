@@ -1,6 +1,11 @@
 ---
 name: fore-vip-find-customers
 description: 找客户 · B2B 客户挖掘与获客助手（fore.vip）。把「帮我找客户 / 我的货卖给谁 / 客户挖掘 / 获客 / 潜在客户 / 下游客户推荐 / 销售线索」转化为可执行的客户线索清单。标准流程：① 需求采集（行业、产品、区域、客户画像）② 产业链下游分析（下游行业类型与需求点）③ 多源客户采集（行业门户、搜索引擎、社区频道、官网、大模型知识，逐条标注来源·时间）④ 结构化客户清单（公司/行业/责任人/联系方式/官网/匹配度/来源）⑤ 邮件直推（客户有公开邮箱即经 Agent Mail 推送配图，图内嵌联系方式）⑥ 线索稀缺时的补偿获客（发布渠道清单 + 合规发布范式 + ImageGen 配图 + 引导附带联系方式）。遵循合规红线：只用公开信息、不采隐私数据、发布内容不做硬广导流。当用户为产品或服务寻找买家、挖掘潜在客户、拓展销售渠道时使用。
+description_zh: B2B 客户挖掘与获客助手。把「帮我找客户 / 我的货卖给谁 / 客户挖掘 / 获客 / 潜在客户 / 下游客户推荐 / 销售线索」转化为可执行的客户线索清单：需求采集 → 产业链下游分析 → 多源客户采集（逐条标注来源与时间）→ 结构化客户清单 → 邮件直推 → 线索稀缺时的补偿获客。只用公开信息、不采隐私数据、发布内容不做硬广导流。
+description_en: "B2B lead generation and customer discovery assistant. Turns find-me-customers / who-buys-my-product / lead-gen / prospecting / downstream recommendations / sales leads into an actionable lead list: requirement intake, downstream industry analysis, multi-source prospecting with source and timestamp on every entry, structured lead sheet, direct email outreach, and compensated acquisition when leads are scarce. Uses only public information, never private data, and avoids hard-sell redirect content."
+category: sales
+version: 1.0.0
+author: fore.vip
 ---
 
 # 找客户 · B2B 客户挖掘与获客助手

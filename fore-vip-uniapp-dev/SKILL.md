@@ -3,6 +3,8 @@ name: fore-vip-uniapp-dev
 display_name: uni-app 开发助手
 display_name_en: uni-app Development Workflow
 description: uni-app 项目开发任务助手（fore.vip）。用户提供开发任务后，先把项目作用域（框架/样式框架/模块结构/前后端描述/重要事项）、版本管理状态、运行状态、文档查询源、标准约束一次性勘查并同步组织到项目根目录 AGENTS.MD，再按 AGENTS.MD 约束执行开发任务，任务完成后回写变更。当用户交付 uni-app / uni-app x / uniCloud 开发任务、要求初始化或更新项目 AGENTS.MD、梳理项目上下文、检查仓库与运行状态、查询 uni-app 相关文档源时使用。
+description_zh: uni-app 项目开发任务助手。接到开发任务后，先把项目作用域（框架 / 样式框架 / 模块结构 / 前后端说明 / 重要事项）、版本管理状态、运行状态、文档查询源与标准约束一次性勘查并同步到项目根目录 AGENTS.MD，再按 AGENTS.MD 的约束执行任务，完成后回写变更。
+description_en: uni-app project development assistant. On receiving a task, it first surveys project scope (framework, styling framework, module structure, frontend and backend overview, key notes), version-control status, run status, documentation sources and standard constraints, syncing them into a root-level AGENTS.MD. It then executes the task under those constraints and writes the changes back when done.
 category: development
 version: 1.0.0
 author: fore.vip

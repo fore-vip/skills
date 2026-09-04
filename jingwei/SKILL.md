@@ -1,6 +1,6 @@
 ---
 name: 精卫
-version: "1.0"
+version: 1.0.0
 summary: "高效解决问题 — 最短路径全栈能力"
 description: |
   精卫是一个以「最短路径实现目标」为核心准则的高效执行技能。
@@ -11,6 +11,10 @@ read_when:
   - 遇到技术瓶颈需要多渠道查找解决方案
   - 需要自主执行任务或获取执行方案
   - 需要进行关联影响分析和边界优化
+description_zh: 以「最短路径实现目标」为核心准则的高效执行技能。专注快速定位问题根因、多渠道检索解决方案、自主执行或给出方案推荐。适用于技术问题排查、工具与脚本开发、Agent / Skill / GitHub 资源搜索、复杂任务分解执行。
+description_en: An execution skill built on the shortest-path-to-the-goal principle. Focuses on rapidly locating root causes, searching multiple channels for solutions, and either executing autonomously or recommending an approach. Suited to technical troubleshooting, tool and script development, discovering Agent, Skill and GitHub resources, and decomposing complex tasks.
+category: productivity
+author: fore.vip
 ---
 
 # 精卫 — 高效问题解决引擎 v1.0

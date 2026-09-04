@@ -1,7 +1,7 @@
 {
   "name": "act",
   "version": "2.1.0",
-  "description": "活动发现与创建 — 搜索、查看详情、创建活动",
+  "description": "活动发现与创建 — 搜索、查看详情、创建/更新/删除活动",
   "mcp": "https://mcp.fore.vip",
   "auth": {
     "create": {
@@ -117,6 +117,54 @@
           "pageSize": { "type": "integer" }
         }
       }
+    },
+    {
+      "name": "update_activity",
+      "description": "更新已创建的活动（白名单字段）。需在 HTTP Header 中传入 X-API-Key 鉴权。仅允许更新本服务创建的 type=ai 活动；creator / type / status / open / view_count 不可改。至少提供一个待更新字段，否则返回「无可更新字段」。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "活动 _id（必填）" },
+          "content": { "type": "string", "description": "活动说明（≤500 字，不能为空）" },
+          "address": { "type": "string", "description": "活动地址（≤128 字）" },
+          "cover": { "type": "string", "description": "封面图 URL（不自动转存，直接写入）" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "标签列表，最多 10 个" },
+          "start_time": { "type": "number", "description": "开始时间 ms 时间戳（可选）" },
+          "end_time": { "type": "number", "description": "结束时间 ms 时间戳（可选，null=不限）" },
+          "latitude": { "type": "number", "description": "纬度（需与 longitude 同时传入才生效）" },
+          "longitude": { "type": "number", "description": "经度（需与 latitude 同时传入才生效）" }
+        },
+        "required": ["id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "content": { "type": "string" }, "address": { "type": "string" },
+          "type": { "type": "string" }, "tags": { "type": "array" },
+          "cover": { "type": "string" }, "location": { "type": "object" },
+          "start_time": { "type": "number" }, "end_time": { "type": "number" },
+          "update_time": { "type": "number" }
+        }
+      }
+    },
+    {
+      "name": "delete_activity",
+      "description": "删除活动。需在 HTTP Header 中传入 X-API-Key 鉴权。仅允许删除本服务创建的 type=ai 活动，删除后不可恢复。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "活动 _id（必填）" }
+        },
+        "required": ["id"]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "description": "删除是否成功" },
+          "deleted": { "type": "string", "description": "被删除活动的 _id" }
+        }
+      }
     }
   ],
   "errors": {
@@ -132,6 +180,16 @@
       "-1": "content/address/cover 必填字段缺失或超长",
       "-3": "封面转存失败（下载/上传异常），活动不创建",
       "-2": "数据库写入失败"
+    },
+    "update": {
+      "403": "Invalid or missing X-API-Key / Only AI-created activities can be updated",
+      "-1": "id 缺失 / 无可更新字段 / content 为空或超长 / address 超长",
+      "-2": "数据库更新失败"
+    },
+    "delete": {
+      "403": "Invalid or missing X-API-Key / Only AI-created activities can be deleted",
+      "-1": "id 缺失 / Activity not found",
+      "-2": "数据库删除失败"
     }
   },
   "geo": {
