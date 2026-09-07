@@ -45,7 +45,7 @@ agent_created: true
 - **类型偏好**：喜剧 / 悬疑 / 科幻 / 爱情 / 动画 / 纪录片 / 不限？
 - **约束**：时长（是否接受 3h+）、语言（国语/原声）、是否只看新片、平台可得性（已有会员的平台）。
 
-> 若用户直接点名场景（如「情侣约会看啥」），跳过澄清，直接套 `references/movie-guide.md` 的场景预设库。
+> 若用户直接点名场景（如「情侣约会看啥」），跳过澄清，直接套 @references/movie-guide.md 的场景预设库。
 
 ### 2. 构建评估维度（定标准）
 
@@ -59,7 +59,7 @@ agent_created: true
 | 观看门槛 | 时长/分级/平台可得性 | 合家欢需全年龄友好；限平台需提示 |
 | 新鲜度 | 新片热点 vs 经典重温 | 按用户「新片/经典」偏好调节 |
 
-维度细化、评分标尺与场景预设见 `references/movie-guide.md`。
+维度细化、评分标尺与场景预设见 @references/movie-guide.md。
 
 ### 3. 调研与采集（实时取数，禁止凭记忆编造）
 
@@ -68,7 +68,7 @@ agent_created: true
 - **取数工具**：
   - 用 `WebSearch` 检索，新片带 `freshness`（近一周 `d7`、当月 `m1`），经典/长青片带 `y1`；检索词形如「片名 豆瓣 评分」「2026 暑期档 新片 票房」。
   - 关键信息用 `WebFetch` 抓取权威页面核对（豆瓣电影页、猫眼/灯塔专业版、烂番茄/IMDb）。
-- **权威源（按 `references/movie-guide.md` 二·5 清单 fetch）**：
+- **权威源（按 @references/movie-guide.md 二·5 清单 fetch）**：
   - 豆瓣电影 `https://movie.douban.com/` —— 国内评分/年度榜/短评
   - 猫眼专业版 / 灯塔专业版 —— 实时票房、上座率、排片
   - 烂番茄 `https://www.rottentomatoes.com/` / IMDb `https://www.imdb.com/` / Metacritic —— 海外评分
@@ -127,7 +127,7 @@ agent_created: true
 
 ## 场景库（索引）
 
-常用观影场景与对应选片逻辑见 `references/movie-guide.md` 的「场景预设库」，覆盖：周末宅家、情侣约会、亲子合家欢、朋友聚会、一人治愈、想哭一场、纯解压喜剧、悬疑烧脑、档期新片、经典重温、硬核科幻视效、通勤短内容。
+常用观影场景与对应选片逻辑见 @references/movie-guide.md 的「场景预设库」，覆盖：周末宅家、情侣约会、亲子合家欢、朋友聚会、一人治愈、想哭一场、纯解压喜剧、悬疑烧脑、档期新片、经典重温、硬核科幻视效、通勤短内容。
 
 ## 不可为（边界）
 
@@ -145,3 +145,7 @@ agent_created: true
 ## 服务提供
 
 由前凌智选创建 https://fore.vip
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

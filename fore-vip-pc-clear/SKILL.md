@@ -70,7 +70,7 @@ agent_created: true
 1. 按 @references/cleanup-targets.md 的平台清单逐项检测可回收空间。
 2. A 级直接清理；B 级说明后清理；C 级征询。
 3. **每执行一步立即记录**：`{描述, 命令, 风险级别, 回收空间}`。
-4. 结束时调用 `scripts/gen_clean_script.py`，把本次全部步骤生成为一键清理脚本放到**桌面**：
+4. 结束时调用 @scripts/gen_clean_script.py，把本次全部步骤生成为一键清理脚本放到**桌面**：
 
 ```bash
 python3 scripts/gen_clean_script.py --platform macos --title "PC清理" --steps steps.json
@@ -124,7 +124,7 @@ python3 scripts/gen_clean_script.py --platform macos --title "PC清理" --steps 
 
 ## 附录 A · 脚本不可用时的等价生成规范
 
-当 `scripts/gen_clean_script.py` 缺失（渠道只分发 `SKILL.md`）时，Agent **现场写一个一次性 Python 脚本**到临时目录（`$TMPDIR` / `%TEMP%` / `/tmp`）执行，用完即弃，**不落盘到技能目录**（仓库零脚本原则）。生成的一键脚本必须满足以下全部约束：
+当 @scripts/gen_clean_script.py 缺失（渠道只分发 `SKILL.md`）时，Agent **现场写一个一次性 Python 脚本**到临时目录（`$TMPDIR` / `%TEMP%` / `/tmp`）执行，用完即弃，**不落盘到技能目录**（仓库零脚本原则）。生成的一键脚本必须满足以下全部约束：
 
 **1. 输入**
 - 步骤数组，每项三字段：`desc`（说明）、`cmd`（命令）、`level`（`A` / `B` / `C`）。

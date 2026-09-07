@@ -64,11 +64,11 @@ compatibility:
 
 ## 第三步：按所选供应商执行配置（三步走）
 
-详情全部在 `references/providers.md`，按厂商分节查用。执行节奏：
+详情全部在 @references/providers.md，按厂商分节查用。执行节奏：
 
 ### 3.1 安装官方 CLI
 
-- 先检测是否已安装：运行 `references/providers.md` 对应厂商的**验证命令**（如 `ossutil version`）。
+- 先检测是否已安装：运行 @references/providers.md 对应厂商的**验证命令**（如 `ossutil version`）。
 - 已装 → 报告版本，跳过安装；未装 → 按文档给用户的系统（macOS/Linux）执行安装命令，装完再次运行验证命令确认。
 - 安装失败：不猜测原因硬试，按文档链接引导用户手动下载或查官方文档。
 
@@ -109,9 +109,13 @@ compatibility:
 
 - **只动本机**：安装 CLI、写本地 CLI 配置文件；不代替用户登录控制台，控制台操作只给精确路径指引。
 - **凭证零外泄**：不在对话输出、日志、文件中回显完整 AK/SK；验证只看"是否连通"不看密钥内容。
-- **不臆造命令**：厂商 CLI 版本迭代快（尤其 ossutil 1.x/2.x），命令执行异常时按 `references/providers.md` 的官方文档链接核对，不凭记忆硬编。
+- **不臆造命令**：厂商 CLI 版本迭代快（尤其 ossutil 1.x/2.x），命令执行异常时按 @references/providers.md 的官方文档链接核对，不凭记忆硬编。
 - **成本提醒**：首次开通时顺带提示计费模式（按量付费）与免费额度，避免用户意外扣费。
 
 ## 参考
 
-- `references/providers.md` — 六大主流厂商对照表与分节配置详情（安装/凭证/域名/文档链接）
+- @references/providers.md — 六大主流厂商对照表与分节配置详情（安装/凭证/域名/文档链接）
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

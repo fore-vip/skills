@@ -15,7 +15,7 @@ agent_created: true
 
 把模糊的「帮我写份合同」「审下这份协议」转化为**结构规范、条款完整、合法合规**的中文合同，或对已有合同做**风险与合规审查**。两件事都做：既能从零起草，也能把关修订。
 
-内置通用民事商事合同模板库（合作 / 代理 / 租赁 / 劳动 / 保密 / 授权 / 买卖 / 服务 / 借款 / 合伙 / CPS 推广等），但这是**起点而非封闭清单**——对任意未列明合同类型，按「主体 / 标的 / 对价 / 期限 / 权责 / 违约 / 争议解决 / 生效」通用框架动态拆解起草（见 `references/contract-library.md`「动态扩展框架」）。
+内置通用民事商事合同模板库（合作 / 代理 / 租赁 / 劳动 / 保密 / 授权 / 买卖 / 服务 / 借款 / 合伙 / CPS 推广等），但这是**起点而非封闭清单**——对任意未列明合同类型，按「主体 / 标的 / 对价 / 期限 / 权责 / 违约 / 争议解决 / 生效」通用框架动态拆解起草（见 @references/contract-library.md「动态扩展框架」）。
 
 **适用**：起草 / 生成 / 审阅中文合同、协议、NDA、报价单、借条、授权委托书。
 **不适用**：出具具法律效力的法律意见书、代理诉讼仲裁、伪造或规避法律条款——本技能提供结构化起草与风险提示，不构成专业法律意见（见边界）。
@@ -41,7 +41,7 @@ agent_created: true
 ## 生成模式流程
 
 ### 1. 锁定合同类型
-识别用户意图对应类型；未明确时用 1 个问题确认（如「是个人之间的借款，还是公司与个人的服务合同？」）。类型命中 `references/contract-library.md` 模板则直接调用；未命中则按通用框架动态起草。
+识别用户意图对应类型；未明确时用 1 个问题确认（如「是个人之间的借款，还是公司与个人的服务合同？」）。类型命中 @references/contract-library.md 模板则直接调用；未命中则按通用框架动态起草。
 
 ### 2. 结构化采集（只问缺口）
 对照所选模板的「必备要素」表，提取已知信息，仅就缺失的关键项提问（甲方乙方身份、标的、金额 / 对价、期限、核心权责、违约与管辖）。个人 / 小金额场景从简，企业场景补全主体资质与签章要求。
@@ -57,13 +57,13 @@ agent_created: true
 - **可选条款**（见 clause bank）：保密、知识产权、不可抗力、排他 / 竞业、自动续约、数据保护——按场景开关。
 
 ### 4. 合规校验（强制）
-生成后必跑 `references/compliance-checklist.md`：
+生成后必跑 @references/compliance-checklist.md：
 - 广告法极限词扫描（国家级 / 最高级 / 最佳 / 第一 / 唯一 / 100% / 永久 等）→ 标红替换。
 - 民法典有效性检查：格式条款提示义务、免责无效情形、违约金 / 定金上限、管辖有效性。
 - 空白待填项清单：列出所有需手填项，确保无逻辑歧义。
 
 ### 5. 输出可填写 HTML → DOCX
-按 `references/fillable-html-spec.md` 生成含 `data-docx-field` / `data-docx-bookmark` 书签的 HTML（正文用连续下划线、表格用 `&nbsp;`）。随后：
+按 @references/fillable-html-spec.md 生成含 `data-docx-field` / `data-docx-bookmark` 书签的 HTML（正文用连续下划线、表格用 `&nbsp;`）。随后：
 - 若环境具备 `html-to-docx` + `generate-fillable-contract-html` 技能 → 转 DOCX 并交付。
 - 若不具备 → 交付 HTML（任意 html→docx 工具可渲染），并说明转换方式。
 
@@ -73,10 +73,10 @@ agent_created: true
 读取合同文本（粘贴或文件），提取：主体、标的、对价、期限、权责、违约、争议解决、签署栏。识别合同类型与相对方地位。
 
 ### 2. 缺失条款检查
-对照 `references/contract-library.md` 对应类型的「必备要素」，列出**缺失或过于简略**的条款（如未约定管辖、无违约条款、无保密义务）。
+对照 @references/contract-library.md 对应类型的「必备要素」，列出**缺失或过于简略**的条款（如未约定管辖、无违约条款、无保密义务）。
 
 ### 3. 风险审查（核心）
-跑 `references/compliance-checklist.md` 的风险模式：
+跑 @references/compliance-checklist.md 的风险模式：
 - 权利义务失衡 / 单方解除权过大
 - 模糊表述（"合理期限""适当""重大"无定义）
 - 违约金过高或过低、定金超限
@@ -141,6 +141,10 @@ agent_created: true
 
 ## 参考资料
 
-- `references/contract-library.md` — 通用合同模板库 + 条款库 + 动态扩展框架
-- `references/compliance-checklist.md` — 广告法极限词 / 民法典要点 / 审阅风险模式
-- `references/fillable-html-spec.md` — 可填写 HTML 书签规范与自检
+- @references/contract-library.md — 通用合同模板库 + 条款库 + 动态扩展框架
+- @references/compliance-checklist.md — 广告法极限词 / 民法典要点 / 审阅风险模式
+- @references/fillable-html-spec.md — 可填写 HTML 书签规范与自检
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

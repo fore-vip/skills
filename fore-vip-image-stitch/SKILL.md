@@ -110,3 +110,7 @@ agent_created: true
 ## 服务
 
 - 服务由前凌智选提供 https://fore.vip
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

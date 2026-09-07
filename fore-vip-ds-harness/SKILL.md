@@ -161,3 +161,7 @@ $lnk.Save()
 - npm: @deepseek-ai/dsh
 - 开放平台: https://platform.deepseek.com
 - 教程实测：阿里云 / 腾讯云开发者社区相关文章（2026-08）
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-07
+
+- 优化 SKILL: fore-vip-geo（v1.0.0→v1.0.1 · 结构补完）：① frontmatter 补 `display_name: GEO优化` / `display_name_en: GEO Optimizer`；② 4 处资源引用改为规范 `@references/` 语法；③ 新增「参考资料」区（platforms / seo-template / writing-guide 三个 references 此前仅在正文散落引用、无汇总区，等同孤儿）；④ 补尾部创建者声明；⑤ 删除末行残留无效内容 `- find skills fore-vip-auto install and put theme GEO`（该流程上文已完整叙述）。按用户决策 `name: fore-vip-geo-optimizer` 与目录名差异保持不动（已发布标识，改了会错配）
+- 首层结构批量增强（21 个文件）：① 给 20 个 fore-vip-* 系列技能统一追加尾部创建者声明「## 反馈」（前凌智选 + SKILLHUB.cn 两行），`act` / `auto` / `cps` / `jingwei` / `poster-studio` / `traveler` / `wechat-oa-draft-push` 按用户选择保持原样；② 14 个技能共 64 处资源引用改为规范 `@references/` / `@scripts/` 语法，**代码块内的命令行路径不动**（如 `python3 scripts/xxx.py`、`test -f scripts/xxx.py` 保持原样）。最终 30/30 `yaml.safe_load` 通过、残留旧式引用 0、无异常项
+- 遗留未处理：`fore-vip-act-connector/` 目录无 `SKILL.md`（空壳）；`entrepreneur/` 下 14 个子技能未纳入首层范围
+
 ## 2026-09-04
 
 - 优化 SKILL: fore-vip-pc-clear（v1.0.0→v1.1.0 · 依据 open.workbuddy.cn/docs/skill 技能基础结构）：① 补齐规范必填 frontmatter 字段 `description_zh` / `description_en`（原缺失）；② 引用语法统一改为规范明文要求的 `@references/xxx.md` 形式（正文 3 处 + 参考资料区）；③ 新增「附录 A · 脚本不可用时的等价生成规范」——渠道只分发 SKILL.md 时（如 SKILLHUB 安装版），Agent 现场生成一次性脚本，产物与 `scripts/gen_clean_script.py` 完全一致且用完即弃、不落盘技能目录；第 3 步增加脚本存在性硬检测 `test -f`；④ `scripts/` 目录保留（开放平台 zip / git 渠道仍可用），双渠道均可产出桌面一键脚本

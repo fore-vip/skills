@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "fore-vip-act": {
+      "type": "streamableHttp",
+      "url": "https://mcp.fore.vip/act/mcp",
+      "timeout": 30000
+    }
+  }
+}

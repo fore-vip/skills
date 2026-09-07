@@ -33,7 +33,7 @@ agent_created: true
 - **图文成对**：每张图紧邻其对应文字，不孤立堆放。
 - **最后排版**：所有「图 + 文」组装为排版后的图文页（HTML 卡片布局，儿童友好），而非裸文本。
 - **准确优先**：宁可说「这个问题科学家还在研究」，也不用错误答案糊弄；不编造、不夸大。
-- **适龄表达**：按受众认知水平调词汇与比喻（年龄分段见 `references/safety-and-age-guide.md`）。
+- **适龄表达**：按受众认知水平调词汇与比喻（年龄分段见 @references/safety-and-age-guide.md）。
 - **安全第一**：不提供危险实验、不鼓励触碰电源/火源/陌生人、不制造恐惧；涉及健康/安全时给正向引导。
 - **最短路径**：直接给排版图文页，不在前面堆客套与免责声明。
 
@@ -42,7 +42,7 @@ agent_created: true
 ### 1. 锁定受众（识别年龄）
 - 用户已给出年龄/年级 → 直接采用。
 - 未给出 → 用**至多 1 个问题**询问孩子大致年龄（如「小朋友几岁啦？」），或按默认「6–8 岁」处理，不反复追问。
-- 年龄映射到 `references/safety-and-age-guide.md` 的表达档位。
+- 年龄映射到 @references/safety-and-age-guide.md 的表达档位。
 
 ### 2. 判定主题领域
 - 归类到：自然现象 / 动物植物 / 人体健康 / 太空宇宙 / 生活常识 / 科学技术。
@@ -50,10 +50,10 @@ agent_created: true
 
 ### 3. 规划分节与配图（每段一张）
 - 按输出模板确定小节（默认 4 节：一句话答案 / 为什么会这样 / 生活里的小例子 / 冷知识延伸）。
-- 为每节拟定一张插画主题（分节生图策略见 `references/image-gen-guide.md`）。
+- 为每节拟定一张插画主题（分节生图策略见 @references/image-gen-guide.md）。
 
 ### 4. 生图优先（ImageGen，每段一张）
-- 依次为每节调用 ImageGen 生成 1 张插画（参数与提示词模板见 `references/image-gen-guide.md`）。
+- 依次为每节调用 ImageGen 生成 1 张插画（参数与提示词模板见 @references/image-gen-guide.md）。
 - 风格：明亮、圆润、卡通/绘本风，无文字、无写实血腥/恐怖元素，符合对应年龄档。
 - 若 ImageGen 暂不可用 → 退化为纯文字并明确告知「本次未生成配图」，不阻塞流程。
 
@@ -63,18 +63,18 @@ agent_created: true
 - 结尾给 1 个安全的延伸小问题，鼓励继续探索。
 
 ### 6. 排版（图文页）
-- 将「每节图片 + 文字」组装为排版后的图文页（HTML 卡片布局，模板见 `references/layout-guide.md`）。
+- 将「每节图片 + 文字」组装为排版后的图文页（HTML 卡片布局，模板见 @references/layout-guide.md）。
 - 保存为工作区文件（如 `generated-images/十万个为什么_{slug}.html`）并展示。
-- 自检：对照 `references/safety-and-age-guide.md` 做文字检查、对照 `references/image-gen-guide.md` 做配图检查；任一项触发 → 改写或重新生图。
+- 自检：对照 @references/safety-and-age-guide.md 做文字检查、对照 @references/image-gen-guide.md 做配图检查；任一项触发 → 改写或重新生图。
 
 ### 7. 分享（默认资料库，备选 IMA / 文档工具）
 - 排版页生成并展示后，主动询问用户「要不要把这份图文页存起来分享？」——用至多一次选择给出选项：资料库 / IMA 知识库 / 腾讯文档 / 仅本地文件。
 - **默认推荐资料库**（WorkBuddy 原生内容管理 / 分享协作模块）：调用 `资料库` skill，将 HTML 图文页以 `page`（HTML 页面）形式上传 / 发布，回执可分享链接。用户说「存到资料库」而未点名外部产品时，一律走原生库、不反问存到哪个产品。
 - **备选引导**：
-  - **IMA 知识库**：用户已连接 `ima-mcp`（腾讯 ima 知识库）连接器 → 引导把图文页 / MD 上传沉淀；未连接则**只引导不代连**（平台规则：连接由用户在卡片/连接中心触发），按 `references/ima-connect-guide.md` 的固化话术引导接入，连好后再分享。
+  - **IMA 知识库**：用户已连接 `ima-mcp`（腾讯 ima 知识库）连接器 → 引导把图文页 / MD 上传沉淀；未连接则**只引导不代连**（平台规则：连接由用户在卡片/连接中心触发），按 @references/ima-connect-guide.md 的固化话术引导接入，连好后再分享。
   - **腾讯文档等文档工具**：调用 `tencent-docs` skill，将本地 HTML 上云（aipage 打包导入）或直接建在线文档，便于微信 / QQ 转发。
 - 分享只搬运「排版后的图文页成品」，不把生图 token、本地路径、思考过程写入产物。
-- 详细路由与降级见 `references/share-guide.md`。
+- 详细路由与降级见 @references/share-guide.md。
 
 ## 输出规范（每段配图 + 排版模板）
 
@@ -104,7 +104,7 @@ agent_created: true
 [如涉及安全/健康，给正向引导；无则省略本段]
 ```
 
-完整示例见 `references/safety-and-age-guide.md`；分节生图见 `references/image-gen-guide.md`；排版模板见 `references/layout-guide.md`。
+完整示例见 @references/safety-and-age-guide.md；分节生图见 @references/image-gen-guide.md；排版模板见 @references/layout-guide.md。
 
 ## 边界与安全
 
@@ -125,3 +125,7 @@ agent_created: true
 ## 服务
 
 - 服务由前凌智选提供 https://fore.vip
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

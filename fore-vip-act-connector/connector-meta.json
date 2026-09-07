@@ -1,0 +1,23 @@
+{
+  "name": "火力打卡 · 活动服务",
+  "name_zh": "火力打卡 · 活动服务",
+  "name_en": "Fore.vip Activities",
+  "description": "在 WorkBuddy 中搜索、查看、创建和管理本地生活活动（运动 / 文化 / 志愿等），支持按地理位置就近推荐。",
+  "description_zh": "通过自然语言搜索附近活动、查看活动详情、创建或管理你发起的活动。覆盖运动、文化、志愿服务等本地生活场景。",
+  "description_en": "Search nearby activities, view details, and create or manage activities you host — covering sports, culture, volunteering and other local-life scenarios.",
+  "source": "fore-vip-act",
+  "type": "mcp",
+  "version": "1.0.0",
+  "examples_zh": [
+    "帮我找福田区这周末的篮球活动",
+    "在南山科技园附近有什么文化活动",
+    "创建一个明天下午的读书会，地址写深圳湾",
+    "把我之前建的那个跑步活动改到下周六"
+  ],
+  "examples_en": [
+    "Find basketball activities in Futian this weekend",
+    "What cultural events are near Nanshan Science Park",
+    "Create a book club for tomorrow afternoon at Shenzhen Bay",
+    "Move my running event to next Saturday"
+  ]
+}

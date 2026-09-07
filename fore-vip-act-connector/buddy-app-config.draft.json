@@ -1,0 +1,36 @@
+{
+  "_comment": "Buddy 应用配置草稿：在 WorkBuddy 开放平台后台（docs/buddy-app）逐项填写。本文件用于团队对齐与评审，非直接导入格式。三层：①应用壳 ②内置连接器(fore-vip-act) ③Open API 授权(取用户信息/scope)。",
+  "module1_app": {
+    "appName": "火力打卡",
+    "appAvatar": "https://mcp.fore.vip/static/icon.svg",
+    "appIntro": "本地生活 O2O 社交打卡与活动平台：发现身边好玩的活动，发起并管理你的活动。",
+    "authItems": ["user.profile.readable", "user.task.readable"],
+    "authCallbackUrl": "https://mcp.fore.vip/oauth/wb-callback",
+    "trustedOrigins": ["https://fore.vip", "https://mcp.fore.vip"],
+    "_note": "创建后平台生成 Client ID + Client Secret，填入 uni-config-center/wb-oauth/config.json；authCallbackUrl 对应 wb-oauth 云对象的 callback 方法（URL 化 /oauth/wb-callback）。"
+  },
+  "module2_home": {
+    "slogan": "打卡本地生活，发现身边好玩",
+    "workModes": [
+      {
+        "name": "活动达人",
+        "systemPrompt": "你是火力打卡的活动助手，帮助用户发现、查看、创建和管理本地生活活动（运动/文化/志愿等），按地理位置就近推荐。",
+        "bindSkills": ["act"]
+      }
+    ],
+    "sceneCapsules": ["帮我找附近的活动", "创建一个活动", "查看我发起的活动"],
+    "builtInConnectors": ["fore-vip-act"],
+    "_note": "内置连接器需为支持 OAuth 的 MCP；fore-vip-act 已自带 OAuth 服务端（mcp.fore.vip/oauth + .well-known），用户点「绑定」即跳 MCP OAuth 认证。"
+  },
+  "module3_market": {
+    "skills": ["act"],
+    "connectors": ["fore-vip-act"]
+  },
+  "module4_other": {
+    "skipBindAuth": false,
+    "bindAuthCopy": "绑定后，即可在火力打卡里发现并参与附近的活动",
+    "inputPlaceholder": "想找什么活动？或说『创建一个活动』",
+    "models": ["HY", "GLM"]
+  },
+  "module5_preview": {}
+}

@@ -59,7 +59,7 @@ compatibility:
 
 ### 2. 确认来源已配置（关键，≥3 端）
 
-读取 `references/providers.md` 了解来源与配置规范。运行前确认 `providers.json` 已就绪：
+读取 @references/providers.md 了解来源与配置规范。运行前确认 `providers.json` 已就绪：
 
 - 查找顺序：`--config` → `$SHOPPING_SAVER_CONFIG` → `~/.workbuddy/fore-vip-shopping-saver/providers.json` → `<skill>/config/providers.json`。
 - **必须 ≥3 个 `enabled` 来源**（任务硬要求）。模板 `references/providers.example.json` 已含 3 端 key-based 来源（聚推客 / 折淘客 / 导购API示例），可直接复制使用。
@@ -80,7 +80,7 @@ python3 <skill>/scripts/shopping_saver.py \
 - 默认排序 `score`（质量评分降序 → 券后价升序）；`price` 按原价升序；`coupon` 按券后价升序。
 - 脚本逐来源请求、规范化、排序、生成**自包含** HTML，并打印 JSON 摘要（各来源命中数 / 总数 / 输出路径）。
 - 单来源失败不影响整体，会在 stderr 提示并跳过。
-- 若环境无 Python，按 `references/providers.md` 的数据模型与字段，手动整理为同样结构的 HTML 清单（仅兜底）。
+- 若环境无 Python，按 @references/providers.md 的数据模型与字段，手动整理为同样结构的 HTML 清单（仅兜底）。
 
 ### 4. 呈现结果
 
@@ -119,12 +119,16 @@ python3 <skill>/scripts/shopping_saver.py \
 ## 关联技能 / 工具
 
 - 外卖红包 / 美团饿了么领券 → `cps`
-- 来源配置规范与签名类平台接法 → `references/providers.md`
+- 来源配置规范与签名类平台接法 → @references/providers.md
 - 配置模板（3 端可运行示例） → `references/providers.example.json`
-- 聚合 / 排序 / 渲染 → `scripts/shopping_saver.py`
+- 聚合 / 排序 / 渲染 → @scripts/shopping_saver.py
 
 ## 参考资料
 
-- `references/providers.md` — 来源清单、providers.json 结构、密钥安全、custom 适配器（签名平台）写法
+- @references/providers.md — 来源清单、providers.json 结构、密钥安全、custom 适配器（签名平台）写法
 - `references/providers.example.json` — 3 端 key-based 来源配置模板
-- `scripts/shopping_saver.py` — 无第三方依赖的聚合脚本（urllib / json / argparse）
+- @scripts/shopping_saver.py — 无第三方依赖的聚合脚本（urllib / json / argparse）
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

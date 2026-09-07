@@ -319,3 +319,7 @@ git stash list                        # 是否存在未应用的暂存
 
 **版本**：v1.0.0（2026-08-30）
 **标签**：uni-app, uniCloud, 微信小程序, 开发工作流, AGENTS.MD
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

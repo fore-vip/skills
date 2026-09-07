@@ -36,7 +36,7 @@ agent_created: true
    - 返回 `edge` 可用 → 用 edge-tts（免费网络引擎，音色自然，音色多）
    - 返回仅 `say` 可用（macOS）→ 用 say（免费本地引擎）
    - 两者皆无 → 跳到第三级
-3. **付费方案兜底**（免费均不可用）：读 `references/paid-tts-providers.md`，向用户说明需要注册、配置密钥、可能产生费用，**经用户确认后**引导其完成配置（推荐腾讯云 TTS，有免费额度），再执行合成。密钥只存用户本地，严禁入库入仓。
+3. **付费方案兜底**（免费均不可用）：读 @references/paid-tts-providers.md，向用户说明需要注册、配置密钥、可能产生费用，**经用户确认后**引导其完成配置（推荐腾讯云 TTS，有免费额度），再执行合成。密钥只存用户本地，严禁入库入仓。
 
 ### 第二步：定音色（弹窗选择）
 
@@ -97,10 +97,14 @@ python3 <skill_dir>/scripts/tts.py --file input.txt --voice <音色> --out /tmp/
 
 - edge-tts 为网络引擎，合成失败多为网络问题：重试 1 次，仍失败降级到 say（macOS）。
 - 文本超过 5000 字建议先写入临时文件再用 `--file` 传入。
-- 付费方案的密钥安全红线见 `references/paid-tts-providers.md` 末节，必须遵守。
+- 付费方案的密钥安全红线见 @references/paid-tts-providers.md 末节，必须遵守。
 - 本技能不做语音克隆、不做声音复刻——那是另一个能力域，超出单一职责。
 
 ## 参考资料
 
-- `scripts/tts.py` — 统一合成脚本（引擎探测、音色列举、mp3 输出）
-- `references/paid-tts-providers.md` — 付费方案配置指南（腾讯云/讯飞/MiniMax/Azure）
+- @scripts/tts.py — 统一合成脚本（引擎探测、音色列举、mp3 输出）
+- @references/paid-tts-providers.md — 付费方案配置指南（腾讯云/讯飞/MiniMax/Azure）
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

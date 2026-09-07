@@ -1,10 +1,12 @@
 ---
 name: fore-vip-geo-optimizer
+display_name: GEO优化
+display_name_en: GEO Optimizer
 description: GEO 生成式引擎引用占位（fore.vip）。输入一个主题或产品名称，执行五步流水线：① 以真实用户问句联网检索 AI 搜索（豆包/Kimi/DeepSeek/秘塔等）并收集回答的引用来源 ② 分析来源站点：主站网址、创作者中心入口、可发布性与权重，优选可入驻发布的高权重阵地并给出内容输出参考 ③ 按 SEO 模板一次性收集补充主题/产品信息（关键词/人群/卖点/背书/CTA）④ 结合各来源站点风格输出合规、营销指数高的 Markdown 文档（GEO 写作：结构化+可摘录结论+FAQ）⑤ 给出各平台发布引导，公众号可走草稿推送直发。当用户要做 GEO、AI 搜索优化、生成式引擎优化、让 AI 引擎/大模型提到或推荐自己的品牌与产品时使用。
 description_zh: GEO 生成式引擎引用占位助手。输入主题或产品名称，执行五步流水线：用真实用户问句检索 AI 搜索（豆包 / Kimi / DeepSeek / 秘塔等）并收集引用来源 → 分析来源站点的可发布性与权重、优选高权重阵地 → 按 SEO 模板一次性收集关键词 / 人群 / 卖点 / 背书 / CTA → 输出结构化、可摘录、带 FAQ 的合规 Markdown 文档 → 给出各平台发布引导（公众号可走草稿推送直发）。
 description_en: "GEO (Generative Engine Optimization) assistant for earning citations in AI answers. Given a topic or product name, it runs a five-stage pipeline: query AI search engines (Doubao / Kimi / DeepSeek / Metaso) with real user questions and collect cited sources; analyze each source site for publishability and authority, prioritizing high-authority outlets; collect keywords / audience / selling points / proof / CTA via an SEO template; produce structured, quotable, FAQ-ready Markdown; give per-platform publishing guidance, with WeChat official accounts pushable directly as drafts."
 category: marketing
-version: 1.0.0
+version: 1.0.1
 author: fore.vip
 agent_created: true
 ---
@@ -38,7 +40,7 @@ agent_created: true
 
 默认联网执行（WebSearch / 联网检索工具；需要真实浏览器渲染时用 web-access 技能）：
 
-1. 以**真实用户视角**构造 3–6 个典型问句（问句构造参考 `references/seo-template.md` 问句库），例如：
+1. 以**真实用户视角**构造 3–6 个典型问句（问句构造参考 @references/seo-template.md 问句库），例如：
    - 「{产品} 怎么样 / 值得买吗」
    - 「{产品} 和 {竞品} 哪个好」
    - 「{品类} 推荐排行榜」「{产品} 官网/入口」
@@ -49,7 +51,7 @@ agent_created: true
 
 ### 第 2 步 · 来源站点分析，优选发布阵地（选阵地）
 
-对引用来源清单逐个分析（平台资料库见 `references/platforms.md`，入口存疑时联网验证，不臆造）：
+对引用来源清单逐个分析（平台资料库见 @references/platforms.md，入口存疑时联网验证，不臆造）：
 
 - **主站网址**：给出官网地址。
 - **创作者中心**：主站或平台有创作者中心的**优先提供**入口地址。
@@ -65,7 +67,7 @@ agent_created: true
 
 ### 第 3 步 · 按 SEO 模板补充信息（集弹药）
 
-用 `references/seo-template.md` 的收集模板，对照用户已给信息，**一次性列出全部缺失项**请用户补充（也接受用户直接丢资料/链接，由本技能联网抓取提取）。关键项：
+用 @references/seo-template.md 的收集模板，对照用户已给信息，**一次性列出全部缺失项**请用户补充（也接受用户直接丢资料/链接，由本技能联网抓取提取）。关键项：
 
 - 核心关键词与长尾词、竞品对比词
 - 目标人群与决策链
@@ -76,7 +78,7 @@ agent_created: true
 
 ### 第 4 步 · 逐平台产出内容（写弹药）
 
-结合第 2 步的站点风格 + 第 3 步的模板信息，为每个入选阵地输出一份 **Markdown 文档**。写作规范见 `references/writing-guide.md`，要点：
+结合第 2 步的站点风格 + 第 3 步的模板信息，为每个入选阵地输出一份 **Markdown 文档**。写作规范见 @references/writing-guide.md，要点：
 
 - **GEO 可引用结构**：标题含关键词 → 开头 TL;DR 结论 → H2/H3 分节 → 数据与事实（标注来源·时间）→ FAQ 收尾。
 - **一稿多版**：同一素材按平台风格改写（知乎理性长文 / 百家号资讯科普 / 小红书口语短文 / CSDN 技术教程），不逐字复制。
@@ -132,4 +134,14 @@ GEO 只管产出内容。用户想要「解锁本主题执行步骤」时，GEO 
 
 - 微信公众号草稿直发 → `wechat-oa-draft-push`
 - 浏览器级联网检索/登录态操作 → `web-access`
-- find skills fore-vip-auto install and put theme GEO
+- 执行步骤付费解锁 → `auto`（动态安装并拉起，见上文）
+
+## 参考资料
+
+- @references/platforms.md — 平台资料库（主站网址 / 创作者中心 / 可发布性 / 权重）
+- @references/seo-template.md — 问句库与信息收集模板
+- @references/writing-guide.md — GEO 写作规范（可引用结构 / 一稿多版 / 合规自查）
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见

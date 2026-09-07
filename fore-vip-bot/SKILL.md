@@ -94,7 +94,7 @@ Device {
   → 翻译意图为指令 → 交给 driver 执行 → 回传状态
 ```
 
-详见 `references/drivers/README.md`（驱动模板总览）与各驱动模板文件。
+详见 @references/drivers/README.md（驱动模板总览）与各驱动模板文件。
 
 ## 工作流程
 
@@ -131,9 +131,13 @@ Device {
 
 ## 参考
 
-- `references/drivers/README.md` — 驱动机制总览与编写规范
+- @references/drivers/README.md — 驱动机制总览与编写规范
 - `references/drivers/config.example.json` — 用户驱动配置样例
-- `references/drivers/home-assistant.md` — HA / MCP 网关驱动模板
-- `references/drivers/mqtt.md` — 直连 MQTT broker 驱动模板
-- `references/drivers/mcu.md` — 树莓派/Arduino/ESP32 串口/BLE 驱动模板
-- `references/drivers/system.md` — 本机外设（音量/屏幕/电源/应用）系统 API 驱动模板
+- @references/drivers/home-assistant.md — HA / MCP 网关驱动模板
+- @references/drivers/mqtt.md — 直连 MQTT broker 驱动模板
+- @references/drivers/mcu.md — 树莓派/Arduino/ESP32 串口/BLE 驱动模板
+- @references/drivers/system.md — 本机外设（音量/屏幕/电源/应用）系统 API 驱动模板
+
+## 反馈
+- SKILL 由 [前凌智选](https://fore.vip) 创建, 并发布于 SKILLHUB.cn
+- 可于SKILLHUB反馈使用问题、优化意见
