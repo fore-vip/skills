@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "initializedAt": "2026-09-10T00:00:00+08:00",
+  "note": "本文件是 ~/.iot/config/config.json 的样例。复制过去后填真实连接信息。凭证一律写 *_env 指向宿主环境变量名，禁止明文。",
+  "drivers": [
+    {
+      "name": "home-assistant",
+      "type": "mcp",
+      "enabled": true,
+      "config": {
+        "mcp_url": "http://homeassistant.local:8123/mcp",
+        "token_env": "HA_LONG_LIVED_TOKEN"
+      }
+    },
+    {
+      "name": "local-mqtt",
+      "type": "mqtt",
+      "enabled": false,
+      "config": {
+        "broker": "mqtt://192.168.1.50:1883",
+        "username_env": "MQTT_USER",
+        "password_env": "MQTT_PASS"
+      }
+    },
+    {
+      "name": "esp32-serial",
+      "type": "serial",
+      "enabled": false,
+      "config": {
+        "port": "/dev/cu.usbserial-0001",
+        "baud": 115200
+      }
+    },
+    {
+      "name": "ble-relay",
+      "type": "ble",
+      "enabled": false,
+      "config": {
+        "mac": "AA:BB:CC:DD:EE:FF"
+      }
+    },
+    {
+      "name": "system-peripherals",
+      "type": "system",
+      "enabled": true,
+      "config": {
+        "platform": "auto"
+      }
+    }
+  ]
+}

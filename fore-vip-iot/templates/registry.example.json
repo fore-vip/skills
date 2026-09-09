@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "note": "本文件是 ~/.iot/config/registry.json 的样例，即中控的「设备注册表」。discover 后写入，后续控制指令都以此表为准。",
+  "devices": [
+    {
+      "id": "livingroom_light_01",
+      "name": "客厅主灯",
+      "type": "light",
+      "driver": "home-assistant",
+      "location": "客厅",
+      "capabilities": ["on/off", "dim", "color"],
+      "state": null
+    },
+    {
+      "id": "bedroom_thermostat",
+      "name": "卧室空调",
+      "type": "thermostat",
+      "driver": "home-assistant",
+      "location": "卧室",
+      "capabilities": ["on/off", "set_temp"],
+      "state": null
+    },
+    {
+      "id": "farm_soil_sensor",
+      "name": "大棚土壤湿度",
+      "type": "sensor",
+      "driver": "local-mqtt",
+      "location": "大棚",
+      "capabilities": ["read"],
+      "state": null
+    },
+    {
+      "id": "sys_volume",
+      "name": "本机音量",
+      "type": "custom",
+      "driver": "system-peripherals",
+      "location": "本机",
+      "capabilities": ["on/off", "dim", "read"],
+      "state": null
+    }
+  ]
+}
