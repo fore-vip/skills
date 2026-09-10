@@ -1,5 +1,7 @@
 ---
 name: fore-vip-iot
+slug: ai-iot
+displayName: 智控
 display_name: 智控
 display_name_en: fore.vip Hardware Control Hub
 description: Agent升级成本地硬件设备控制中枢（fore.vip）。用户安装后，在自己的电脑上统一控制家里或环境里的所有硬件设备——智能家居（灯/插座/空调/窗帘/传感器）、创客硬件（树莓派/Arduino/ESP32+继电器/舵机/摄像头）、本机外设（音量/屏幕/电源）、环境物联网（PLC/农业/养殖传感器与执行器）。采用"设备抽象层 + 指令范式 + 动态驱动"框架——SKILL 不绑定任何协议，驱动模板放在 templates/ 单层目录，运行时按用户环境加载驱动（MCP/HTTP-MQTT-BLE-串口/系统API）；所有配置、设备注册表与自定义驱动一律写入用户目录 ~/.iot/config 与 ~/.iot/drivers，SKILL 安装目录只读，首次运行自动初始化并向用户说明工作区位置。当用户说"打开客厅灯""把卧室温度调到26""读取土壤湿度""关掉所有设备""家里有哪些设备能控制"时使用。
