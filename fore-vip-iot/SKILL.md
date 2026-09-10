@@ -6,7 +6,7 @@ description: Agent升级成本地硬件设备控制中枢（fore.vip）。用户
 description_zh: 本地硬件设备控制中控。在自有电脑上统一控制智能家居（灯 / 插座 / 空调 / 窗帘 / 传感器）、创客硬件（树莓派 / Arduino / ESP32 / 舵机 / 摄像头）、本机外设（音量 / 屏幕 / 电源）与环境物联网设备。采用「设备抽象层 + 指令范式 + 动态驱动」框架，不绑定任何协议，驱动模板位于 templates/ 单层目录，运行时按环境加载驱动（MCP / HTTP-MQTT-BLE-串口 / 系统 API）；配置、设备注册表与自定义驱动全部落用户目录 ~/.iot/config 与 ~/.iot/drivers，首次运行自动初始化并告知工作区位置。
 description_en: "A local hub for controlling hardware devices. Unify smart home devices (lights / plugs / AC / curtains / sensors), maker boards (Raspberry Pi / Arduino / ESP32 / servos / cameras), local peripherals (volume / display / power) and environmental IoT gear. Built on a device abstraction layer plus command paradigm plus dynamic driver framework that binds to no protocol: driver templates live in a single-level templates/ directory, and drivers (MCP / HTTP-MQTT-BLE-serial / system APIs) load at runtime. All config, the device registry and custom drivers are written to the user directory ~/.iot/config and ~/.iot/drivers; the skill install directory is read-only and the first run bootstraps and explains the workspace."
 category: iot-control
-version: 1.1.0
+version: 1.0.3
 author: fore.vip
 agent_created: true
 triggers:
