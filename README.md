@@ -22,7 +22,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 | auto | 付费解锁后，输入主题即返回该主题最优质的执行步骤提示。 |
 | cps | 领外卖券、点外卖优惠、看看有什么吃的，就直接给一个可点的领券链接。支持自然语言（领券 / 看看有什么... |
 | fore-vip-anti-fraud | 反诈识别与避险助手（fore.vip）。用户输入遇到的事情或关键词（陌生来电/短信/链接/兼职刷单/... |
-| fore-vip-bot | 本地硬件设备控制中控（fore.vip）。用户安装后，在自己的电脑上统一控制家里或环境里的所有硬件设... |
+| fore-vip-iot | 本地硬件设备控制中控（智控，fore.vip）。统一控制智能家居、创客硬件、本机外设与环境物联网设备；驱动模板在 `templates/`，配置与设备注册表落 `~/.iot/`。 |
 | fore-vip-career-starter | 职场新人求职助手（fore.vip）。面向社会经验相对薄弱的群体（应届生 / 转行 / 待业 / 低... |
 | fore-vip-contract | 中文合同起草、生成与审阅助手（fore.vip）。把「帮我写一份合作协议 / 代理合同 / 保密协议... |
 | fore-vip-ds-harness | DeepSeek Harness（dsh）傻瓜式本地启动助手。一句话讲清 DSH 是什么，引导在 D... |
@@ -50,6 +50,40 @@ npx skills add fore-vip/skills --skill <skill-name>
 | fore-vip-jigsaw | 可打印拼图生成助手（fore.vip）。先用 AI 生成动漫/插画底图（或用户本地图），再用矢量 SVG 叠加经典拼图卡扣切割线，输出自带底图的可打印 SVG——打印后沿黑线剪开即得互补拼块，直接可玩。支持网格难度（默认 5×5）与卡扣随机种子。 |
 
 > 注：entrepreneur/ 分类下的子技能本次未纳入首层列表（暂忽略）。
+
+## 技能归属与多渠道分发
+
+本仓库的技能分属**个人库**与**团队库**，并同步分发到多个开放平台。新增或改动技能，都要遵守下面的归属与发布规范。
+
+### 一、库归属
+
+| 库 | 说明 | 标记 |
+|------|------|------|
+| 个人库 | 个人名下发布与维护，署名个人 | frontmatter `owner: personal` |
+| 团队库 | fore.vip 团队空间统一维护，署名前凌智选 | frontmatter `owner: team` |
+
+- 归属写在 SKILL.md frontmatter 的 `owner` 字段；**未标记的一律视为「待归类」**。
+- 归属决定三件事：品牌署名、SKILL 尾部的反馈链接、发布时用的 API Token（个人 token 与团队 token 不混用）。
+- 跨库迁移（`personal` ↔ `team`）需要同时改署名、反馈链接与发布 Token，按 MINOR 处理。
+
+> ⚠️ 当前 45 个技能尚未逐条标注归属，划分清单待确认后批量补齐。
+
+### 二、分发平台
+
+| 平台 | 状态 | 关键要求 |
+|------|------|----------|
+| [SKILLHUB](https://skillhub.cn) | 已接入（`skillhub publish`） | 必须有 `slug` + `displayName`（驼峰）+ `version`；只认单层子目录 |
+| WorkBuddy 开放平台 | 已接入 | 必填 `description` / `description_zh` / `description_en` / `version` / `author` |
+| Red SKILL | 待接入 | 平台规范待补 |
+| 知乎 | 待接入 | 平台规范待补 |
+
+### 三、跨平台通用约束（四平台都要满足）
+
+1. **单层子目录**：开放平台不支持多级子层，`references/drivers/` 这类二级目录一律摊平 —— 模板放 `templates/`，文档放 `references/`。
+2. **运行时数据不进安装目录**：配置、注册表、用户自定义资产统一落用户目录（如 `~/.iot/config`、`~/.iot/drivers`），SKILL 安装目录只读 —— 平台升级会覆盖。
+3. **版本号递进走第三位 PATCH**：`1.0.1 → 1.0.2 → 1.0.3`，不擅自升 MINOR / MAJOR。
+4. **凭证不入库**：平台 API Token 只在命令行传入，禁止写进任何仓库文件。
+5. **发布前自检**：先跑 `skillhub publish <dir> --dry-run --json` 预检，通过再正式发布。
 
 ## 许可证
 
