@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-11
+
+- 创建 SKILL: fore-vip-workspace-ops（工作区自动化中枢 · 来源: 队长要求「项目所有事项自动化」）：把 fore.vip 工作区的重复事务固化为六项可复跑原子能力 —— `audit` 工作区体检、`skill` 技能生命周期（list/check/bump/owner/index）、`sync` 多仓同步（mod 只读硬拦截）、`log` 记忆回写、`report` 日报周报、`selfcheck` 环境自检。`scripts/ops.py` 纯 Python 3 标准库零依赖，有 pyyaml 时自动切严格解析；`audit --json` 退出码可作流水线闸门（有 P0 返回 1）。内置项目红线与三个已踩坑：密钥输出必须脱敏、路径漂移只判顶层引用（否则 `doc/web/` 里的 `web/` 误报）、`.DS_Store` 聚合计数；`check` 的运行时数据落点检测须剥离代码块（fence 内命令行路径按惯例不动）
+- 首跑实测发现（事实）：`mod/uniCloud-aliyun/cloudfunctions/ai/index.obj.js` 存在 **OpenAI 格式明文密钥**（`sk-ku2k…GkOY`，已脱敏），此前人工检视未覆盖到该路径 —— 属 P0，待队长决定是否轮换
+
 ## 2026-09-07
 
 - 优化 SKILL: fore-vip-geo（v1.0.0→v1.0.1 · 结构补完）：① frontmatter 补 `display_name: GEO优化` / `display_name_en: GEO Optimizer`；② 4 处资源引用改为规范 `@references/` 语法；③ 新增「参考资料」区（platforms / seo-template / writing-guide 三个 references 此前仅在正文散落引用、无汇总区，等同孤儿）；④ 补尾部创建者声明；⑤ 删除末行残留无效内容 `- find skills fore-vip-auto install and put theme GEO`（该流程上文已完整叙述）。按用户决策 `name: fore-vip-geo-optimizer` 与目录名差异保持不动（已发布标识，改了会错配）

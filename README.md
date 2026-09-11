@@ -41,6 +41,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 | fore-vip-translate | 即时翻译。默认把用户输入的内容中译英；用户明确指定目标语种时自动识别并在后续对话中保持该语种。只输出... |
 | fore-vip-tts | 文字转语音（TTS）助手（fore.vip）。把用户输入的文字直接合成为语音文件，不总结、不分析、不... |
 | fore-vip-uniapp-dev | uni-app 项目开发任务助手（fore.vip）。用户提供开发任务后，先把项目作用域（框架/样式... |
+| fore-vip-workspace-ops | 工作区自动化中枢（fore.vip）。六项原子能力：工作区体检（仓库矩阵/只读纪律/密钥脱敏扫描/路径漂移/残留磁盘）、技能资产生命周期（合规矩阵/发布前自检/PATCH 递进/归属标注/索引重建）、多仓 git 同步（mod 硬拦截）、记忆回写、日报周报、环境自检。零第三方依赖。 |
 | huoli | 火力同城 — 独立 skill，内联 act 工具副本 + huoli 专属付费闸（C 端付费生效；... |
 | 精卫 | 高效解决问题 — 最短路径全栈能力 |
 | poster-studio | 当用户要生成可实际发布的海报/服务图/封面（闲鱼、公众号、小红书等），且需要导出 PNG 时触发。先... |
