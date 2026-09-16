@@ -36,7 +36,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 | fore-vip-mom-says | 育儿问题分析与可落地应对（fore.vip）。用户输入育儿相关问题或主题（如「孩子三岁不爱吃饭」「一写作业就哭」「总是打别的小朋友」「青春期关门不说话」「二胎来了老大闹情绪」），先按年龄阶段拆... |
 | fore-vip-movie | 电影推荐与观影指南（fore.vip）。把模糊的「看什么电影 / 周末看啥 / 适合 X 的电影 / 最近有什么好片 / 想看一部治愈系」转化为按类型·心情·评分·档期·场景分层的观影推荐与可... |
 | fore-vip-oss | 对象存储（OSS）入门与配置助手。向用户介绍 OSS 是什么、可应用场景，弹出窗口让用户从主流云供应商（阿里云 OSS/腾讯云 COS/AWS S3/华为云 OBS/MinIO/七牛云）中选择... |
-| poster-studio | 当用户要生成可实际发布的海报/服务图/封面（闲鱼、公众号、小红书等），且需要导出 PNG 时触发。先按极简排版设计哲学（Algorithmic Poster Philosophy）构建系统，再... |
+| poster-studio | 当用户要生成可实际发布的海报/服务图/封面（闲鱼、公众号、小红书等），且需要导出 PNG 时触发。先按极简排版设计哲学（Algorithmic Poster Philosophy）构建系统，*... |
 | fore-vip-product-recommend | 通用产品调研与推荐框架（fore.vip）。把模糊的「帮我推荐个产品 / 该买哪个 / 选型对比 / 适合我的 X / 测评对比 / 选型清单 / 帮我选」转化为有依据、可溯源、分层的结构化推... |
 | fore-vip-shopping-saver | 购物超省（fore.vip）— 输入商品名称或图片，从用户配置的 ≥3 个购物/导购/联盟接口汇聚商品链接、样图/SKU 图、价格与领券地址，按质量评分/价格/券后价排序，生成简洁大气的高端... |
 | fore-vip-skill-lint | 批量校验并补齐 SKILL.md 的 frontmatter，使其符合 open.workbuddy.cn/docs/skill 官方技能规范。先按官方必填字段表扫描差距（descriptio... |
