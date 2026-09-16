@@ -15,25 +15,73 @@
 
 ## 阿里云 OSS（ossutil）
 
-**安装（macOS / Linux 官方脚本）**
+> **现行版本是 ossutil 2.0**（2.4.0+）。2.0 与 1.x 命令/配置差异大，以下步骤按 2.0 编写；
+> 若本机是 1.x（`ossutil version` 输出 `v1.x.x`），跳到本节末尾「1.x → 2.0 关键差异」再操作。
+
+**安装 ossutil 2.0（官方二进制，按架构选一个）**
 
 ```bash
-curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
-ossutil version   # 验证
+# macOS Intel / x86_64
+curl -O https://gosspublic.alicdn.com/ossutil/v2/2.4.0/ossutil-2.4.0-mac-amd64.zip
+# macOS Apple Silicon / arm64
+curl -O https://gosspublic.alicdn.com/ossutil/v2/2.4.0/ossutil-2.4.0-mac-arm64.zip
+# Linux x86_64
+curl -O https://gosspublic.alicdn.com/ossutil/v2/2.4.0/ossutil-2.4.0-linux-amd64.zip
+
+unzip ossutil-2.4.0-mac-amd64.zip && cd ossutil-2.4.0-mac-amd64
+chmod 755 ossutil
+mv ossutil ~/.local/bin/          # 用户级；系统级用 sudo mv ossutil /usr/local/bin/
+ossutil version                   # 验证：输出 2.4.0
 ```
 
-> ossutil 2.x（ossutil2）命令有差异，若已安装 2.x，以官方文档为准：https://help.aliyun.com/zh/oss/developer-reference/ossutil
+> 升级时**先备份旧二进制**（`cp $(which ossutil) $(which ossutil)-v1.7.19.bak`）再覆盖，方便回滚。
+> 一键脚本 `curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash` 装的是 **1.x**，新装不要用。
 
 **获取 AK/SK**
 - 控制台：https://ram.console.aliyun.com/users → 创建用户 → 勾选 `OpenAPI 调用访问` → 生成 AccessKey（仅创建时可见，立即保存）
 - 强烈建议使用 RAM 子账号并仅授予 `AliyunOSSFullAccess`（或按桶最小化授权），不要用主账号 AK
 
-**配置凭证**
+**配置凭证（2.0 必填 region，不是 endpoint）**
 
 ```bash
 ossutil config
-# 交互式输入：AccessKey ID / AccessKey Secret / Endpoint（如 https://oss-cn-hangzhou.aliyuncs.com）
+# 交互式输入：AccessKey ID / AccessKey Secret / Region（如 cn-hangzhou）
+# 2.0 签名已升到 V4，region 为必填项；endpoint 由 region 自动推导（内网/自定义域名再单独指定）
+ossutil ls            # 验证连通
 ```
+
+生成的 `~/.ossutilconfig` 格式（支持多套配置，用 `--profile` 引用）：
+
+```ini
+[default]
+accessKeyID=your_accesskey_id
+accessKeySecret=your_accesskey_secret
+region=cn-hangzhou
+
+[profile shenzhen]
+accessKeyID=your_accesskey_id_1
+accessKeySecret=your_accesskey_secret_1
+region=cn-shenzhen
+```
+
+**1.x → 2.0 关键差异（升级必看）**
+
+| 项 | 1.x | 2.0 |
+|---|---|---|
+| 必填配置 | AK / SK / **Endpoint** | AK / SK / **Region**（漏配报 `region must be set in sign version 4`） |
+| 帮助 | `ossutil help` | `ossutil --help`（`help` 子命令已移除） |
+| 删除 Bucket | `rm` | `rb`；且 `-m`（分片）与 `-r` 必须分两次执行 |
+| 签名 URL | `sign` | `presign`（`sign` 保留为别名但选项不同，V4 签名最长 7 天） |
+| 追加写 | `appendfromfile` | `append`（数据源支持本地 / OSS / stdin） |
+| 对象属性 | `set-acl` / `set-meta` | `set-props`（别名保留，选项不同） |
+| Bucket 配置 | `logging` / `lifecycle` 等根命令 | `ossutil api put-bucket-xxx`（参数支持 XML / JSON） |
+| 增量上传 | `--snapshot-path` | 已移除，改用 `-u` / `--update` |
+| `--include/--exclude` | 只匹配文件名，全规则顺序求值 | 匹配全路径，**首个匹配即停止** |
+| 对象间拷贝 | 只拷数据 | 默认连带元数据与标签，用 `--copy-props` 控制 |
+
+- 官方文档：https://help.aliyun.com/zh/oss/developer-reference/ossutil
+- 迁移指南：https://help.aliyun.com/document_detail/2804545.html
+- 差异对照：https://help.aliyun.com/document_detail/2804546.html
 
 **域名绑定**
 1. 控制台 → 对应 Bucket → 概览/传输管理 → 绑定自定义域名（bucket 绑定域名需同账号下已备案域名，中国大陆 region 强制备案）

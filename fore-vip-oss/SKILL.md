@@ -6,7 +6,7 @@ description: 对象存储（OSS）入门与配置助手。向用户介绍 OSS �
 description_zh: 对象存储（OSS）入门与配置助手。介绍 OSS 概念与应用场景，弹窗让用户从主流云供应商（阿里云 OSS / 腾讯云 COS / AWS S3 / 华为云 OBS / MinIO / 七牛云）中选择，然后按所选供应商完成三件事：安装官方 CLI、引导获取 AK/SK 访问凭证、辅助配置自定义域名（CNAME）。
 description_en: "Object storage (OSS) intro and setup assistant. Explains what OSS is and when to use it, prompts the user to pick a provider (Alibaba Cloud OSS / Tencent Cloud COS / AWS S3 / Huawei Cloud OBS / MinIO / Qiniu), then completes three tasks for that provider: install the official CLI, guide AK/SK credential setup, and help configure a custom domain via CNAME."
 category: cloud-storage
-version: 1.0.0
+version: 1.0.1
 author: fore.vip
 agent_created: true
 triggers:
@@ -70,6 +70,8 @@ compatibility:
 
 - 先检测是否已安装：运行 @references/providers.md 对应厂商的**验证命令**（如 `ossutil version`）。
 - 已装 → 报告版本，跳过安装；未装 → 按文档给用户的系统（macOS/Linux）执行安装命令，装完再次运行验证命令确认。
+- **版本判定（阿里云必做）**：`ossutil version` 输出 `v1.x.x` → 是 1.x，命令与配置语义不同，**必须按 providers.md「1.x → 2.0 关键差异」走 2.0 分支**（关键：2.0 配 region 而非 endpoint；`ossutil --help` 而非 `ossutil help`）。
+- 升级已装 CLI 时**先备份旧二进制再覆盖**（如 `cp $(which ossutil) $(which ossutil)-v1.7.19.bak`），保留回滚能力。
 - 安装失败：不猜测原因硬试，按文档链接引导用户手动下载或查官方文档。
 
 ### 3.2 引导获取 AK/SK 访问凭证
