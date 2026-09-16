@@ -14,7 +14,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 
 > 目录站：https://www.skills.sh/fore-vip/skills
 
-## 技能列表（首层 - 28 个）
+## 技能列表（首层 - 29 个）
 
 | 技能 | 说明 |
 |------|------|
@@ -44,6 +44,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 | traveler | 旅行行程规划助手。根据用户提供的出发地、目的地、天数、预算、人群与兴趣，生成结构化、可执行的每日行程单（时间轴+交通衔接+餐饮住宿+预算估算+避坑与备选），行程涉及出行/门票/美食/大交通时主... |
 | fore-vip-tts | 文字转语音（TTS）助手（fore.vip）。把用户输入的文字直接合成为语音文件，不总结、不分析、不加任何多余内容，拿到文字就转。引擎按「环境默认 → 免费方案（edge-tts / macO... |
 | fore-vip-uniapp-dev | uni-app 项目开发任务助手（fore.vip）。用户提供开发任务后，先把项目作用域（框架/样式框架/模块结构/前后端描述/重要事项）、版本管理状态、运行状态、文档查询源、标准约束一次性勘... |
+| fore-vip-workplace-survival | 职场博弈与止损助手（fore.vip）。面向在职打工人，输入一件具体的职场困扰（被当众批评 / 背锅 / 边缘化 / 抢功 / 画饼 / 劝退 / 不合理加班 / 绩效被打低 / 降薪调岗 /... |
 | fore-vip-workspace-ops | 把 fore.vip 工作区的日常重复事务变成一条可复跑的命令（fore.vip）。六项原子能力：① audit 工作区体检（仓库矩阵 / mod 只读纪律 / 密钥明文脱敏扫描 / READ... |
 | wechat-oa-draft-push | 微信公众号草稿推送助手。将文章（标题/作者/摘要/正文 HTML/封面图）保存为草稿并发布到微信公众号。安装后向用户收集 AppID 与 AppSecret，用户完成文章内容并确认后一键推送。... |
 
@@ -66,7 +67,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 - 归属决定三件事：品牌署名、SKILL 尾部的反馈链接、发布时用的 API Token（个人 token 与团队 token 不混用）。
 - 跨库迁移（`personal` ↔ `team`）需要同时改署名、反馈链接与发布 Token，按 MINOR 处理。
 
-> ⚠️ 归属现状（2026-09-13 由 `opt/build_skills_index.py --stats` 实测）：28 个技能中 **27 个未标注**，仅 `fore-vip-workspace-ops` 标了 `owner: team`。划分清单待确认后批量补齐。
+> ⚠️ 归属现状（2026-09-13 由 `opt/build_skills_index.py --stats` 实测）：29 个技能中 **27 个未标注**，仅 `fore-vip-workspace-ops` 标了 `owner: team`。划分清单待确认后批量补齐。
 
 ### 二、分发平台
 
