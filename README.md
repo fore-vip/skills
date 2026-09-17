@@ -14,7 +14,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 
 > 目录站：https://www.skills.sh/fore-vip/skills
 
-## 技能列表（首层 - 29 个）
+## 技能列表（首层 - 30 个）
 
 | 技能 | 说明 |
 |------|------|
@@ -39,6 +39,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 | poster-studio | 当用户要生成可实际发布的海报/服务图/封面（闲鱼、公众号、小红书等），且需要导出 PNG 时触发。先按极简排版设计哲学（Algorithmic Poster Philosophy）构建系统，*... |
 | fore-vip-product-recommend | 通用产品调研与推荐框架（fore.vip）。把模糊的「帮我推荐个产品 / 该买哪个 / 选型对比 / 适合我的 X / 测评对比 / 选型清单 / 帮我选」转化为有依据、可溯源、分层的结构化推... |
 | fore-vip-shopping-saver | 购物超省（fore.vip）— 输入商品名称或图片，从用户配置的 ≥3 个购物/导购/联盟接口汇聚商品链接、样图/SKU 图、价格与领券地址，按质量评分/价格/券后价排序，生成简洁大气的高端... |
+| fore-vip-shuangxiu | 双休了么 · 用消费投票的购物决策助手（fore.vip）。说出想买什么，按 3:2 组出 5 家候选企业（3 家成熟品牌 + 2 家创新企业），从模型档案 / 社区 / 搜索引擎 / 资讯站四路取证，按双休工时、劳动合规、产品与供应链三维度 8 子项加权评分排名，给出前 3 名官方旗舰店。不评产品参数、不做比价领券、不代办维权。 |
 | fore-vip-skill-lint | 批量校验并补齐 SKILL.md 的 frontmatter，使其符合 open.workbuddy.cn/docs/skill 官方技能规范。先按官方必填字段表扫描差距（descriptio... |
 | fore-vip-translate | 即时翻译全球语种。默认把用户输入的内容中译英；用户明确指定目标语种时自动识别并在后续对话中保持该语种。只输出译文本身，不输出任何解释、提示、前缀后缀或多余内容。触发词：翻译、translate... |
 | traveler | 旅行行程规划助手。根据用户提供的出发地、目的地、天数、预算、人群与兴趣，生成结构化、可执行的每日行程单（时间轴+交通衔接+餐饮住宿+预算估算+避坑与备选），行程涉及出行/门票/美食/大交通时主... |

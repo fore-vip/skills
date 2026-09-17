@@ -155,6 +155,13 @@
       "description": "可打印拼图生成：AI 生图/本地图 + 矢量拼图卡扣切割线，输出可打印 SVG，打印剪开即玩。",
       "path": "fore-vip-jigsaw/",
       "category": "image"
+    },
+    {
+      "name": "fore-vip-shuangxiu",
+      "display_name": "双休了么",
+      "description": "用消费投票的购物决策助手：说出想买什么，按 3:2 组出 5 家候选企业（3 成熟品牌 + 2 创新企业），从模型档案/社区/搜索引擎/资讯站四路取证，按双休工时、劳动合规、产品与供应链三维度 8 子项加权评分排名，给出前 3 名官方旗舰店。不评产品参数、不做比价领券、不代办维权。",
+      "path": "fore-vip-shuangxiu/",
+      "category": "ecommerce"
     }
   ],
   "license": "MIT"
