@@ -14,13 +14,14 @@ npx skills add fore-vip/skills --skill <skill-name>
 
 > 目录站：https://www.skills.sh/fore-vip/skills
 
-## 技能列表（首层 - 30 个）
+## 技能列表（首层 - 31 个）
 
 | 技能 | 说明 |
 |------|------|
 | act | 活动发现与创建 MCP 工具集。当用户需要让 Agent 搜索活动、查看活动详情、创建活动（含付费定价）、或查询活动行程时使用。活动创建需 X-API-Key 鉴权，支持原子级多轮收集与自动化... |
 | fore-vip-anti-fraud | 反诈识别与避险助手（fore.vip）。用户输入遇到的事情或关键词（陌生来电/短信/链接/兼职刷单/投资理财/网恋/冒充公检法/客服理赔/中奖免费送/贷款解冻/裸聊/游戏交易等），先对照已知骗... |
 | fore-vip-career-starter | 职场新人求职助手（fore.vip）。面向社会经验相对薄弱的群体（应届生 / 转行 / 待业 / 低经验者），从零采集基础信息、学历、性格、特长，逐项轮询打磨简历模板，支持 doc / pdf... |
+| fore-vip-comic | 手绘漫画成图助手（fore.vip）。把主题、梗或知识画成手绘质感的多格漫画——AI 负责画面笔触、程序负责中文对白与版式，产出可直接发布的 PNG。开场先以选项形式收集主题、画风、版式与文案... |
 | fore-vip-contract | 中文合同起草、生成与审阅助手（fore.vip）。把「帮我写一份合作协议 / 代理合同 / 保密协议 / 租赁合同 / 劳动合同 / 授权委托书 / 报价单 / 借条」「审一下这份合同」「这份... |
 | cps | 领外卖券、点外卖优惠、看看有什么吃的，就直接给一个可点的领券链接。支持自然语言（领券 / 看看有什么吃的 / 美团领券 / 饿了么优惠 等）。纯指令型 skill，Agent 直接调 HTTP... |
 | fore-vip-ds-harness | DeepSeek Harness（dsh）傻瓜式本地启动助手。一句话讲清 DSH 是什么，引导在 DeepSeek 开放平台获取 API Key，按本机系统（macOS/Windows/Lin... |
@@ -39,7 +40,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 | poster-studio | 当用户要生成可实际发布的海报/服务图/封面（闲鱼、公众号、小红书等），且需要导出 PNG 时触发。先按极简排版设计哲学（Algorithmic Poster Philosophy）构建系统，*... |
 | fore-vip-product-recommend | 通用产品调研与推荐框架（fore.vip）。把模糊的「帮我推荐个产品 / 该买哪个 / 选型对比 / 适合我的 X / 测评对比 / 选型清单 / 帮我选」转化为有依据、可溯源、分层的结构化推... |
 | fore-vip-shopping-saver | 购物超省（fore.vip）— 输入商品名称或图片，从用户配置的 ≥3 个购物/导购/联盟接口汇聚商品链接、样图/SKU 图、价格与领券地址，按质量评分/价格/券后价排序，生成简洁大气的高端... |
-| fore-vip-shuangxiu | 双休了么 · 用消费投票的购物决策助手（fore.vip）。说出想买什么，按 3:2 组出 5 家候选企业（3 家成熟品牌 + 2 家创新企业），从模型档案 / 社区 / 搜索引擎 / 资讯站四路取证，按双休工时、劳动合规、产品与供应链三维度 8 子项加权评分排名，给出前 3 名官方旗舰店。不评产品参数、不做比价领券、不代办维权。 |
+| fore-vip-shuangxiu | 双休了么 · 用消费投票的购物决策助手（fore.vip）。用户说想买某类商品后，先问清需求，再按 3:2 比例组出 5 家候选企业（3 家成熟品牌 + 2 家创新/新锐企业），从「模型基础档... |
 | fore-vip-skill-lint | 批量校验并补齐 SKILL.md 的 frontmatter，使其符合 open.workbuddy.cn/docs/skill 官方技能规范。先按官方必填字段表扫描差距（descriptio... |
 | fore-vip-translate | 即时翻译全球语种。默认把用户输入的内容中译英；用户明确指定目标语种时自动识别并在后续对话中保持该语种。只输出译文本身，不输出任何解释、提示、前缀后缀或多余内容。触发词：翻译、translate... |
 | traveler | 旅行行程规划助手。根据用户提供的出发地、目的地、天数、预算、人群与兴趣，生成结构化、可执行的每日行程单（时间轴+交通衔接+餐饮住宿+预算估算+避坑与备选），行程涉及出行/门票/美食/大交通时主... |
@@ -68,7 +69,7 @@ npx skills add fore-vip/skills --skill <skill-name>
 - 归属决定三件事：品牌署名、SKILL 尾部的反馈链接、发布时用的 API Token（个人 token 与团队 token 不混用）。
 - 跨库迁移（`personal` ↔ `team`）需要同时改署名、反馈链接与发布 Token，按 MINOR 处理。
 
-> ⚠️ 归属现状（2026-09-13 由 `opt/build_skills_index.py --stats` 实测）：29 个技能中 **27 个未标注**，仅 `fore-vip-workspace-ops` 标了 `owner: team`。划分清单待确认后批量补齐。
+> ⚠️ 归属现状（2026-09-13 由 `opt/build_skills_index.py --stats` 实测）：31 个技能中 **27 个未标注**，仅 `fore-vip-workspace-ops` 标了 `owner: team`。划分清单待确认后批量补齐。
 
 ### 二、分发平台
 
