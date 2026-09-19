@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- 业务功能页必须有独立 title / description / canonical，不能与首页共用 -->
+  <title>{{F_TITLE}}</title>
+  <meta name="description" content="{{F_DESC}}">
+  <link rel="canonical" href="{{F_CANONICAL}}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="{{THEME_COLOR}}">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="{{SITE_NAME}}">
+  <meta property="og:title" content="{{F_TITLE}}">
+  <meta property="og:description" content="{{F_DESC}}">
+  <meta property="og:url" content="{{F_CANONICAL}}">
+  <meta property="og:image" content="{{OG_IMAGE}}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="{{OG_LOCALE}}">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/theme.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "{{F_NAME}}",
+    "serviceType": "{{F_NAME}}",
+    "description": "{{F_DESC}}",
+    "url": "{{F_CANONICAL}}",
+    "provider": {
+      "@type": "Organization",
+      "name": "{{SITE_NAME}}",
+      "url": "{{HOME_URL}}"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "{{AREA_SERVED}}"
+    }
+  }
+  </script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<header class="site-head">
+  <div class="wrap site-head__inner">
+    <a class="brand" href="/">
+      <img class="brand__mark" src="/logo-mark.png" alt="" width="28" height="28">
+      <span class="brand__name">{{SITE_NAME}}</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a class="nav__link" href="/">首页</a>
+      <a class="nav__link" href="/features.html" aria-current="page">产品能力</a>
+      <a class="nav__link" href="#how">怎么运作</a>
+      <a class="nav__link" href="#contact">联系我们</a>
+    </nav>
+    <div class="site-head__cta">
+      <a class="btn btn--primary" href="#contact">{{CTA_TEXT}}</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="section hero">
+    <div class="wrap hero__inner">
+      <nav class="breadcrumb small" aria-label="面包屑">
+        <a href="/">首页</a> <span aria-hidden="true">/</span> <span>{{F_NAME}}</span>
+      </nav>
+      <span class="eyebrow">产品能力</span>
+      <h1 class="display">{{F_H1}}</h1>
+      <p class="lede">{{F_LEAD}}</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary btn--lg" href="#contact">{{CTA_TEXT}}</a>
+        <a class="btn btn--ghost btn--lg" href="/">回到首页</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 解决什么问题 -->
+  <section class="section section--soft" id="problem">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">解决什么问题</span>
+        <h2 class="h2">{{F_PROBLEM_TITLE}}</h2>
+      </div>
+      <div class="grid grid--2">
+        <div class="card reveal card--flat">
+          <h3 class="h3">现在的麻烦</h3>
+          <ul class="stack-sm">
+            <li>{{P1}}</li>
+            <li>{{P2}}</li>
+            <li>{{P3}}</li>
+          </ul>
+        </div>
+        <div class="card reveal card--flat">
+          <h3 class="h3">用了之后</h3>
+          <ul class="stack-sm">
+            <li>{{G1}}</li>
+            <li>{{G2}}</li>
+            <li>{{G3}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 怎么运作 -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">怎么运作</span>
+        <h2 class="h2">三步拿到结果</h2>
+      </div>
+      <div class="grid grid--3 steps">
+        <div class="step reveal">
+          <h3 class="h3">{{S1_TITLE}}</h3>
+          <p class="small">{{S1_BODY}}</p>
+        </div>
+        <div class="step reveal">
+          <h3 class="h3">{{S2_TITLE}}</h3>
+          <p class="small">{{S2_BODY}}</p>
+        </div>
+        <div class="step reveal">
+          <h3 class="h3">{{S3_TITLE}}</h3>
+          <p class="small">{{S3_BODY}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 能力明细 -->
+  <section class="section section--soft" id="spec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">能力明细</span>
+        <h2 class="h2">{{F_SPEC_TITLE}}</h2>
+      </div>
+      <div class="grid grid--3">
+        <article class="card reveal">
+          <h3 class="h3">{{SP1_TITLE}}</h3>
+          <p class="small">{{SP1_BODY}}</p>
+        </article>
+        <article class="card reveal">
+          <h3 class="h3">{{SP2_TITLE}}</h3>
+          <p class="small">{{SP2_BODY}}</p>
+        </article>
+        <article class="card reveal">
+          <h3 class="h3">{{SP3_TITLE}}</h3>
+          <p class="small">{{SP3_BODY}}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">常见问题</span>
+        <h2 class="h2">关于这项能力</h2>
+      </div>
+      <div class="faq reveal">
+        <details>
+          <summary>{{FQ1}}</summary>
+          <p>{{FA1}}</p>
+        </details>
+        <details>
+          <summary>{{FQ2}}</summary>
+          <p>{{FA2}}</p>
+        </details>
+        <details>
+          <summary>{{FQ3}}</summary>
+          <p>{{FA3}}</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft cta" id="contact">
+    <div class="wrap cta__inner">
+      <h2 class="h1">{{CTA_TITLE}}</h2>
+      <p class="lede">{{CTA_LEAD}}</p>
+      <div class="cta__actions">
+        <a class="btn btn--primary btn--lg" href="mailto:{{EMAIL}}">邮件联系我们</a>
+        <a class="btn btn--ghost btn--lg" href="/">回到首页</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="site-foot__grid">
+      <div class="site-foot__col">
+        <div class="site-foot__title">{{SITE_NAME}}</div>
+        <p class="small">{{FOOTER_DESC}}</p>
+      </div>
+      <div class="site-foot__col">
+        <div class="site-foot__title">站点</div>
+        <a class="site-foot__link" href="/">首页</a>
+        <a class="site-foot__link" href="/features.html">产品能力</a>
+        <a class="site-foot__link" href="/sitemap.xml">站点地图</a>
+      </div>
+      <div class="site-foot__col">
+        <div class="site-foot__title">联系</div>
+        <a class="site-foot__link" href="mailto:{{EMAIL}}">{{EMAIL}}</a>
+        <span class="site-foot__link">{{CONTACT_EXTRA}}</span>
+      </div>
+    </div>
+    <div class="site-foot__bottom">
+      <span>© {{YEAR}} {{SITE_NAME}}. All rights reserved.</span>
+      <span class="icp">{{ICP_HTML}}</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js');
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (!items.length || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
+</html>

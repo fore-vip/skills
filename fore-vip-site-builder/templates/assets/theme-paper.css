@@ -1,0 +1,31 @@
+/* theme-paper.css — 商务留白浅色
+   白底 + 细线分区 + 衬线标题 + 大留白。适合企业 / 咨询 / 法律 / 财务。 */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f6f7f9;
+  --fg: #14171a;
+  --fg-muted: #5b6472;
+  --line: #e3e6ea;
+  --accent: #14171a;          /* accent */
+  --accent-solid: #14171a;    /* accent-solid */
+  --accent-fg: #ffffff;       /* accent-fg */
+  --shadow: 0 1px 2px rgba(16, 20, 24, .04);
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 14px;
+}
+
+/* 衬线标题是这个风格的识别点：只加在 Display / H1 / H2 上，正文不动 */
+.display, .h1, .h2 { font-family: var(--font-serif); letter-spacing: 0; }
+
+/* 细线分区，不用阴影 —— 商务感来自秩序而非装饰 */
+.card { box-shadow: none; border-color: var(--line); border-radius: var(--r-md); }
+.card__icon { background: var(--bg-soft); border-radius: var(--r-sm); }
+
+/* 区块之间用极淡的背景色交替，代替分隔线，留白更完整 */
+.section--soft { background: var(--bg-soft); }
+
+/* 表格式数据区在浅色下用细线更清晰 */
+.stats { border-top: 1px solid var(--line); padding-top: var(--s-6); }

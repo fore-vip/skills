@@ -1,0 +1,46 @@
+/* theme-brand.css — 品牌活力
+   明亮底 + 主色渐变点缀 + 圆角卡片 + 轻动效。适合消费产品 / 活动 / 内容站。 */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f7f8fb;
+  --fg: #101418;
+  --fg-muted: #5a6472;
+  --line: #e6e9ef;
+  --accent: #d92d20;          /* accent */
+  --accent-solid: #d92d20;    /* accent-solid */
+  --accent-fg: #ffffff;       /* accent-fg */
+  --shadow: 0 4px 16px rgba(16, 20, 24, .06);
+
+  --r-sm: 8px;
+  --r-md: 16px;
+  --r-lg: 28px;
+}
+
+/* 圆角与阴影是这一档的性格：卡片更圆、悬停更明显 */
+.card { border-color: transparent; box-shadow: var(--shadow); }
+.card:hover { transform: translateY(-2px); transition: transform 200ms var(--ease); }
+.btn { border-radius: 999px; }
+.btn--primary {
+  background: linear-gradient(135deg,
+              var(--accent-solid),
+              color-mix(in srgb, var(--accent-solid) 72%, #7a1fd0));
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent-solid) 26%, transparent);
+}
+.btn--primary:hover { box-shadow: 0 10px 24px color-mix(in srgb, var(--accent-solid) 32%, transparent); }
+
+/* 头屏浅色渐变衬底（只用一层，不叠玻璃拟态） */
+.hero { position: relative; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(70% 90% at 80% 0%,
+              color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
+  pointer-events: none;
+}
+
+.card__icon {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-radius: var(--r-sm);
+}
+.eyebrow, .accent, .stat__num { color: var(--accent); }
+.faq summary::after { color: var(--accent); }

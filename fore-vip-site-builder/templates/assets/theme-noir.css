@@ -1,0 +1,40 @@
+/* theme-noir.css — 极简科技暗色
+   深墨底 + 大字号 + 单色高光。适合 AI / 工具 / 技术产品。 */
+
+:root {
+  --bg: #0b0d10;
+  --bg-soft: #12161b;
+  --fg: #e8eaed;
+  --fg-muted: #9aa4b1;
+  --line: #232a33;
+  --accent: #ff6b6b;          /* accent */
+  --accent-solid: #ff6b6b;    /* accent-solid */
+  --accent-fg: #0b0d10;       /* accent-fg */
+  --shadow: none;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+}
+
+/* 暗底下的细线与卡片：靠边框区分，不靠阴影 */
+.card { background: var(--bg-soft); }
+.card__icon { background: #1a2028; }
+.btn--ghost { border-color: var(--line); }
+.btn--ghost:hover { border-color: var(--fg-muted); }
+
+/* 顶栏毛玻璃在暗色下的透明度需要更低一点 */
+.site-head { background: color-mix(in srgb, var(--bg) 78%, transparent); }
+
+/* 头屏加一层极淡的顶部光晕，替代渐变堆砌 */
+.hero { position: relative; }
+.hero::before {
+  content: ""; position: absolute; inset: -20% 0 auto 0; height: 420px;
+  background: radial-gradient(60% 100% at 50% 0%,
+              color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%);
+  pointer-events: none; z-index: -1;
+}
+
+/* 强调色在暗底上仍要足够亮 —— 若自定义品牌色偏暗，
+   init_site.py 会自动提亮到与 --bg 对比 ≥ 4.5:1 */
+.eyebrow, .accent, .stat__num { color: var(--accent); }

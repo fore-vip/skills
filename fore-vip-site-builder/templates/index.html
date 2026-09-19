@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{DESC}}">
+  <link rel="canonical" href="{{CANONICAL}}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="{{THEME_COLOR}}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{SITE_NAME}}">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{DESC}}">
+  <meta property="og:url" content="{{CANONICAL}}">
+  <meta property="og:image" content="{{OG_IMAGE}}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="{{OG_LOCALE}}">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/theme.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{SITE_NAME}}",
+    "url": "{{HOME_URL}}",
+    "logo": "{{HOME_URL}}logo.png",
+    "description": "{{DESC}}",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "{{EMAIL}}",
+      "availableLanguage": ["zh-CN"]
+    }
+  }
+  </script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳到主要内容</a>
+
+<header class="site-head">
+  <div class="wrap site-head__inner">
+    <a class="brand" href="/">
+      <img class="brand__mark" src="/logo-mark.png" alt="" width="28" height="28">
+      <span class="brand__name">{{SITE_NAME}}</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a class="nav__link" href="/features.html">产品能力</a>
+      <a class="nav__link" href="#how">怎么运作</a>
+      <a class="nav__link" href="#faq">常见问题</a>
+      <a class="nav__link" href="#contact">联系我们</a>
+    </nav>
+    <div class="site-head__cta">
+      <a class="btn btn--primary" href="#contact">{{CTA_TEXT}}</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 1. 头屏 -->
+  <section class="section hero">
+    <div class="wrap hero__inner">
+      <span class="eyebrow">{{EYEBROW}}</span>
+      <h1 class="display">{{TAGLINE}}</h1>
+      <p class="lede">{{LEAD}}</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary btn--lg" href="#contact">{{CTA_TEXT}}</a>
+        <a class="btn btn--ghost btn--lg" href="/features.html">看看能做什么</a>
+      </div>
+      <p class="small">{{HERO_NOTE}}</p>
+    </div>
+  </section>
+
+  <!-- 2. 卖点 -->
+  <section class="section section--soft" id="value">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">为什么选我们</span>
+        <h2 class="h2">{{VALUE_TITLE}}</h2>
+        <p class="lede">{{VALUE_LEAD}}</p>
+      </div>
+      <div class="grid grid--3">
+        <article class="card reveal">
+          <div class="card__icon" aria-hidden="true">①</div>
+          <h3 class="h3">{{V1_TITLE}}</h3>
+          <p class="small">{{V1_BODY}}</p>
+        </article>
+        <article class="card reveal">
+          <div class="card__icon" aria-hidden="true">②</div>
+          <h3 class="h3">{{V2_TITLE}}</h3>
+          <p class="small">{{V2_BODY}}</p>
+        </article>
+        <article class="card reveal">
+          <div class="card__icon" aria-hidden="true">③</div>
+          <h3 class="h3">{{V3_TITLE}}</h3>
+          <p class="small">{{V3_BODY}}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 怎么运作 -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">怎么运作</span>
+        <h2 class="h2">三步就能开始</h2>
+      </div>
+      <div class="grid grid--3 steps">
+        <div class="step reveal">
+          <h3 class="h3">说清需求</h3>
+          <p class="small">{{STEP1}}</p>
+        </div>
+        <div class="step reveal">
+          <h3 class="h3">拿到结果</h3>
+          <p class="small">{{STEP2}}</p>
+        </div>
+        <div class="step reveal">
+          <h3 class="h3">持续跟进</h3>
+          <p class="small">{{STEP3}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 数据 / 背书 -->
+  <section class="section section--soft" id="proof">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">一些事实</span>
+        <h2 class="h2">{{PROOF_TITLE}}</h2>
+      </div>
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat__num">{{N1}}</div>
+          <div class="stat__label">{{N1_LABEL}}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{{N2}}</div>
+          <div class="stat__label">{{N2_LABEL}}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{{N3}}</div>
+          <div class="stat__label">{{N3_LABEL}}</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">{{N4}}</div>
+          <div class="stat__label">{{N4_LABEL}}</div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:var(--s-6)">{{PROOF_NOTE}}</p>
+    </div>
+  </section>
+
+  <!-- 5. 常见问题（零 JS） -->
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">常见问题</span>
+        <h2 class="h2">你可能想知道</h2>
+      </div>
+      <div class="faq reveal">
+        <details>
+          <summary>{{Q1}}</summary>
+          <p>{{A1}}</p>
+        </details>
+        <details>
+          <summary>{{Q2}}</summary>
+          <p>{{A2}}</p>
+        </details>
+        <details>
+          <summary>{{Q3}}</summary>
+          <p>{{A3}}</p>
+        </details>
+        <details>
+          <summary>{{Q4}}</summary>
+          <p>{{A4}}</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 转化区 -->
+  <section class="section section--soft cta" id="contact">
+    <div class="wrap cta__inner">
+      <span class="eyebrow">下一步</span>
+      <h2 class="h1">{{CTA_TITLE}}</h2>
+      <p class="lede">{{CTA_LEAD}}</p>
+      <div class="cta__actions">
+        <a class="btn btn--primary btn--lg" href="mailto:{{EMAIL}}">邮件联系我们</a>
+        <a class="btn btn--ghost btn--lg" href="/features.html">先看能力清单</a>
+      </div>
+      <p class="small">{{CTA_NOTE}}</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="site-foot__grid">
+      <div class="site-foot__col">
+        <div class="site-foot__title">{{SITE_NAME}}</div>
+        <p class="small">{{FOOTER_DESC}}</p>
+      </div>
+      <div class="site-foot__col">
+        <div class="site-foot__title">站点</div>
+        <a class="site-foot__link" href="/">首页</a>
+        <a class="site-foot__link" href="/features.html">产品能力</a>
+        <a class="site-foot__link" href="/sitemap.xml">站点地图</a>
+      </div>
+      <div class="site-foot__col">
+        <div class="site-foot__title">联系</div>
+        <a class="site-foot__link" href="mailto:{{EMAIL}}">{{EMAIL}}</a>
+        <span class="site-foot__link">{{CONTACT_EXTRA}}</span>
+      </div>
+    </div>
+    <div class="site-foot__bottom">
+      <span>© {{YEAR}} {{SITE_NAME}}. All rights reserved.</span>
+      <span class="icp">{{ICP_HTML}}</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 渐进增强：无 JS 时内容默认可见，不隐藏任何区域
+  document.documentElement.classList.add('js');
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (!items.length || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
+</html>
