@@ -679,7 +679,7 @@ def main() -> int:
     accent_solid = fit_contrast(brand, fg)
     values["THEME_COLOR"] = to_hex(bg)
 
-    theme_css = (TPL_DIR / "assets" / f"theme-{a.style}.css").read_text(encoding="utf-8")
+    theme_css = (TPL_DIR / f"theme-{a.style}.css").read_text(encoding="utf-8")
     theme_css = set_var(theme_css, "accent-solid", to_hex(accent_solid))
     theme_css = set_var(theme_css, "accent-fg", to_hex(fg))
     theme_css = set_var(theme_css, "accent", to_hex(accent))
@@ -693,7 +693,7 @@ def main() -> int:
         (out / dest).write_text(html, encoding="utf-8", newline="\n")
         written.append(dest)
 
-    base_css = render((TPL_DIR / "assets" / "base.css").read_text(encoding="utf-8"), values)
+    base_css = render((TPL_DIR / "base.css").read_text(encoding="utf-8"), values)
     (out / "assets" / "css" / "base.css").write_text(base_css, encoding="utf-8", newline="\n")
     (out / "assets" / "css" / "theme.css").write_text(render(theme_css, values), encoding="utf-8", newline="\n")
     written += ["assets/css/base.css", "assets/css/theme.css"]
