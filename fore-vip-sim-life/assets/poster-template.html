@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{NAME}} · 一生</title>
+<style>
+  :root{
+    --ink:#eae4d9; --dim:#a49b90; --faint:#726a61;
+    --bg:#0e0d0b; --panel:#161412; --line:rgba(234,228,217,.10);
+    --red:#e53e3e; --gold:#c9a227;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#000; display:flex; justify-content:center; padding:0;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .poster{
+    width:900px; background:var(--bg); color:var(--ink); position:relative;
+    padding:72px 76px 56px; overflow:hidden;
+    background-image:
+      radial-gradient(900px 460px at 82% -12%, rgba(229,62,62,.13), transparent 62%),
+      radial-gradient(700px 400px at -10% 108%, rgba(201,162,39,.06), transparent 60%);
+  }
+  .poster::before{
+    content:""; position:absolute; inset:0; pointer-events:none; opacity:.35;
+    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px);
+  }
+  .serif{font-family:"Songti SC","Noto Serif SC","STSong",serif}
+
+  .kicker{
+    display:flex; align-items:center; gap:12px;
+    font-size:11px; letter-spacing:.28em; color:var(--faint); text-transform:uppercase;
+  }
+  .kicker i{width:26px;height:1px;background:var(--red);display:block}
+
+  h1{
+    font-family:"Songti SC","Noto Serif SC",serif;
+    font-size:58px; line-height:1.06; font-weight:600; letter-spacing:.02em;
+    margin:26px 0 14px;
+  }
+  .meta{font-size:14px; color:var(--dim); letter-spacing:.06em}
+  .meta b{color:var(--ink); font-weight:500}
+
+  .epitaph{
+    margin:30px 0 0; padding:22px 0 22px 20px; border-left:2px solid var(--red);
+    font-family:"Songti SC","Noto Serif SC",serif; font-size:19px; line-height:1.95;
+    color:#d8d1c5; max-width:660px;
+  }
+
+  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:22px}
+  .tag{
+    font-size:11.5px; color:var(--dim); border:1px solid var(--line);
+    padding:4px 10px; border-radius:2px; letter-spacing:.08em;
+  }
+
+  .sect{margin-top:52px}
+  .sect-h{
+    display:flex; align-items:baseline; gap:14px; margin-bottom:6px;
+  }
+  .sect-h h2{
+    font-size:12px; letter-spacing:.22em; color:var(--faint); font-weight:500;
+  }
+  .sect-h span{flex:1; height:1px; background:var(--line)}
+
+  /* ---------- 时间轴 ---------- */
+  .axis{margin-top:26px; position:relative}
+  .axis::before{
+    content:""; position:absolute; left:96px; top:8px; bottom:10px; width:1px;
+    background:linear-gradient(180deg, transparent, var(--line) 6%, var(--line) 94%, transparent);
+  }
+  .beat{display:grid; grid-template-columns:96px 1fr; gap:26px; position:relative; padding:13px 0}
+  .beat .when{
+    text-align:right; font-size:12px; color:var(--faint); letter-spacing:.04em;
+    font-variant-numeric:tabular-nums; line-height:1.5; padding-top:2px;
+  }
+  .beat .when b{display:block; color:var(--dim); font-size:13px; font-weight:500}
+  .beat .what{position:relative; padding-left:22px}
+  .beat .what::before{
+    content:""; position:absolute; left:-5px; top:8px; width:7px; height:7px;
+    border-radius:50%; background:var(--bg); border:1px solid var(--faint);
+  }
+  .beat.key .what::before{background:var(--red); border-color:var(--red); box-shadow:0 0 0 4px rgba(229,62,62,.14)}
+  .beat .t{font-size:15.5px; font-weight:600; letter-spacing:.02em}
+  .beat.key .t{color:#fff}
+  .beat .d{font-size:13.5px; line-height:1.85; color:var(--dim); margin-top:5px}
+
+  /* ---------- 六维 ---------- */
+  .grid6{display:grid; grid-template-columns:1fr 1fr; gap:16px 44px; margin-top:24px}
+  .row{display:grid; grid-template-columns:46px 1fr 38px; align-items:center; gap:12px}
+  .row .k{font-size:12.5px; color:var(--dim); letter-spacing:.08em}
+  .row .bar{height:3px; background:rgba(234,228,217,.09); position:relative; overflow:hidden}
+  .row .bar i{position:absolute; inset:0 auto 0 0; background:linear-gradient(90deg,var(--red),#f07171)}
+  .row .v{font-size:13px; color:var(--dim); text-align:right; font-variant-numeric:tabular-nums}
+
+  /* ---------- 页脚 ---------- */
+  /* ---------- 身边的人 ---------- */
+  .castgrid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:0 44px; margin-top:20px;
+  }
+  .p{padding:13px 0; border-top:1px solid var(--line)}
+  .p .nm{font-family:"Songti SC","Noto Serif SC",serif; font-size:17px; color:var(--ink);
+         letter-spacing:.04em}
+  .p .rl{font-size:12px; color:var(--faint); margin-left:8px; letter-spacing:.06em}
+  .p .sp{font-size:11.5px; color:rgba(229,62,62,.82); margin-left:8px;
+         font-variant-numeric:tabular-nums}
+  .p .mk{font-size:12.5px; color:var(--dim); margin-top:5px; line-height:1.6}
+  .p.gone .nm{color:var(--dim)}
+  .p.gone .sp{color:var(--faint)}
+
+  .foot{
+    margin-top:54px; padding-top:20px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:flex-end;
+    font-size:11px; color:var(--faint); letter-spacing:.1em; line-height:1.9;
+  }
+  .foot .right{text-align:right}
+  .stat{display:flex; gap:34px; margin-top:10px}
+  .stat div{font-size:11px; color:var(--faint); min-width:58px}
+  .stat b{display:block; font-size:23px; color:var(--ink); font-weight:500; letter-spacing:0;
+          font-variant-numeric:tabular-nums; margin-bottom:2px}
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="kicker"><i></i>SIMULATED LIFE · 第 {{INDEX}} 号样本</div>
+
+  <h1 class="serif">{{NAME}}</h1>
+  <div class="meta">
+    <b>{{LIFE_SPAN}}</b>　·　{{PLACE}}　·　{{SEX}}
+    {{#GIFT}}　·　{{GIFT}}{{/GIFT}}
+  </div>
+
+  <div class="epitaph serif">{{EPITAPH}}</div>
+
+  <div class="tags">{{TAGS}}</div>
+
+  <div class="sect">
+    <div class="sect-h"><h2>大 事 记</h2><span></span></div>
+    <div class="axis">{{TIMELINE}}</div>
+  </div>
+
+  {{#CAST}}
+  <div class="sect">
+    <div class="sect-h"><h2>身 边 的 人</h2><span></span></div>
+    <div class="castgrid">{{CAST}}</div>
+  </div>
+  {{/CAST}}
+
+  <div class="sect">
+    <div class="sect-h"><h2>离 世 时</h2><span></span></div>
+    <div class="grid6">{{ATTRS}}</div>
+  </div>
+
+  <div class="foot">
+    <div>
+      <div>SEED · {{SEED}}</div>
+      <div class="stat">
+        <div><b>{{YEARS}}</b>年</div>
+        <div><b>{{TURNS}}</b>轮推演</div>
+        <div><b>{{EVENTS}}</b>个节点</div>
+      </div>
+    </div>
+    <div class="right">
+      时代 · {{ERA}}<br>
+      {{STAMP}}
+    </div>
+  </div>
+</div>
+</body>
+</html>

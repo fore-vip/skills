@@ -1,0 +1,4362 @@
+{
+  "version": "1.0",
+  "note": "事件库。按 年龄段 × 地区 × 阶层 加权抽取。hook 是情境钩子，供展开叙事，不可照抄成句。effects 作用于 健康/财富/关系/心境/本事/声量。",
+  "events": [
+    {
+      "id": "c01",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 3,
+      "valence": "mix",
+      "title": "一场高烧",
+      "hook": "半夜烧到说胡话，大人抱着走了很远的路去诊所",
+      "effects": {
+        "health": -5,
+        "bond": 3
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4,
+      "variants": [
+        "烧到说胡话，家里人整夜换毛巾",
+        "连着几天退不下去，最后是邻居借了车送去镇上"
+      ]
+    },
+    {
+      "id": "c02",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2.5,
+      "valence": "neg",
+      "title": "被留在老家",
+      "hook": "父母去了远处做工，你被交给祖辈，一年见一次",
+      "effects": {
+        "bond": -6,
+        "spirit": -3
+      },
+      "regions": [
+        "东亚",
+        "东南亚",
+        "南亚",
+        "拉美",
+        "非洲"
+      ],
+      "variants": [
+        "父母先走了，你留在爷爷奶奶家，说好秋天来接",
+        "走的那天你没哭，等车拐过路口才开始"
+      ]
+    },
+    {
+      "id": "c03",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "一件不合身的礼物",
+      "hook": "有人从外地带回一件太大的衣服，你还是穿了整个冬天",
+      "effects": {
+        "spirit": 3,
+        "bond": 2
+      }
+    },
+    {
+      "id": "c04",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 1.8,
+      "valence": "mix",
+      "title": "眉角留了道疤",
+      "hook": "学走路时磕在门槛上，缝了三针，疤痕跟你一辈子",
+      "effects": {
+        "health": -2,
+        "spirit": 1
+      }
+    },
+    {
+      "id": "c05",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "邻居家失火",
+      "hook": "整条街的人端着盆往外跑，火光映在墙上",
+      "effects": {
+        "spirit": -4,
+        "bond": 2
+      },
+      "regions": [
+        "东亚",
+        "东南亚",
+        "南亚",
+        "非洲",
+        "拉美"
+      ],
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 12,
+      "then": [
+        {
+          "id": "c15",
+          "within": 2,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "c06",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "第一次见到海",
+      "hook": "原来水可以大到看不见边",
+      "effects": {
+        "spirit": 4
+      }
+    },
+    {
+      "id": "c07",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2,
+      "valence": "neg",
+      "title": "母亲病了一场",
+      "hook": "家里的说话声变小了，饭桌上多了一碗没人动的汤",
+      "effects": {
+        "health": -2,
+        "bond": 3,
+        "spirit": -4
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4,
+      "then": [
+        {
+          "id": "c14",
+          "within": 2,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "c08",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2.5,
+      "valence": "pos",
+      "title": "有人说这孩子眼睛亮",
+      "hook": "一句随口的话，被家里人记了很多年",
+      "effects": {
+        "spirit": 4,
+        "fame": 1
+      }
+    },
+    {
+      "id": "c09",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2.2,
+      "valence": "mix",
+      "title": "家里添了弟妹",
+      "hook": "属于你的那部分注意力，从此要分出去一半",
+      "effects": {
+        "bond": 2,
+        "wealth": -3,
+        "spirit": -2
+      }
+    },
+    {
+      "id": "c10",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 0.7,
+      "valence": "neg",
+      "title": "一场天灾",
+      "hook": "水/风/震来过一次，屋顶少了一半，人被转移去别处住",
+      "effects": {
+        "health": -4,
+        "wealth": -6,
+        "spirit": -5
+      },
+      "regions": [
+        "东亚",
+        "南亚",
+        "东南亚",
+        "拉美",
+        "非洲"
+      ],
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 12
+    },
+    {
+      "id": "d01",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 3,
+      "valence": "mix",
+      "title": "被老师当众念名字",
+      "hook": "成绩单被举起来，全班回头看你，目光里说不清是什么",
+      "effects": {
+        "skill": 3,
+        "spirit": 2
+      },
+      "variants": [
+        "念的是批评的话，念完让全班看着你",
+        "念完让你站到讲台边上，站了一节课"
+      ]
+    },
+    {
+      "id": "d02",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2.5,
+      "valence": "neg",
+      "title": "一个跟到成年的外号",
+      "hook": "有人按你身上某个特点起了名字，笑着喊，喊了很多年",
+      "effects": {
+        "spirit": -5,
+        "bond": -2
+      },
+      "variants": [
+        "起先是开玩笑，后来连老师也叫错",
+        "你想过改，但户口本上写的就是这个"
+      ]
+    },
+    {
+      "id": "d03",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "捡到一只受伤的鸟",
+      "hook": "用纸盒养了半个月，最后还是没养活",
+      "effects": {
+        "spirit": 2,
+        "bond": 2
+      }
+    },
+    {
+      "id": "d04",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2.2,
+      "valence": "pos",
+      "title": "家里添了大件",
+      "hook": "一台电视/冰箱被搬进屋，邻居都来看",
+      "effects": {
+        "spirit": 4,
+        "fame": 1
+      },
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ]
+    },
+    {
+      "id": "d05",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2,
+      "valence": "mix",
+      "title": "转学",
+      "hook": "走进一间全是陌生面孔的教室，被安排在最后一排",
+      "effects": {
+        "bond": -4,
+        "skill": 1
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 10
+    },
+    {
+      "id": "d06",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2.5,
+      "valence": "mix",
+      "title": "开始帮家里干活",
+      "hook": "放学后不是回家，是去摊上/地里/店里搭手",
+      "effects": {
+        "skill": 3,
+        "health": -2,
+        "wealth": 2
+      },
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ],
+      "tags": [
+        "family"
+      ],
+      "cooldown": 6,
+      "variants": [
+        "从搬东西开始，慢慢能替大人顶一班",
+        "每天早上要先干完活才去上学"
+      ]
+    },
+    {
+      "id": "d07",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "一个大人认真跟你说过话",
+      "hook": "他没有敷衍你，而是把你当成一个能听懂的人",
+      "effects": {
+        "spirit": 5,
+        "skill": 2
+      }
+    },
+    {
+      "id": "d08",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2,
+      "valence": "neg",
+      "title": "打架，叫家长",
+      "hook": "你在办公室里站着，听见大人替你道歉",
+      "effects": {
+        "bond": -3,
+        "spirit": -3
+      }
+    },
+    {
+      "id": "d09",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "迷上了一样东西",
+      "hook": "漫画/邮票/收音机/游戏，你把所有零钱都投进去",
+      "effects": {
+        "spirit": 4,
+        "skill": 2
+      }
+    },
+    {
+      "id": "d10",
+      "stage": [
+        7,
+        12
+      ],
+      "w": 1.5,
+      "valence": "mix",
+      "title": "亲戚借住半年",
+      "hook": "家里多了一个人，也多了很多不能说的话",
+      "effects": {
+        "bond": 2,
+        "spirit": -2,
+        "wealth": -2
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 6
+    },
+    {
+      "id": "t01",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 3,
+      "valence": "mix",
+      "title": "一场决定去向的考试",
+      "hook": "分数出来那天，家里的空气比平时厚",
+      "effects": {
+        "skill": 3,
+        "spirit": -2
+      },
+      "tags": [
+        "study"
+      ],
+      "cooldown": 3,
+      "variants": [
+        "考完那天下了雨，你自己走回家",
+        "分数出来那天，家里没开电视"
+      ],
+      "then": [
+        {
+          "id": "t11",
+          "within": 1,
+          "boost": 20
+        },
+        {
+          "id": "t12",
+          "within": 1,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "t02",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 2.5,
+      "valence": "pos",
+      "title": "第一次心动",
+      "hook": "你开始注意某个人走进教室的顺序",
+      "effects": {
+        "spirit": 5,
+        "bond": 3
+      },
+      "then": [
+        {
+          "id": "t13",
+          "within": 4,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "t03",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 1.8,
+      "valence": "neg",
+      "title": "日记被翻开了",
+      "hook": "你发现有些话不该写下来，或者不该放在那个抽屉里",
+      "effects": {
+        "bond": -6,
+        "spirit": -4
+      }
+    },
+    {
+      "id": "t04",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "一个改变你说话方式的朋友",
+      "hook": "他讲话的腔调、信的东西，后来长在了你身上",
+      "effects": {
+        "bond": 5,
+        "spirit": 3
+      }
+    },
+    {
+      "id": "t05",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 2.2,
+      "valence": "neg",
+      "title": "差点念不下去",
+      "hook": "家里算了一笔账，你的学费是其中最容易被划掉的一项",
+      "effects": {
+        "skill": -2,
+        "spirit": -6,
+        "wealth": -3
+      },
+      "classes": [
+        "贫困",
+        "温饱"
+      ],
+      "tags": [
+        "study"
+      ],
+      "cooldown": 3
+    },
+    {
+      "id": "t06",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 1.5,
+      "valence": "mix",
+      "title": "长个子太快",
+      "hook": "膝盖夜里疼，衣服一个季度就短了",
+      "effects": {
+        "health": -3,
+        "spirit": 1
+      }
+    },
+    {
+      "id": "t07",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "拿了个名次",
+      "hook": "一次比赛/竞赛/运动会，你的名字被念到",
+      "effects": {
+        "fame": 3,
+        "skill": 3,
+        "spirit": 4
+      }
+    },
+    {
+      "id": "t08",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "目睹一次冲突",
+      "hook": "你看见有人被围住，你没有上前",
+      "effects": {
+        "spirit": -5
+      }
+    },
+    {
+      "id": "t09",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 2,
+      "valence": "mix",
+      "title": "第一次挣到钱",
+      "hook": "手上的钱是自己挣的，这个感觉和压岁钱不一样",
+      "effects": {
+        "wealth": 3,
+        "skill": 2,
+        "spirit": 3
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "t10",
+      "stage": [
+        13,
+        17
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "有人替你争取了一次机会",
+      "hook": "一位老师/亲戚替你说了话，让你去了更好的地方",
+      "effects": {
+        "skill": 4,
+        "bond": 3
+      }
+    },
+    {
+      "id": "y01",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 3,
+      "valence": "mix",
+      "title": "离开家的那趟车",
+      "hook": "行李比想象中少，站台上没有人多说一句",
+      "effects": {
+        "spirit": 3,
+        "bond": -3
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 99,
+      "then": [
+        {
+          "id": "s15",
+          "within": 5,
+          "boost": 20
+        },
+        {
+          "id": "s16",
+          "within": 5,
+          "boost": 20
+        }
+      ],
+      "variants": [
+        "行李是一个编织袋，母亲塞了两罐咸菜",
+        "票是站票，你在两节车厢中间坐了八个小时"
+      ]
+    },
+    {
+      "id": "y02",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 2.5,
+      "valence": "mix",
+      "title": "一段没走远的关系",
+      "hook": "你们认真过，但谁都没能力把它带到下一个城市",
+      "effects": {
+        "spirit": -4,
+        "bond": 2
+      },
+      "variants": [
+        "后来谁也没提分手，只是不再联系",
+        "他去了南方，你留在这里，中间隔了两年和一千公里"
+      ]
+    },
+    {
+      "id": "y03",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 2.5,
+      "valence": "mix",
+      "title": "家里替你选了一条路",
+      "hook": "考公/进厂/回乡/接手家里的活，你点头或者没点头",
+      "effects": {
+        "bond": 2,
+        "spirit": -3,
+        "wealth": 3
+      },
+      "variants": [
+        "说的是「先干着」，一干就是五年",
+        "你提过一次别的想法，被一句「以后再说」压下去了"
+      ]
+    },
+    {
+      "id": "y04",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "遇到一个肯教你的师傅",
+      "hook": "他骂你，也真教你，把手上那点本事一点点递过来",
+      "effects": {
+        "skill": 6,
+        "bond": 4
+      }
+    },
+    {
+      "id": "y05",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 1.8,
+      "valence": "neg",
+      "title": "被坑了一次",
+      "hook": "押金/中介/合伙人，钱不见了，人也找不到了",
+      "effects": {
+        "wealth": -7,
+        "spirit": -5
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "y06",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "一次说走就走的远行",
+      "hook": "你去了一个谁也不认识你的地方，住了很短的时间",
+      "effects": {
+        "spirit": 6,
+        "wealth": -3
+      }
+    },
+    {
+      "id": "y07",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "身体第一次报警",
+      "hook": "年轻的身体给了你一次不带解释的疼",
+      "effects": {
+        "health": -6,
+        "spirit": -2
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "y08",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 2.5,
+      "valence": "pos",
+      "title": "第一份正经工作",
+      "hook": "工牌上印着你的名字，你拍了照但没发出去",
+      "effects": {
+        "wealth": 5,
+        "skill": 3
+      },
+      "variants": [
+        "工牌上印着你的名字，你戴着拍了张照",
+        "第一个月工资到手，你数了两遍才敢存"
+      ],
+      "lean": {
+        "skill": 0.35
+      }
+    },
+    {
+      "id": "y09",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "朋友走散了",
+      "hook": "没有吵架，就是慢慢不回消息了",
+      "effects": {
+        "bond": -6,
+        "spirit": -3
+      }
+    },
+    {
+      "id": "y10",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 0.6,
+      "valence": "pos",
+      "title": "一次意外的好运",
+      "hook": "一件小概率的事落在你身上，改变了接下来几年的走向",
+      "effects": {
+        "wealth": 8,
+        "fame": 5,
+        "spirit": 4
+      }
+    },
+    {
+      "id": "a01",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2.8,
+      "valence": "mix",
+      "title": "婚事",
+      "hook": "两个人坐到一张桌子前，把各自的家庭、钱和以后摊开来谈",
+      "effects": {
+        "bond": 6,
+        "wealth": -5,
+        "spirit": 3
+      },
+      "variants": [
+        "办了酒，收的礼金记在一个本子上",
+        "两家人吃了一顿饭，事情就定了"
+      ]
+    },
+    {
+      "id": "a02",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2.2,
+      "valence": "mix",
+      "title": "房子",
+      "hook": "首付、贷款、名字写谁，一串问题压在这几个字上",
+      "effects": {
+        "wealth": -8,
+        "bond": 3,
+        "spirit": -2
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 12
+    },
+    {
+      "id": "a03",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2.5,
+      "valence": "mix",
+      "title": "换了一条路",
+      "hook": "你辞了/跳了/自己干了，所有人都说你不该",
+      "effects": {
+        "skill": 4,
+        "wealth": -4,
+        "spirit": 4
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 4,
+      "variants": [
+        "辞职报告交了两次，第一次被退回来",
+        "没有辞职，只是不再去上班了"
+      ]
+    },
+    {
+      "id": "a04",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2,
+      "valence": "neg",
+      "title": "父母开始生病",
+      "hook": "你第一次意识到他们会老，而且老得很快",
+      "effects": {
+        "health": -2,
+        "bond": 4,
+        "spirit": -6,
+        "wealth": -4
+      },
+      "requires": [
+        "parents"
+      ],
+      "tags": [
+        "family"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "a05",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2,
+      "valence": "mix",
+      "title": "有了孩子",
+      "hook": "从产房出来那一刻，你知道了什么叫没有退路",
+      "effects": {
+        "bond": 6,
+        "wealth": -7,
+        "spirit": 4,
+        "health": -3
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 99
+    },
+    {
+      "id": "a06",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2,
+      "valence": "neg",
+      "title": "被裁了",
+      "hook": "通知很短，你的工位第二天就干净了",
+      "effects": {
+        "wealth": -7,
+        "spirit": -6,
+        "skill": 1
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 5,
+      "then": [
+        {
+          "id": "s01",
+          "within": 3,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "a07",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "一次被看见的机会",
+      "hook": "有人把一件重要的事交到你手上",
+      "effects": {
+        "skill": 5,
+        "fame": 5,
+        "wealth": 4
+      },
+      "then": [
+        {
+          "id": "s09",
+          "within": 3,
+          "boost": 20
+        }
+      ],
+      "lean": {
+        "skill": 0.5
+      }
+    },
+    {
+      "id": "a08",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 1.6,
+      "valence": "neg",
+      "title": "欠了一笔钱",
+      "hook": "数字不大不小，刚好够让你每晚算一次",
+      "effects": {
+        "wealth": -9,
+        "spirit": -6
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 5,
+      "then": [
+        {
+          "id": "s11",
+          "within": 8,
+          "boost": 20
+        },
+        {
+          "id": "s12",
+          "within": 3,
+          "boost": 20
+        },
+        {
+          "id": "s18",
+          "within": 5,
+          "boost": 20
+        }
+      ],
+      "lean": {
+        "wealth": -0.7
+      }
+    },
+    {
+      "id": "a09",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 1.8,
+      "valence": "neg",
+      "title": "体检查出问题",
+      "hook": "报告单上有一行字，你反复看了三遍",
+      "effects": {
+        "health": -8,
+        "spirit": -5
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4,
+      "then": [
+        {
+          "id": "s05",
+          "within": 3,
+          "boost": 20
+        }
+      ],
+      "lean": {
+        "health": -0.35
+      }
+    },
+    {
+      "id": "a10",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "老友重逢",
+      "hook": "一顿饭吃到很晚，你们都变成了对方不认识的样子",
+      "effects": {
+        "bond": 5,
+        "spirit": 4
+      }
+    },
+    {
+      "id": "m01",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 2.8,
+      "valence": "mix",
+      "title": "行业变了天",
+      "hook": "熟悉的做法忽然不管用了，比你年轻的人开始讲你听不懂的词",
+      "effects": {
+        "skill": -3,
+        "wealth": -5,
+        "spirit": -4
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 99,
+      "then": [
+        {
+          "id": "s04",
+          "within": 4,
+          "boost": 20
+        }
+      ],
+      "variants": [
+        "不是一下子垮的，是一年比一年少",
+        "同行先撑不住了，接着轮到你这一行"
+      ]
+    },
+    {
+      "id": "m02",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 2.2,
+      "valence": "mix",
+      "title": "孩子到了你做不了主的年纪",
+      "hook": "你发现自己说的话，正在变成当年你不爱听的那些话",
+      "effects": {
+        "bond": -4,
+        "spirit": -3
+      },
+      "requires": [
+        "children"
+      ],
+      "when": {
+        "child_age": [
+          ">=",
+          11
+        ]
+      }
+    },
+    {
+      "id": "m03",
+      "stage": [
+        35,
+        72
+      ],
+      "w": 2,
+      "valence": "neg",
+      "title": "送走一位长辈",
+      "hook": "你成了家里说话最算数的那个人，这件事来得毫无预告",
+      "effects": {
+        "spirit": -8,
+        "bond": 4
+      },
+      "tags": [
+        "loss"
+      ],
+      "cooldown": 4,
+      "then": [
+        {
+          "id": "m17",
+          "within": 1,
+          "boost": 20
+        }
+      ],
+      "requires": [
+        "parents"
+      ],
+      "sets": {
+        "parents": false
+      }
+    },
+    {
+      "id": "m04",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.8,
+      "valence": "neg",
+      "title": "婚姻里出现了裂缝",
+      "hook": "有些话说了很多年，终于有一次没人再接",
+      "effects": {
+        "bond": -8,
+        "spirit": -6
+      },
+      "requires": [
+        "married"
+      ],
+      "tags": [
+        "love"
+      ],
+      "cooldown": 99
+    },
+    {
+      "id": "m05",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.8,
+      "valence": "pos",
+      "title": "站到了自己的顶点",
+      "hook": "你能决定一些事了，或者至少在某个圈子里说得上话",
+      "effects": {
+        "fame": 8,
+        "wealth": 6,
+        "spirit": 5
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 8,
+      "not_follows": [
+        {
+          "id": "m09",
+          "within": 2
+        }
+      ],
+      "lean": {
+        "skill": 0.5
+      }
+    },
+    {
+      "id": "m06",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.8,
+      "valence": "mix",
+      "title": "一次押注",
+      "hook": "你把攒下的钱放进了一个自己也不完全懂的地方",
+      "effects": {
+        "wealth": -8,
+        "spirit": -3
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 6,
+      "then": [
+        {
+          "id": "s13",
+          "within": 3,
+          "boost": 20
+        },
+        {
+          "id": "s14",
+          "within": 3,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "m07",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 2.2,
+      "valence": "neg",
+      "title": "身体的警告变成了常客",
+      "hook": "药盒开始出现在桌上，你学会了看说明书",
+      "effects": {
+        "health": -7,
+        "spirit": -3
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4,
+      "then": [
+        {
+          "id": "s05",
+          "within": 3,
+          "boost": 20
+        }
+      ],
+      "lean": {
+        "health": -0.6
+      }
+    },
+    {
+      "id": "m08",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.6,
+      "valence": "pos",
+      "title": "重新捡起一样旧东西",
+      "hook": "吉他/画笔/球场/书，你在某个周末把它翻了出来",
+      "effects": {
+        "spirit": 7,
+        "health": 2
+      }
+    },
+    {
+      "id": "m09",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "被后辈超过",
+      "hook": "你带过的人，坐到了你上面的位置",
+      "effects": {
+        "fame": -5,
+        "spirit": -5
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 6,
+      "not_follows": [
+        {
+          "id": "m05",
+          "within": 2
+        }
+      ]
+    },
+    {
+      "id": "m10",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.5,
+      "valence": "mix",
+      "title": "老家变了样",
+      "hook": "拆了/搬了/修了，你记忆里的那条路找不到了",
+      "effects": {
+        "wealth": 5,
+        "spirit": -4,
+        "bond": -2
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 15
+    },
+    {
+      "id": "l01",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 2.5,
+      "valence": "mix",
+      "title": "退下来",
+      "hook": "位置交出去了，日子突然空出一大块",
+      "effects": {
+        "spirit": -4,
+        "health": 2,
+        "wealth": -3
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 99,
+      "variants": [
+        "最后一天把抽屉清空，钥匙放在桌上",
+        "没人办欢送会，你自己把工牌剪了"
+      ]
+    },
+    {
+      "id": "l02",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 2,
+      "valence": "pos",
+      "title": "子女成家",
+      "hook": "你在一场酒席上被敬了很多次，忽然想不起要说什么",
+      "effects": {
+        "bond": 5,
+        "spirit": 5,
+        "wealth": -5
+      },
+      "requires": [
+        "children"
+      ],
+      "tags": [
+        "family"
+      ],
+      "cooldown": 99,
+      "when": {
+        "child_age": [
+          ">=",
+          22
+        ]
+      }
+    },
+    {
+      "id": "l03",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 2.5,
+      "valence": "neg",
+      "title": "慢性病坐实了",
+      "hook": "医生说这个得跟你一辈子，要注意，但也没那么急",
+      "effects": {
+        "health": -8,
+        "spirit": -3
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 6,
+      "then": [
+        {
+          "id": "s05",
+          "within": 3,
+          "boost": 20
+        }
+      ],
+      "variants": [
+        "药盒开始出现在饭桌边上",
+        "医生说「控制住就行」，你知道这句话的意思"
+      ],
+      "lean": {
+        "health": -0.5
+      }
+    },
+    {
+      "id": "l04",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "一次长途旅行",
+      "hook": "去了年轻时贴在墙上的那个地方",
+      "effects": {
+        "spirit": 8,
+        "wealth": -4,
+        "health": -1
+      }
+    },
+    {
+      "id": "l05",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 2,
+      "valence": "neg",
+      "title": "同龄人开始有人走了",
+      "hook": "讣告第一次出现在你认识的人里，并且越来越频繁",
+      "effects": {
+        "spirit": -7,
+        "bond": -2
+      },
+      "tags": [
+        "loss"
+      ],
+      "cooldown": 3
+    },
+    {
+      "id": "l06",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "又被请回去了",
+      "hook": "有人来找你，说这事还得你来",
+      "effects": {
+        "fame": 5,
+        "wealth": 4,
+        "spirit": 5
+      },
+      "tags": [
+        "job"
+      ],
+      "cooldown": 6
+    },
+    {
+      "id": "l07",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 2,
+      "valence": "mix",
+      "title": "带孙辈",
+      "hook": "一天下来腰是酸的，但屋里有了别的声音",
+      "effects": {
+        "bond": 6,
+        "health": -3,
+        "spirit": 3
+      },
+      "requires": [
+        "children"
+      ],
+      "tags": [
+        "family"
+      ],
+      "cooldown": 8,
+      "when": {
+        "child_age": [
+          ">=",
+          24
+        ]
+      }
+    },
+    {
+      "id": "l08",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "摔了一跤",
+      "hook": "在地上躺了半分钟才敢动，那半分钟想了很多",
+      "effects": {
+        "health": -7,
+        "spirit": -4
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "l09",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "家产的事摆上了桌面",
+      "hook": "一些平时不提的话，被一次聚会逼了出来",
+      "effects": {
+        "bond": -7,
+        "wealth": 4,
+        "spirit": -4
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 99
+    },
+    {
+      "id": "l10",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "学会了一样新东西",
+      "hook": "手机/乐器/外语/游泳，你从零开始，学得比想象中慢，也比想象中有意思",
+      "effects": {
+        "skill": 5,
+        "spirit": 5
+      }
+    },
+    {
+      "id": "o01",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 3,
+      "valence": "neg",
+      "title": "老伴先走了",
+      "hook": "屋子里剩下一个人的动静，什么都听得见",
+      "effects": {
+        "bond": -8,
+        "spirit": -10,
+        "health": -4
+      },
+      "requires": [
+        "married"
+      ],
+      "tags": [
+        "loss"
+      ],
+      "cooldown": 99,
+      "variants": [
+        "医院的走廊很长，你走得比谁都慢",
+        "前一天还在说要去买点菜，第二天早上就没有应声"
+      ],
+      "then": [
+        {
+          "id": "o15",
+          "within": 2,
+          "boost": 18
+        },
+        {
+          "id": "o16",
+          "within": 1,
+          "boost": 18
+        }
+      ],
+      "sets": {
+        "married": false
+      }
+    },
+    {
+      "id": "o02",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 2.2,
+      "valence": "mix",
+      "title": "住处的选择",
+      "hook": "跟子女住、自己住、还是去有人的地方住，每一个都要放弃点什么",
+      "effects": {
+        "bond": 3,
+        "spirit": -3
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 10
+    },
+    {
+      "id": "o03",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 2.5,
+      "valence": "neg",
+      "title": "一场大病",
+      "hook": "住院、手术、签字，你第一次看见自己的名字被写在那种纸上",
+      "effects": {
+        "health": -10,
+        "wealth": -7,
+        "spirit": -5
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 5,
+      "then": [
+        {
+          "id": "s17",
+          "within": 2,
+          "boost": 20
+        }
+      ],
+      "variants": [
+        "手术做了六个小时，醒来第一句话问的是几点了",
+        "在重症室待了三天，家里人在外面待了三天"
+      ],
+      "lean": {
+        "health": -0.45
+      }
+    },
+    {
+      "id": "o04",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 2.2,
+      "valence": "pos",
+      "title": "孙辈来看你",
+      "hook": "他们嫌你唠叨，但走的时候会回头",
+      "effects": {
+        "spirit": 7,
+        "bond": 4
+      },
+      "requires": [
+        "children"
+      ],
+      "when": {
+        "child_age": [
+          ">=",
+          28
+        ]
+      }
+    },
+    {
+      "id": "o05",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "记性开始出错",
+      "hook": "有些名字要想很久，有些事你以为说过其实没有",
+      "effects": {
+        "skill": -5,
+        "spirit": -5
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 6
+    },
+    {
+      "id": "o06",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.6,
+      "valence": "mix",
+      "title": "送走老朋友",
+      "hook": "能一起回忆那段时间的人，又少了一个",
+      "effects": {
+        "spirit": -6,
+        "bond": -2
+      },
+      "tags": [
+        "loss"
+      ],
+      "cooldown": 3
+    },
+    {
+      "id": "o07",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.4,
+      "valence": "pos",
+      "title": "做了一件年轻时没做成的事",
+      "hook": "它很小，但你笑了很久",
+      "effects": {
+        "spirit": 8
+      }
+    },
+    {
+      "id": "o08",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "被时代甩在后面",
+      "hook": "办一件小事要问三个人，问到最后你不想办了",
+      "effects": {
+        "spirit": -5,
+        "skill": -3
+      }
+    },
+    {
+      "id": "o09",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.8,
+      "valence": "pos",
+      "title": "陌生人的善意",
+      "hook": "有人扶了你一把，或者替你付了几块钱，你没来得及问名字",
+      "effects": {
+        "spirit": 6,
+        "bond": 2
+      }
+    },
+    {
+      "id": "o10",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 2.5,
+      "valence": "neu",
+      "title": "一个很平常的下午",
+      "hook": "太阳照进来，你坐在那儿，什么都没想",
+      "effects": {
+        "spirit": 2
+      },
+      "variants": [
+        "电视开着，你没在看，窗外的光慢慢挪过地板",
+        "你把一件旧衣服叠了三遍，又放回去"
+      ]
+    },
+    {
+      "id": "x01",
+      "stage": [
+        18,
+        60
+      ],
+      "w": 0.25,
+      "valence": "pos",
+      "title": "一件极小概率的好事",
+      "hook": "中奖/被选中/被认出来，命运忽然向你这边偏了一下",
+      "effects": {
+        "wealth": 15,
+        "fame": 8,
+        "spirit": 8
+      },
+      "tags": [
+        "rare"
+      ],
+      "cooldown": 99,
+      "rare": true
+    },
+    {
+      "id": "x02",
+      "stage": [
+        8,
+        70
+      ],
+      "w": 0.3,
+      "valence": "neg",
+      "title": "一次事故",
+      "hook": "本来是最普通的一天，回来的路上出了事",
+      "effects": {
+        "health": -15,
+        "wealth": -8,
+        "spirit": -8
+      },
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 20,
+      "rare": true
+    },
+    {
+      "id": "x03",
+      "stage": [
+        18,
+        55
+      ],
+      "w": 0.22,
+      "valence": "pos",
+      "title": "决定性的离开",
+      "hook": "你去了另一个国家/城市，从那年起你的人生分成了前半段和后半段",
+      "effects": {
+        "wealth": 8,
+        "skill": 6,
+        "bond": -6,
+        "spirit": 6
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 99,
+      "rare": true
+    },
+    {
+      "id": "x04",
+      "stage": [
+        20,
+        60
+      ],
+      "w": 0.25,
+      "valence": "neg",
+      "title": "一场官司或纠纷",
+      "hook": "一件本来可以私了的事，最后进了程序",
+      "effects": {
+        "wealth": -10,
+        "spirit": -7
+      },
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 20,
+      "rare": true
+    },
+    {
+      "id": "c11",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 2.0,
+      "valence": "mix",
+      "title": "第一次被留在别处过夜",
+      "hook": "不是自己家的床，天花板上的纹路你记了很多年",
+      "effects": {
+        "spirit": -3,
+        "bond": 2
+      }
+    },
+    {
+      "id": "c12",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 1.8,
+      "valence": "pos",
+      "title": "有人天天给你讲故事",
+      "hook": "后来你忘了故事，只记得那个声音",
+      "effects": {
+        "spirit": 4,
+        "skill": 2
+      }
+    },
+    {
+      "id": "c13",
+      "stage": [
+        0,
+        6
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "家里为钱吵过一架",
+      "hook": "你听不懂在吵什么，但知道要安静",
+      "effects": {
+        "spirit": -4,
+        "bond": -2
+      },
+      "classes": [
+        "贫困",
+        "温饱"
+      ],
+      "tags": [
+        "money"
+      ],
+      "cooldown": 5
+    },
+    {
+      "id": "m11",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.8,
+      "valence": "mix",
+      "title": "一次同学聚会",
+      "hook": "你发现大家过得都差不多，也差很多",
+      "effects": {
+        "bond": 3,
+        "spirit": -2
+      },
+      "tags": [
+        "social"
+      ],
+      "cooldown": 8
+    },
+    {
+      "id": "m12",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.8,
+      "valence": "neg",
+      "title": "父母需要人照顾了",
+      "hook": "时间开始被切成小块，分给两头",
+      "effects": {
+        "health": -3,
+        "bond": 3,
+        "spirit": -5,
+        "wealth": -3
+      },
+      "requires": [
+        "parents"
+      ],
+      "tags": [
+        "family"
+      ],
+      "cooldown": 5
+    },
+    {
+      "id": "m13",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.6,
+      "valence": "pos",
+      "title": "做出了一件自己认的东西",
+      "hook": "不大，但你知道那是你做的",
+      "effects": {
+        "skill": 4,
+        "spirit": 6,
+        "fame": 2
+      },
+      "lean": {
+        "skill": 0.45
+      }
+    },
+    {
+      "id": "m14",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.6,
+      "valence": "neg",
+      "title": "一次没谈成的合作",
+      "hook": "话说得很好，最后什么也没落下",
+      "effects": {
+        "wealth": -5,
+        "spirit": -4
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "m15",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.5,
+      "valence": "mix",
+      "title": "搬了一次家",
+      "hook": "新地方什么都要重新认识",
+      "effects": {
+        "bond": -3,
+        "wealth": -3,
+        "spirit": 2
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 12
+    },
+    {
+      "id": "m16",
+      "stage": [
+        35,
+        49
+      ],
+      "w": 1.4,
+      "valence": "pos",
+      "title": "有人认真谢过你",
+      "hook": "你早忘了那件事，对方记了很多年",
+      "effects": {
+        "spirit": 5,
+        "bond": 3
+      },
+      "lean": {
+        "bond": 0.4
+      }
+    },
+    {
+      "id": "l11",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.6,
+      "valence": "mix",
+      "title": "体检报告上的箭头变多了",
+      "hook": "你开始认真看那些以前不看的数字",
+      "effects": {
+        "health": -4,
+        "spirit": -2
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "l12",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.6,
+      "valence": "pos",
+      "title": "重新开始存钱",
+      "hook": "为了一个具体的目的，比如一趟旅行或者一间小屋",
+      "effects": {
+        "wealth": 3,
+        "spirit": 4
+      }
+    },
+    {
+      "id": "l13",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "一个熟人走得突然",
+      "hook": "昨天还在说话，今天就没有了",
+      "effects": {
+        "spirit": -6
+      },
+      "tags": [
+        "loss"
+      ],
+      "cooldown": 3
+    },
+    {
+      "id": "l14",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.4,
+      "valence": "mix",
+      "title": "把老房子处理了",
+      "hook": "钥匙交出去那天，你在门口站了一会儿",
+      "effects": {
+        "wealth": 5,
+        "spirit": -4,
+        "bond": -2
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 15
+    },
+    {
+      "id": "l15",
+      "stage": [
+        50,
+        64
+      ],
+      "w": 1.3,
+      "valence": "pos",
+      "title": "被年轻人请教",
+      "hook": "你讲的都是老办法，但他们听得很认真",
+      "effects": {
+        "fame": 3,
+        "spirit": 5,
+        "skill": 2
+      },
+      "tags": [
+        "fame"
+      ],
+      "cooldown": 6,
+      "lean": {
+        "skill": 0.5
+      }
+    },
+    {
+      "id": "o11",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.8,
+      "valence": "mix",
+      "title": "开始整理旧物",
+      "hook": "一箱信、几张照片、一件舍不得扔的衣服",
+      "effects": {
+        "spirit": 3
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 8
+    },
+    {
+      "id": "o12",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.5,
+      "valence": "neg",
+      "title": "睡不好了",
+      "hook": "夜里醒着的时间越来越长",
+      "effects": {
+        "health": -3,
+        "spirit": -3
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "o13",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.6,
+      "valence": "pos",
+      "title": "有人定期来看你",
+      "hook": "不是亲人，但比很多亲人来得勤",
+      "effects": {
+        "spirit": 5,
+        "bond": 3
+      },
+      "lean": {
+        "bond": -0.45
+      }
+    },
+    {
+      "id": "o14",
+      "stage": [
+        65,
+        110
+      ],
+      "w": 1.4,
+      "valence": "mix",
+      "title": "把一件事交代清楚了",
+      "hook": "该说的都说了，心里空出来一块",
+      "effects": {
+        "spirit": 3,
+        "bond": 2
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 8
+    },
+    {
+      "id": "y11",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 1.6,
+      "valence": "mix",
+      "title": "第一次一个人过节",
+      "hook": "屋里很安静，你给自己做了顿饭",
+      "effects": {
+        "spirit": -3,
+        "skill": 2
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 5
+    },
+    {
+      "id": "y12",
+      "stage": [
+        18,
+        24
+      ],
+      "w": 1.5,
+      "valence": "pos",
+      "title": "学会了一项能吃饭的手艺",
+      "hook": "不多，但饿不着",
+      "effects": {
+        "skill": 5,
+        "wealth": 2
+      },
+      "tags": [
+        "study"
+      ],
+      "cooldown": 4,
+      "kinds": [
+        "learn",
+        "work"
+      ]
+    },
+    {
+      "id": "a11",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 1.8,
+      "valence": "neg",
+      "title": "一段关系结束了",
+      "hook": "没有大吵，只是都知道走不下去了",
+      "effects": {
+        "bond": -6,
+        "spirit": -5
+      },
+      "tags": [
+        "love"
+      ],
+      "cooldown": 6,
+      "not_follows": [
+        {
+          "id": "s08",
+          "within": 1
+        }
+      ],
+      "then": [
+        {
+          "id": "s07",
+          "within": 2,
+          "boost": 20
+        },
+        {
+          "id": "s08",
+          "within": 6,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "a12",
+      "stage": [
+        25,
+        34
+      ],
+      "w": 1.6,
+      "valence": "pos",
+      "title": "第一次带家人出去吃饭",
+      "hook": "你付的钱，那一刻很具体",
+      "effects": {
+        "spirit": 5,
+        "bond": 3,
+        "wealth": -2
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 5
+    },
+    {
+      "id": "s01",
+      "stage": [
+        26,
+        50
+      ],
+      "w": 0.9,
+      "valence": "mix",
+      "title": "自己接活",
+      "hook": "从单位出来，第一个月只接到两单，钱是往里贴的",
+      "effects": {
+        "wealth": -3,
+        "skill": 3,
+        "spirit": -2
+      },
+      "tags": [
+        "job"
+      ],
+      "follows": {
+        "id": "a06",
+        "within": 3,
+        "boost": 6.0
+      },
+      "then": [
+        {
+          "id": "s02",
+          "within": 4,
+          "boost": 20
+        },
+        {
+          "id": "s03",
+          "within": 4,
+          "boost": 20
+        },
+        {
+          "id": "s18",
+          "within": 6,
+          "boost": 20
+        }
+      ],
+      "kinds": [
+        "work",
+        "risk",
+        "money"
+      ]
+    },
+    {
+      "id": "s02",
+      "stage": [
+        28,
+        55
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "活儿慢慢多了",
+      "hook": "开始有人主动打电话来问，你把价格往上提了一点",
+      "effects": {
+        "wealth": 5,
+        "skill": 3,
+        "spirit": 4,
+        "fame": 2
+      },
+      "follows": {
+        "id": "s01",
+        "within": 4,
+        "boost": 4.0
+      },
+      "not_follows": [
+        {
+          "id": "s03",
+          "within": 2
+        }
+      ],
+      "then": [
+        {
+          "id": "s19",
+          "within": 6,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "stage": [
+        28,
+        55
+      ],
+      "w": 1.0,
+      "valence": "neg",
+      "title": "接的活赔了",
+      "hook": "料钱涨了，工钱压着，算下来一年白干",
+      "effects": {
+        "wealth": -6,
+        "spirit": -5,
+        "skill": 2
+      },
+      "follows": {
+        "id": "s01",
+        "within": 4,
+        "boost": 3.5
+      },
+      "not_follows": [
+        {
+          "id": "s02",
+          "within": 2
+        }
+      ]
+    },
+    {
+      "id": "s04",
+      "stage": [
+        36,
+        58
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "从头学一门新手艺",
+      "hook": "四十多岁坐在一群二十岁的人中间，笔记记得比谁都认真",
+      "effects": {
+        "skill": 5,
+        "spirit": -2,
+        "wealth": -2
+      },
+      "follows": {
+        "id": "m01",
+        "within": 4,
+        "boost": 5.0
+      },
+      "kinds": [
+        "learn",
+        "work"
+      ]
+    },
+    {
+      "id": "s05",
+      "stage": [
+        25,
+        70
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "住了次院",
+      "hook": "白色的被子，走廊里的推车声，夜里有人一直咳",
+      "effects": {
+        "health": -8,
+        "wealth": -4,
+        "spirit": -4,
+        "bond": 2
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4,
+      "follows": [
+        {
+          "id": "a09",
+          "within": 3,
+          "boost": 5.0
+        },
+        {
+          "id": "l03",
+          "within": 3,
+          "boost": 4.0
+        },
+        {
+          "id": "m07",
+          "within": 3,
+          "boost": 3.0
+        }
+      ],
+      "then": [
+        {
+          "id": "s06",
+          "within": 3,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "s06",
+      "stage": [
+        50,
+        78
+      ],
+      "w": 1.0,
+      "valence": "pos",
+      "title": "病后改了活法",
+      "hook": "烟戒了，酒也少了，每天走四十分钟，走到出汗为止",
+      "effects": {
+        "health": 6,
+        "spirit": 3,
+        "wealth": -1
+      },
+      "follows": {
+        "id": "s05",
+        "within": 3,
+        "boost": 4.0
+      }
+    },
+    {
+      "id": "s17",
+      "stage": [
+        66,
+        95
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "病后重新学走路",
+      "hook": "扶着走廊的扶手，一天走三趟，一趟十米",
+      "effects": {
+        "health": 3,
+        "spirit": 2,
+        "skill": -1
+      },
+      "follows": {
+        "id": "o03",
+        "within": 2,
+        "boost": 4.0
+      }
+    },
+    {
+      "id": "s07",
+      "stage": [
+        24,
+        48
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "一个人搬出去住",
+      "hook": "第一晚屋子空得响，你把电视开着睡着了",
+      "effects": {
+        "bond": -4,
+        "spirit": -3,
+        "skill": 2,
+        "wealth": -2
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 8,
+      "follows": {
+        "id": "a11",
+        "within": 2,
+        "boost": 4.0
+      }
+    },
+    {
+      "id": "s08",
+      "stage": [
+        26,
+        52
+      ],
+      "w": 1.0,
+      "valence": "pos",
+      "title": "又遇上了谁",
+      "hook": "不是心动，是聊起来不费劲",
+      "effects": {
+        "bond": 6,
+        "spirit": 5
+      },
+      "forbids": [
+        "married"
+      ],
+      "follows": {
+        "id": "a11",
+        "within": 6,
+        "boost": 3.0
+      },
+      "not_follows": [
+        {
+          "id": "a11",
+          "within": 1
+        }
+      ]
+    },
+    {
+      "id": "s09",
+      "stage": [
+        26,
+        58
+      ],
+      "w": 1.0,
+      "valence": "pos",
+      "title": "有人请你去讲一次",
+      "hook": "台下三十几个人，你讲了四十分钟，手一直在抖",
+      "effects": {
+        "fame": 4,
+        "spirit": 4,
+        "skill": 2
+      },
+      "follows": {
+        "id": "a07",
+        "within": 3,
+        "boost": 4.0
+      },
+      "then": [
+        {
+          "id": "s10",
+          "within": 5,
+          "boost": 20
+        }
+      ]
+    },
+    {
+      "id": "s10",
+      "stage": [
+        28,
+        62
+      ],
+      "w": 0.9,
+      "valence": "neg",
+      "title": "被捧得太高，摔了一下",
+      "hook": "说过的话被翻出来，一条一条贴在下面",
+      "effects": {
+        "fame": -6,
+        "spirit": -7,
+        "bond": -2
+      },
+      "follows": {
+        "id": "s09",
+        "within": 5,
+        "boost": 3.0
+      },
+      "lean": {
+        "fame": 0.5
+      }
+    },
+    {
+      "id": "s11",
+      "stage": [
+        26,
+        60
+      ],
+      "w": 1.1,
+      "valence": "pos",
+      "title": "把债还清了",
+      "hook": "最后一笔转出去那天，你在楼下站了很久",
+      "effects": {
+        "wealth": 3,
+        "spirit": 8,
+        "bond": 2
+      },
+      "follows": {
+        "id": "a08",
+        "within": 8,
+        "boost": 5.0
+      },
+      "not_follows": [
+        {
+          "id": "s12",
+          "within": 2
+        }
+      ]
+    },
+    {
+      "id": "s12",
+      "stage": [
+        25,
+        52
+      ],
+      "w": 0.9,
+      "valence": "neg",
+      "title": "债主上了门",
+      "hook": "敲门声很轻，但你知道是谁",
+      "effects": {
+        "spirit": -7,
+        "bond": -3,
+        "wealth": -3
+      },
+      "follows": {
+        "id": "a08",
+        "within": 3,
+        "boost": 3.0
+      },
+      "not_follows": [
+        {
+          "id": "s11",
+          "within": 2
+        }
+      ]
+    },
+    {
+      "id": "s13",
+      "stage": [
+        36,
+        58
+      ],
+      "w": 1.0,
+      "valence": "pos",
+      "title": "押对了",
+      "hook": "那件事成了，成了之后你反而没那么高兴",
+      "effects": {
+        "wealth": 8,
+        "spirit": 4,
+        "fame": 3
+      },
+      "follows": {
+        "id": "m06",
+        "within": 3,
+        "boost": 4.0
+      },
+      "not_follows": [
+        {
+          "id": "s14",
+          "within": 3
+        }
+      ]
+    },
+    {
+      "id": "s14",
+      "stage": [
+        36,
+        58
+      ],
+      "w": 1.0,
+      "valence": "neg",
+      "title": "押错了",
+      "hook": "账上的数字少了一位，你没跟家里说",
+      "effects": {
+        "wealth": -9,
+        "spirit": -6
+      },
+      "follows": {
+        "id": "m06",
+        "within": 3,
+        "boost": 4.0
+      },
+      "not_follows": [
+        {
+          "id": "s13",
+          "within": 3
+        }
+      ]
+    },
+    {
+      "id": "s15",
+      "stage": [
+        19,
+        32
+      ],
+      "w": 1.0,
+      "valence": "pos",
+      "title": "在城市里站住了脚",
+      "hook": "从合租搬进一间自己的屋子，钥匙只有一把",
+      "effects": {
+        "wealth": 4,
+        "skill": 3,
+        "spirit": 5,
+        "bond": -2
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 8,
+      "follows": {
+        "id": "y01",
+        "within": 5,
+        "boost": 4.0
+      },
+      "not_follows": [
+        {
+          "id": "s16",
+          "within": 5
+        }
+      ]
+    },
+    {
+      "id": "s16",
+      "stage": [
+        19,
+        34
+      ],
+      "w": 0.9,
+      "valence": "mix",
+      "title": "还是回了老家",
+      "hook": "回去那天没人问你为什么，饭桌上多摆了一副碗筷",
+      "effects": {
+        "wealth": -3,
+        "bond": 4,
+        "spirit": -2
+      },
+      "follows": {
+        "id": "y01",
+        "within": 5,
+        "boost": 3.0
+      },
+      "not_follows": [
+        {
+          "id": "s15",
+          "within": 5
+        }
+      ]
+    },
+    {
+      "id": "s18",
+      "stage": [
+        30,
+        60
+      ],
+      "w": 1.0,
+      "valence": "neg",
+      "title": "被最信的人摆了一道",
+      "hook": "合同是他拿去签的，钱进了他的账户",
+      "effects": {
+        "wealth": -7,
+        "bond": -8,
+        "spirit": -6,
+        "skill": 2
+      },
+      "follows": [
+        {
+          "id": "s01",
+          "within": 6,
+          "boost": 2.5
+        },
+        {
+          "id": "a08",
+          "within": 5,
+          "boost": 2.0
+        }
+      ]
+    },
+    {
+      "id": "s19",
+      "stage": [
+        35,
+        62
+      ],
+      "w": 1.0,
+      "valence": "pos",
+      "title": "带出了一个人",
+      "hook": "他后来自己出去做，逢年过节还会来一趟",
+      "effects": {
+        "skill": 2,
+        "bond": 5,
+        "spirit": 5,
+        "fame": 2
+      },
+      "follows": {
+        "id": "s02",
+        "within": 6,
+        "boost": 3.0
+      }
+    },
+    {
+      "id": "g01",
+      "stage": [
+        35,
+        78
+      ],
+      "w": 1.1,
+      "valence": "pos",
+      "title": "有人上门拜师",
+      "hook": "提着两瓶酒，站在门口不知道手往哪放",
+      "effects": {
+        "skill": 3,
+        "fame": 4,
+        "spirit": 5,
+        "bond": 2
+      },
+      "when": {
+        "skill": [
+          ">=",
+          68
+        ]
+      },
+      "lean": {
+        "skill": 0.6
+      }
+    },
+    {
+      "id": "g02",
+      "stage": [
+        40,
+        82
+      ],
+      "w": 0.9,
+      "valence": "pos",
+      "title": "被请去定规矩",
+      "hook": "一屋子人等你开口，你说了三条，他们记了",
+      "effects": {
+        "fame": 6,
+        "spirit": 3,
+        "wealth": 2
+      },
+      "when": {
+        "skill": [
+          ">=",
+          74
+        ],
+        "fame": [
+          ">=",
+          18
+        ]
+      }
+    },
+    {
+      "id": "g03",
+      "stage": [
+        30,
+        72
+      ],
+      "w": 1.4,
+      "valence": "neg",
+      "title": "亲戚来借钱",
+      "hook": "开口的时候不看你的眼睛，说了一个你没法拒绝的数",
+      "effects": {
+        "wealth": -4,
+        "bond": 2,
+        "spirit": -3
+      },
+      "when": {
+        "wealth": [
+          ">=",
+          68
+        ]
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 5,
+      "lean": {
+        "wealth": 0.5
+      }
+    },
+    {
+      "id": "g04",
+      "stage": [
+        25,
+        58
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "借了高利",
+      "hook": "签字的时候手很快，好像快一点就不算数",
+      "effects": {
+        "wealth": -2,
+        "spirit": -5
+      },
+      "when": {
+        "wealth": [
+          "<=",
+          18
+        ]
+      },
+      "tags": [
+        "money"
+      ],
+      "cooldown": 4,
+      "lean": {
+        "wealth": -0.8
+      }
+    },
+    {
+      "id": "g05",
+      "stage": [
+        55,
+        95
+      ],
+      "w": 1.3,
+      "valence": "neg",
+      "title": "楼梯成了难题",
+      "hook": "三层楼，中间要歇两次",
+      "effects": {
+        "health": -3,
+        "spirit": -3
+      },
+      "when": {
+        "health": [
+          "<=",
+          38
+        ]
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 6
+    },
+    {
+      "id": "g06",
+      "stage": [
+        22,
+        68
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "有一阵子什么都不想做",
+      "hook": "醒了也不起，窗帘拉着，手机在枕头边上震",
+      "effects": {
+        "spirit": -6,
+        "health": -2,
+        "wealth": -1
+      },
+      "when": {
+        "spirit": [
+          "<=",
+          32
+        ]
+      },
+      "tags": [
+        "mood"
+      ],
+      "cooldown": 4,
+      "lean": {
+        "bond": -0.6,
+        "spirit": -0.5
+      }
+    },
+    {
+      "id": "g07",
+      "stage": [
+        18,
+        88
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "有人在你难的时候来了",
+      "hook": "没说安慰的话，就是坐了一下午",
+      "effects": {
+        "bond": 7,
+        "spirit": 7
+      },
+      "when": {
+        "spirit": [
+          "<=",
+          38
+        ]
+      },
+      "lean": {
+        "spirit": -0.6
+      }
+    },
+    {
+      "id": "g08",
+      "stage": [
+        22,
+        72
+      ],
+      "w": 1.1,
+      "valence": "mix",
+      "title": "有人在网上写你",
+      "hook": "写得不太准，但传得到处都是",
+      "effects": {
+        "fame": 5,
+        "spirit": -4
+      },
+      "when": {
+        "fame": [
+          ">=",
+          26
+        ]
+      },
+      "tags": [
+        "fame"
+      ],
+      "cooldown": 4,
+      "lean": {
+        "fame": 0.5
+      }
+    },
+    {
+      "id": "g09",
+      "stage": [
+        20,
+        62
+      ],
+      "w": 1.0,
+      "valence": "neg",
+      "title": "身体先垮了一步",
+      "hook": "医生说不能再这样下去，你点头，然后还是那样",
+      "effects": {
+        "health": -6,
+        "spirit": -2
+      },
+      "when": {
+        "health": [
+          "<=",
+          30
+        ]
+      },
+      "tags": [
+        "health"
+      ],
+      "cooldown": 4
+    },
+    {
+      "id": "g10",
+      "stage": [
+        28,
+        64
+      ],
+      "w": 1.1,
+      "valence": "pos",
+      "title": "攒够了第一笔钱",
+      "hook": "数字看起来还是很小，但它是正的",
+      "effects": {
+        "wealth": 4,
+        "spirit": 5
+      },
+      "when": {
+        "wealth": [
+          "<=",
+          10
+        ]
+      },
+      "lean": {
+        "wealth": -0.9
+      }
+    },
+    {
+      "id": "g11",
+      "stage": [
+        30,
+        72
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "被人拿旧事说嘴",
+      "hook": "多年前的一件事，被人重新讲了一遍，讲得不像原来的样子",
+      "effects": {
+        "fame": -3,
+        "spirit": -4,
+        "bond": -2
+      },
+      "when": {
+        "fame": [
+          ">=",
+          20
+        ]
+      },
+      "tags": [
+        "fame"
+      ],
+      "cooldown": 5,
+      "lean": {
+        "fame": 0.4
+      }
+    },
+    {
+      "id": "g12",
+      "stage": [
+        45,
+        80
+      ],
+      "w": 1.1,
+      "valence": "pos",
+      "title": "手上的活儿成了别人的参考",
+      "hook": "有人照着你做的样子做了一遍，做得不如你",
+      "effects": {
+        "skill": 2,
+        "fame": 3,
+        "spirit": 5
+      },
+      "when": {
+        "skill": [
+          ">=",
+          70
+        ]
+      }
+    },
+    {
+      "id": "r01",
+      "stage": [
+        22,
+        40
+      ],
+      "w": 1.4,
+      "valence": "mix",
+      "title": "户口、房子和一场婚事绑在一起",
+      "hook": "两边家长谈的是这些，你和对方坐在旁边",
+      "effects": {
+        "bond": 2,
+        "spirit": -4,
+        "wealth": -3
+      },
+      "regions": [
+        "东亚"
+      ],
+      "forbids": [
+        "married"
+      ]
+    },
+    {
+      "id": "r02",
+      "stage": [
+        13,
+        18
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "高考前的最后一年",
+      "hook": "教室后墙的倒计时牌，一天撕一张",
+      "effects": {
+        "skill": 3,
+        "spirit": -6,
+        "health": -2
+      },
+      "regions": [
+        "东亚"
+      ],
+      "tags": [
+        "study"
+      ]
+    },
+    {
+      "id": "r03",
+      "stage": [
+        30,
+        58
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "给父母在老家盖了房",
+      "hook": "他们住进去了，你一年回去两次",
+      "effects": {
+        "wealth": -7,
+        "bond": 6,
+        "spirit": 3
+      },
+      "regions": [
+        "东亚",
+        "东南亚"
+      ]
+    },
+    {
+      "id": "r04",
+      "stage": [
+        18,
+        32
+      ],
+      "w": 1.4,
+      "valence": "mix",
+      "title": "家里开始谈你的婚事",
+      "hook": "人选是长辈定的，你只见过一张照片",
+      "effects": {
+        "bond": 3,
+        "spirit": -5
+      },
+      "regions": [
+        "南亚",
+        "中东"
+      ],
+      "forbids": [
+        "married"
+      ]
+    },
+    {
+      "id": "r05",
+      "stage": [
+        20,
+        45
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "嫁妆的事谈崩过一次",
+      "hook": "两边都觉得自己让步太多",
+      "effects": {
+        "wealth": -6,
+        "bond": -4,
+        "spirit": -4
+      },
+      "regions": [
+        "南亚"
+      ],
+      "requires": [
+        "married"
+      ]
+    },
+    {
+      "id": "r06",
+      "stage": [
+        7,
+        18
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "村里通了电",
+      "hook": "第一个灯泡亮起来那晚，全村人都在看",
+      "effects": {
+        "spirit": 5,
+        "skill": 2
+      },
+      "regions": [
+        "南亚",
+        "非洲"
+      ],
+      "classes": [
+        "贫困",
+        "温饱"
+      ]
+    },
+    {
+      "id": "r07",
+      "stage": [
+        5,
+        16
+      ],
+      "w": 1.5,
+      "valence": "mix",
+      "title": "每天要走很远去取水",
+      "hook": "来回一个多小时，桶压在头上，路是记住了的",
+      "effects": {
+        "health": -2,
+        "skill": 2,
+        "spirit": -2
+      },
+      "regions": [
+        "非洲",
+        "南亚"
+      ],
+      "classes": [
+        "贫困",
+        "温饱"
+      ]
+    },
+    {
+      "id": "r08",
+      "stage": [
+        18,
+        42
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "旱季比往年长",
+      "hook": "地里没有收成，粮价涨了一半",
+      "effects": {
+        "wealth": -6,
+        "health": -3
+      },
+      "regions": [
+        "非洲",
+        "南亚"
+      ],
+      "classes": [
+        "贫困",
+        "温饱"
+      ]
+    },
+    {
+      "id": "r09",
+      "stage": [
+        16,
+        38
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "家里多了一个要养的人",
+      "hook": "亲戚的孩子，父母没了，就送到你家",
+      "effects": {
+        "wealth": -4,
+        "bond": 4,
+        "spirit": -2
+      },
+      "regions": [
+        "非洲",
+        "南亚",
+        "拉美"
+      ]
+    },
+    {
+      "id": "r10",
+      "stage": [
+        18,
+        45
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "斋月里的一个晚上",
+      "hook": "天亮前的那顿饭，一家人都在",
+      "effects": {
+        "bond": 5,
+        "spirit": 4
+      },
+      "regions": [
+        "中东",
+        "东南亚"
+      ]
+    },
+    {
+      "id": "r11",
+      "stage": [
+        20,
+        48
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "家里人对你的选择有意见",
+      "hook": "话没有说重，但饭桌上安静了很久",
+      "effects": {
+        "bond": -4,
+        "spirit": -4
+      },
+      "regions": [
+        "中东",
+        "南亚",
+        "东亚"
+      ]
+    },
+    {
+      "id": "r12",
+      "stage": [
+        17,
+        38
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "有人去了北边",
+      "hook": "走的时候没告别，过了半年寄回来一点钱",
+      "effects": {
+        "bond": -3,
+        "wealth": 2,
+        "spirit": -3
+      },
+      "regions": [
+        "拉美"
+      ],
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ]
+    },
+    {
+      "id": "r13",
+      "stage": [
+        25,
+        52
+      ],
+      "w": 1.1,
+      "valence": "neg",
+      "title": "街区里的一阵乱",
+      "hook": "店关了三天，学校也停了课",
+      "effects": {
+        "health": -3,
+        "wealth": -4,
+        "spirit": -5
+      },
+      "regions": [
+        "拉美",
+        "非洲"
+      ],
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 8
+    },
+    {
+      "id": "r14",
+      "stage": [
+        30,
+        58
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "工厂搬走了",
+      "hook": "通知贴在门口，说下个月开始不必再来",
+      "effects": {
+        "wealth": -6,
+        "spirit": -4,
+        "skill": 2
+      },
+      "regions": [
+        "欧洲",
+        "中亚"
+      ],
+      "tags": [
+        "job"
+      ],
+      "cooldown": 8
+    },
+    {
+      "id": "r15",
+      "stage": [
+        25,
+        58
+      ],
+      "w": 1.1,
+      "valence": "neg",
+      "title": "身边有人喝得太凶",
+      "hook": "从每天一杯，到每天早上",
+      "effects": {
+        "bond": -4,
+        "spirit": -4
+      },
+      "regions": [
+        "欧洲",
+        "中亚"
+      ]
+    },
+    {
+      "id": "r16",
+      "stage": [
+        18,
+        32
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "学生贷款压了很多年",
+      "hook": "每个月自动扣走一笔，扣了十年还剩一大半",
+      "effects": {
+        "wealth": -5,
+        "spirit": -3
+      },
+      "regions": [
+        "北美"
+      ],
+      "when": {
+        "wealth": [
+          "<=",
+          45
+        ]
+      }
+    },
+    {
+      "id": "r17",
+      "stage": [
+        30,
+        58
+      ],
+      "w": 1.1,
+      "valence": "mix",
+      "title": "换了城市，也换了一整套生活",
+      "hook": "朋友要重新交，医生要重新找",
+      "effects": {
+        "bond": -5,
+        "wealth": -3,
+        "spirit": 2
+      },
+      "regions": [
+        "北美",
+        "大洋洲"
+      ],
+      "tags": [
+        "move"
+      ],
+      "cooldown": 10
+    },
+    {
+      "id": "r18",
+      "stage": [
+        18,
+        42
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "去外地打工，钱按月寄回来",
+      "hook": "汇率是多少你算得很清楚",
+      "effects": {
+        "wealth": 2,
+        "bond": -4,
+        "spirit": -2
+      },
+      "regions": [
+        "东南亚",
+        "南亚"
+      ],
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ],
+      "kinds": [
+        "work",
+        "money"
+      ]
+    },
+    {
+      "id": "r19",
+      "stage": [
+        25,
+        52
+      ],
+      "w": 1.1,
+      "valence": "neg",
+      "title": "一场台风把屋顶掀了",
+      "hook": "雨从上面下来，全家拿盆接",
+      "effects": {
+        "wealth": -5,
+        "health": -2,
+        "bond": 3
+      },
+      "regions": [
+        "东南亚",
+        "东亚",
+        "拉美"
+      ],
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 8
+    },
+    {
+      "id": "r20",
+      "stage": [
+        18,
+        42
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "去邻国做季节工",
+      "hook": "干四个月，回来歇八个月",
+      "effects": {
+        "wealth": 2,
+        "health": -3,
+        "bond": -3
+      },
+      "regions": [
+        "中亚",
+        "南亚",
+        "东南亚"
+      ],
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ],
+      "kinds": [
+        "work",
+        "money"
+      ]
+    },
+    {
+      "id": "k01",
+      "stage": [
+        10,
+        60
+      ],
+      "w": 1.3,
+      "valence": "neg",
+      "title": "欠薪",
+      "hook": "老板说月底给，月底又说下个月",
+      "effects": {
+        "wealth": -5,
+        "spirit": -5
+      },
+      "classes": [
+        "贫困",
+        "温饱"
+      ],
+      "tags": [
+        "money"
+      ],
+      "cooldown": 4,
+      "kinds": [
+        "work",
+        "money"
+      ],
+      "lean": {
+        "wealth": -0.6
+      }
+    },
+    {
+      "id": "k02",
+      "stage": [
+        8,
+        55
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "领过一次救济",
+      "hook": "队伍排到巷口，前面的人和你穿一样的鞋",
+      "effects": {
+        "wealth": 2,
+        "spirit": -4
+      },
+      "classes": [
+        "贫困"
+      ],
+      "lean": {
+        "wealth": -0.7
+      }
+    },
+    {
+      "id": "k03",
+      "stage": [
+        18,
+        58
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "手上有了真东西",
+      "hook": "别人做不了的活，你能做",
+      "effects": {
+        "skill": 5,
+        "spirit": 4,
+        "wealth": 2
+      },
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ]
+    },
+    {
+      "id": "k04",
+      "stage": [
+        30,
+        58
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "家里谈了一次分家",
+      "hook": "数字很大，话说得很客气",
+      "effects": {
+        "wealth": 5,
+        "bond": -5,
+        "spirit": -3
+      },
+      "classes": [
+        "富裕"
+      ],
+      "requires": [
+        "parents"
+      ]
+    },
+    {
+      "id": "k05",
+      "stage": [
+        22,
+        58
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "被推到家里生意的一个位置上",
+      "hook": "座位是给你的，活儿也是",
+      "effects": {
+        "wealth": 3,
+        "skill": 3,
+        "spirit": -3
+      },
+      "classes": [
+        "富裕",
+        "中产"
+      ],
+      "kinds": [
+        "work",
+        "money"
+      ]
+    },
+    {
+      "id": "k06",
+      "stage": [
+        25,
+        66
+      ],
+      "w": 1.1,
+      "valence": "neg",
+      "title": "一个项目砸在手里",
+      "hook": "账做得很好看，只有你知道缺口在哪",
+      "effects": {
+        "wealth": -9,
+        "spirit": -6,
+        "health": -2
+      },
+      "classes": [
+        "富裕",
+        "中产"
+      ],
+      "kinds": [
+        "work",
+        "money",
+        "risk"
+      ]
+    },
+    {
+      "id": "k07",
+      "stage": [
+        30,
+        58
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "房贷还剩十七年",
+      "hook": "每个月那笔钱准时走，像另一个人的心跳",
+      "effects": {
+        "wealth": -2,
+        "spirit": -3
+      },
+      "classes": [
+        "中产",
+        "工薪"
+      ],
+      "when": {
+        "wealth": [
+          "<=",
+          62
+        ]
+      }
+    },
+    {
+      "id": "k08",
+      "stage": [
+        35,
+        60
+      ],
+      "w": 1.1,
+      "valence": "neg",
+      "title": "孩子的补习费又涨了",
+      "hook": "你算了一遍，把旅游那笔划掉了",
+      "effects": {
+        "wealth": -5,
+        "spirit": -2,
+        "bond": 2
+      },
+      "classes": [
+        "中产",
+        "工薪"
+      ],
+      "requires": [
+        "children"
+      ],
+      "when": {
+        "child_age": [
+          ">=",
+          6
+        ]
+      }
+    },
+    {
+      "id": "k09",
+      "stage": [
+        22,
+        58
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "评了一次级别",
+      "hook": "材料准备了半年，名额只有一个",
+      "effects": {
+        "wealth": 2,
+        "skill": 2,
+        "spirit": -2
+      },
+      "classes": [
+        "工薪",
+        "中产"
+      ],
+      "kinds": [
+        "work"
+      ]
+    },
+    {
+      "id": "k10",
+      "stage": [
+        25,
+        60
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "长期上夜班",
+      "hook": "白天睡觉，家里说话都压着声",
+      "effects": {
+        "health": -4,
+        "wealth": 2,
+        "bond": -3
+      },
+      "classes": [
+        "贫困",
+        "温饱",
+        "工薪"
+      ],
+      "tags": [
+        "health"
+      ],
+      "cooldown": 6,
+      "kinds": [
+        "work",
+        "money"
+      ]
+    },
+    {
+      "id": "x05",
+      "stage": [
+        6,
+        80
+      ],
+      "w": 0.5,
+      "valence": "neg",
+      "title": "一场车祸",
+      "hook": "醒来的时候在医院，先摸的是腿",
+      "effects": {
+        "health": -16,
+        "wealth": -5,
+        "spirit": -6
+      },
+      "rare": true,
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 20
+    },
+    {
+      "id": "x06",
+      "stage": [
+        18,
+        68
+      ],
+      "w": 0.5,
+      "valence": "pos",
+      "title": "中了一次奖",
+      "hook": "金额不算大，但足够让家里安静一年",
+      "effects": {
+        "wealth": 10,
+        "spirit": 6
+      },
+      "rare": true
+    },
+    {
+      "id": "x07",
+      "stage": [
+        10,
+        76
+      ],
+      "w": 0.45,
+      "valence": "pos",
+      "title": "碰到一个改变你一生的人",
+      "hook": "他说的一句话，你记了三十年",
+      "effects": {
+        "spirit": 8,
+        "skill": 5,
+        "bond": 4
+      },
+      "rare": true
+    },
+    {
+      "id": "x08",
+      "stage": [
+        18,
+        72
+      ],
+      "w": 0.4,
+      "valence": "mix",
+      "title": "被误诊了一回",
+      "hook": "半年里你以为自己没多少时间了",
+      "effects": {
+        "health": 4,
+        "spirit": -8,
+        "wealth": -4
+      },
+      "rare": true
+    },
+    {
+      "id": "x09",
+      "stage": [
+        18,
+        82
+      ],
+      "w": 0.35,
+      "valence": "neg",
+      "title": "一场火",
+      "hook": "烧掉的不只是东西",
+      "effects": {
+        "wealth": -12,
+        "health": -4,
+        "spirit": -7
+      },
+      "rare": true,
+      "tags": [
+        "danger"
+      ],
+      "cooldown": 20
+    },
+    {
+      "id": "x10",
+      "stage": [
+        20,
+        62
+      ],
+      "w": 0.4,
+      "valence": "mix",
+      "title": "上了新闻",
+      "hook": "三天里所有人都在说这件事，第四天没人提了",
+      "effects": {
+        "fame": 10,
+        "spirit": -3
+      },
+      "rare": true
+    },
+    {
+      "id": "x11",
+      "stage": [
+        16,
+        72
+      ],
+      "w": 0.45,
+      "valence": "pos",
+      "title": "捡到一笔钱，还了回去",
+      "hook": "对方要给谢礼，你没要",
+      "effects": {
+        "spirit": 7,
+        "bond": 3
+      },
+      "rare": true
+    },
+    {
+      "id": "x12",
+      "stage": [
+        25,
+        66
+      ],
+      "w": 0.4,
+      "valence": "neg",
+      "title": "被合伙人卷了钱",
+      "hook": "人跑了，账留下了",
+      "effects": {
+        "wealth": -10,
+        "spirit": -7,
+        "bond": -3
+      },
+      "rare": true
+    },
+    {
+      "id": "x13",
+      "stage": [
+        30,
+        76
+      ],
+      "w": 0.35,
+      "valence": "pos",
+      "title": "一笔旧账被还上了",
+      "hook": "三十年前借出去的，本息一起",
+      "effects": {
+        "wealth": 6,
+        "spirit": 6
+      },
+      "rare": true
+    },
+    {
+      "id": "x14",
+      "stage": [
+        18,
+        56
+      ],
+      "w": 0.4,
+      "valence": "mix",
+      "title": "一次远行改变了对日子的看法",
+      "hook": "回来以后你还是你，只是不那么急了",
+      "effects": {
+        "spirit": 7,
+        "wealth": -3,
+        "skill": 3
+      },
+      "rare": true
+    },
+    {
+      "id": "n01",
+      "stage": [
+        13,
+        19
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "第一次一个人坐长途车",
+      "hook": "车窗上全是自己的影子，站名一个一个往后退",
+      "effects": {
+        "spirit": 2,
+        "skill": 2
+      }
+    },
+    {
+      "id": "n02",
+      "stage": [
+        22,
+        42
+      ],
+      "w": 1.4,
+      "valence": "mix",
+      "title": "办了一张属于自己的证件",
+      "hook": "排队的人很多，你反复确认材料有没有少",
+      "effects": {
+        "spirit": 3,
+        "skill": 2
+      }
+    },
+    {
+      "id": "n03",
+      "stage": [
+        25,
+        58
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "把一件小事坚持了三年",
+      "hook": "没人要求，也没人看，就是每天做了",
+      "effects": {
+        "skill": 4,
+        "spirit": 4
+      },
+      "tags": [
+        "habit"
+      ],
+      "cooldown": 12
+    },
+    {
+      "id": "n04",
+      "stage": [
+        30,
+        62
+      ],
+      "w": 1.2,
+      "valence": "neg",
+      "title": "一个熟悉的店关了门",
+      "hook": "卷帘门上贴着电话，字体是手写的",
+      "effects": {
+        "spirit": -3,
+        "bond": -1
+      }
+    },
+    {
+      "id": "n05",
+      "stage": [
+        20,
+        72
+      ],
+      "w": 1.3,
+      "valence": "mix",
+      "title": "遇到一个和你想法完全相反的人",
+      "hook": "他没说服你，你也没说服他，但你想了很久",
+      "effects": {
+        "spirit": -2,
+        "skill": 2,
+        "bond": 2
+      }
+    },
+    {
+      "id": "n06",
+      "stage": [
+        35,
+        68
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "开始戴上了眼镜",
+      "hook": "看菜单要举远一点，后来干脆不举了",
+      "effects": {
+        "health": -1,
+        "spirit": -2
+      }
+    },
+    {
+      "id": "n07",
+      "stage": [
+        40,
+        72
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "学会拒绝一件事",
+      "hook": "说完之后手心是湿的，但那天睡得很好",
+      "effects": {
+        "spirit": 6,
+        "bond": -2
+      }
+    },
+    {
+      "id": "n08",
+      "stage": [
+        25,
+        62
+      ],
+      "w": 1.3,
+      "valence": "neg",
+      "title": "被自己人误解",
+      "hook": "解释了两遍，第三遍你就不说了",
+      "effects": {
+        "bond": -5,
+        "spirit": -4
+      }
+    },
+    {
+      "id": "n09",
+      "stage": [
+        18,
+        52
+      ],
+      "w": 1.2,
+      "valence": "pos",
+      "title": "有人记得你说过的一句话",
+      "hook": "你早忘了，他引用了原文",
+      "effects": {
+        "spirit": 5,
+        "bond": 3
+      }
+    },
+    {
+      "id": "n10",
+      "stage": [
+        45,
+        78
+      ],
+      "w": 1.2,
+      "valence": "mix",
+      "title": "重新联系上一个断了很久的人",
+      "hook": "第一句话是「你还在这个地方啊」",
+      "effects": {
+        "bond": 4,
+        "spirit": 4
+      }
+    },
+    {
+      "id": "c14",
+      "stage": [
+        1,
+        9
+      ],
+      "w": 1.1,
+      "valence": "mix",
+      "title": "被送到亲戚家住了半年",
+      "hook": "你的碗和别人不一样，你记住了这件事",
+      "effects": {
+        "bond": -3,
+        "spirit": -3,
+        "skill": 1
+      },
+      "tags": [
+        "family"
+      ],
+      "cooldown": 8,
+      "follows": {
+        "id": "c07",
+        "within": 2,
+        "boost": 18
+      }
+    },
+    {
+      "id": "c15",
+      "stage": [
+        3,
+        10
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "家里从此不让你碰火",
+      "hook": "灶台边上多了一道说不清来历的规矩",
+      "effects": {
+        "spirit": -2,
+        "skill": 2
+      },
+      "follows": {
+        "id": "c05",
+        "within": 2,
+        "boost": 15
+      }
+    },
+    {
+      "id": "t11",
+      "stage": [
+        14,
+        21
+      ],
+      "w": 1.1,
+      "valence": "mix",
+      "title": "去了另一个城市念书",
+      "hook": "宿舍六个人，你的铺位靠门，冬天最先冷",
+      "effects": {
+        "bond": -3,
+        "skill": 3,
+        "spirit": 2,
+        "wealth": -3
+      },
+      "tags": [
+        "move"
+      ],
+      "cooldown": 10,
+      "follows": {
+        "id": "t01",
+        "within": 1,
+        "boost": 18
+      },
+      "not_follows": [
+        {
+          "id": "t12",
+          "within": 8
+        }
+      ]
+    },
+    {
+      "id": "t12",
+      "stage": [
+        14,
+        21
+      ],
+      "w": 1.1,
+      "valence": "mix",
+      "title": "留在了镇上",
+      "hook": "同学走了大半，街上安静下来，你还在原来的教室",
+      "effects": {
+        "bond": 3,
+        "skill": 1,
+        "spirit": -3
+      },
+      "follows": {
+        "id": "t01",
+        "within": 1,
+        "boost": 18
+      },
+      "not_follows": [
+        {
+          "id": "t11",
+          "within": 8
+        }
+      ]
+    },
+    {
+      "id": "t13",
+      "stage": [
+        15,
+        22
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "一毕业就断了",
+      "hook": "没有告别，只是开学以后再也没有联系",
+      "effects": {
+        "spirit": -4,
+        "bond": -2,
+        "skill": 1
+      },
+      "follows": {
+        "id": "t02",
+        "within": 4,
+        "boost": 12
+      }
+    },
+    {
+      "id": "m17",
+      "stage": [
+        35,
+        58
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "后事办完，家里空出一间房",
+      "hook": "东西不知道该扔还是该留，就先都锁起来了",
+      "effects": {
+        "spirit": -5,
+        "bond": 3,
+        "wealth": 2
+      },
+      "tags": [
+        "loss"
+      ],
+      "cooldown": 8,
+      "follows": {
+        "id": "m03",
+        "within": 1,
+        "boost": 18
+      }
+    },
+    {
+      "id": "o15",
+      "stage": [
+        66,
+        108
+      ],
+      "w": 1.0,
+      "valence": "mix",
+      "title": "一个人学着做饭",
+      "hook": "盐总是放多，后来干脆少放，吃着吃着也就习惯了",
+      "effects": {
+        "health": -2,
+        "skill": 2,
+        "spirit": -3
+      },
+      "follows": {
+        "id": "o01",
+        "within": 2,
+        "boost": 18
+      },
+      "not_follows": [
+        {
+          "id": "o16",
+          "within": 6
+        }
+      ]
+    },
+    {
+      "id": "o16",
+      "stage": [
+        66,
+        108
+      ],
+      "w": 1.0,
+      "valence": "neg",
+      "title": "最难的是头一年",
+      "hook": "所有的节日都变成了需要熬过去的日子",
+      "effects": {
+        "spirit": -7,
+        "health": -3,
+        "bond": -2
+      },
+      "follows": {
+        "id": "o01",
+        "within": 1,
+        "boost": 16
+      },
+      "not_follows": [
+        {
+          "id": "o15",
+          "within": 6
+        }
+      ]
+    }
+  ]
+}
