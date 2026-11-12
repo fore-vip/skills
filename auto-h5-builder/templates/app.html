@@ -14,9 +14,20 @@ __CSS__
 <body data-app="store-h5">
 
 <header class="topbar">
-  <a class="brand" href="#/home"><span class="logo">__LOGO__</span><span class="bname">__STORE_NAME__</span></a>
-  <a class="ghost" href="#/share">分享有礼</a>
+  <a class="brand" href="#/home" id="btnBrand"><span class="logo">__LOGO__</span><span class="bname">__STORE_NAME__</span></a>
+  <div class="menu">
+    <button class="menu-btn" id="btnMenu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menuPanel" aria-label="打开菜单">
+      <span class="menu-bar"></span><span class="menu-bar"></span><span class="menu-bar"></span>
+    </button>
+    <div class="menu-panel" id="menuPanel" role="menu" aria-label="页面导航" hidden>
+      <a class="menu-item" role="menuitem" href="#/book" data-menu="book">预约</a>
+      <a class="menu-item" role="menuitem" href="#/share" data-menu="share">分享</a>
+      <a class="menu-item" role="menuitem" href="#/admin" data-menu="admin" id="menuLogin">登录<em class="menu-tag" id="menuLoginTag" hidden>店长</em></a>
+      <button class="menu-item menu-item--quiet" role="menuitem" type="button" id="menuLogout" data-menu="logout" disabled>退出</button>
+    </div>
+  </div>
 </header>
+<div class="menu-mask" id="menuMask" hidden></div>
 
 <main>
   <!-- ① 首页 -->
@@ -32,13 +43,15 @@ __CSS__
 
     <h2 class="sec">到店信息</h2>
     <div class="info" id="storeInfo"></div>
-
-    <p class="footlink"><a href="#/admin">店主管理</a></p>
   </section>
 
-  <!-- ② 预约 -->
+  <!-- ② 预约（独立页） -->
   <section class="view" data-view="book" id="view-book" hidden>
-    <h1 class="page-t">预约到店</h1>
+    <div class="page-head">
+      <p class="crumb"><a href="#/home">首页</a> / 预约</p>
+      <h1 class="page-t">预约到店</h1>
+      <p class="page-sub">选服务和时间，提交后店主会按手机号与你确认</p>
+    </div>
     <p class="hint hint--warn" id="cloudHint" hidden></p>
 
     <h2 class="sec">1 · 选服务</h2>
@@ -73,10 +86,13 @@ __CSS__
     </div>
   </section>
 
-  <!-- ③ 分享 -->
+  <!-- ③ 分享（独立页） -->
   <section class="view" data-view="share" id="view-share" hidden>
-    <h1 class="page-t">__INVITE_TITLE__</h1>
-    <p class="lead" id="inviteReward"></p>
+    <div class="page-head">
+      <p class="crumb"><a href="#/home">首页</a> / 分享</p>
+      <h1 class="page-t">__INVITE_TITLE__</h1>
+      <p class="page-sub" id="inviteReward"></p>
+    </div>
 
     <div class="codebox">
       <span>我的邀请码</span>
@@ -92,12 +108,15 @@ __CSS__
     <div class="poster" id="posterText"></div>
   </section>
 
-  <!-- ④ 店主管理 -->
+  <!-- ④ 店主管理（独立页） -->
   <section class="view" data-view="admin" id="view-admin" hidden>
-    <h1 class="page-t">店主管理</h1>
+    <div class="page-head">
+      <p class="crumb"><a href="#/home">首页</a> / 店主</p>
+      <h1 class="page-t">店主管理</h1>
+      <p class="page-sub">首次登录的账号自动成为本店店长，登录后直接进入管理台</p>
+    </div>
 
     <div id="authPanel">
-      <p class="hint">用店主的手机号或邮箱收验证码登录，登录后只能看到本店订单。</p>
       <form class="form" id="loginForm" novalidate>
         <label>__LOGIN_LABEL__
           <input id="fLogin" autocomplete="username" placeholder="__LOGIN_PLACEHOLDER__">
@@ -108,7 +127,7 @@ __CSS__
             <button class="ghost" id="btnSendCode" type="button">获取验证码</button>
           </div>
         </label>
-        <button class="cta" type="submit">登录</button>
+        <button class="cta" type="submit">店长登录</button>
         <p class="hint hint--warn" id="loginHint"></p>
       </form>
     </div>
@@ -119,17 +138,9 @@ __CSS__
       <div id="orderList"></div>
       <button class="ghost" id="btnRefresh" type="button">刷新订单</button>
       <p class="hint" id="adminHint"></p>
-      <button class="ghost mt" id="btnLogout" type="button">退出登录</button>
     </div>
   </section>
 </main>
-
-<nav class="tabbar" aria-label="主导航">
-  <a class="tab" href="#/home" data-tab="home">首页</a>
-  <a class="tab" href="#/book" data-tab="book">预约</a>
-  <a class="tab" href="#/share" data-tab="share">分享</a>
-  <a class="tab" href="#/admin" data-tab="admin">管理</a>
-</nav>
 
 __SDK__
 <script>window.APP_SPEC=__SPEC_JSON__;window.APP_CFG=__CFG_JSON__;</script>

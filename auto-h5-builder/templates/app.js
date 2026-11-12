@@ -22,6 +22,7 @@
 
   var cloud = null;
   var session = null;
+  var isOwner = false;
   var orders = [];
   var filter = 'all';
   var pendingOtp = null;
@@ -80,6 +81,18 @@
     return cloud;
   }
 
+  /* ---------- 右上菜单 ---------- */
+  function menuOpen(open) {
+    $('#menuPanel').hidden = !open;
+    $('#menuMask').hidden = !open;
+    $('#btnMenu').setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function closeMenu() { menuOpen(false); }
+  function refreshMenu() {
+    $('#menuLoginTag').hidden = !isOwner;
+    $('#menuLogout').disabled = !isOwner;
+  }
+
   /* ---------- 路由 ---------- */
   var VIEWS = ['home', 'book', 'share', 'admin'];
   function currentView() {
@@ -92,9 +105,14 @@
       var sec = $('#view-' + name);
       if (sec) sec.hidden = name !== v;
     });
-    $$('.tab').forEach(function (t) {
-      t.classList.toggle('is-on', t.getAttribute('data-tab') === v);
-    });
+    closeMenu();
+    var titles = {
+      home: '在线预约',
+      book: '预约到店',
+      share: SHARE.inviteTitle || '分享有礼',
+      admin: '店主管理'
+    };
+    document.title = STORE.name + ' · ' + titles[v];
     window.scrollTo(0, 0);
     if (v === 'book') renderBook();
     if (v === 'share') renderShare();
@@ -288,10 +306,46 @@
     if (/per minute|rate limit|too many/i.test(msg)) {
       return '请求太频繁：同一邮箱每分钟只能发一次，请稍后再试。';
     }
+    if (/does not match regex|SendVerificationCodeRequest/i.test(msg)) {
+      return '这个邮箱收不到验证码：不要带 + 号等特殊字符，换一个常用邮箱再试。';
+    }
     if (/未开启|disabled|not enabled/i.test(msg)) {
       return '店主登录还没开通：到云服务控制台打开邮箱/短信验证码登录后再试（' + msg + '）';
     }
     return msg;
+  }
+  /* 首个登录的账号自动成为店长：store_owner 只有一行，写入成功即认领 */
+  async function claimOwner() {
+    var db = client().database;
+    var mine = await db.from('store_owner').select('*').limit(1);
+    if (mine.error) throw mine.error;
+    if ((mine.data || []).length) return { ok: true };
+    var claim;
+    try { claim = await db.from('store_owner').insert({ id: 1 }); }
+    catch (e) { claim = { error: e }; }
+    if (!claim.error) return { ok: true };
+    var text = readable(claim.error) + ' ' + (claim.error.code || '');
+    if (/duplicate key|已存在|23505/.test(text)) {
+      return { ok: false, msg: '这个账号不是店主：本店已由首次登录的账号管理，请用那个账号登录。' };
+    }
+    throw claim.error;
+  }
+  function showLogin() {
+    $('#authPanel').hidden = false;
+    $('#adminPanel').hidden = true;
+  }
+  async function afterAuth() {
+    var owner = await claimOwner();
+    isOwner = owner.ok;
+    refreshMenu();
+    if (!owner.ok) {
+      try { await client().auth.signOut(); } catch (e) { /* 忽略 */ }
+      session = null;
+      showLogin();
+      loginHint(owner.msg);
+      return;
+    }
+    showAdmin();
   }
   async function enterAdmin() {
     if (!CFG) {
@@ -302,11 +356,24 @@
       var res = await client().auth.getSession();
       var s = res && res.data ? (res.data.session || res.data) : null;
       session = s && (s.user || s.access_token) ? s : null;
-      if (session) return showAdmin();
-      $('#authPanel').hidden = false;
-      $('#adminPanel').hidden = true;
+      if (session) return afterAuth();
+      showLogin();
     } catch (err) {
       loginHint(readable(err));
+    }
+  }
+  async function restoreSession() {
+    if (!CFG) return;
+    try {
+      var res = await client().auth.getSession();
+      var s = res && res.data ? (res.data.session || res.data) : null;
+      session = s && (s.user || s.access_token) ? s : null;
+      if (!session) return;
+      var owner = await claimOwner();
+      isOwner = owner.ok;
+      refreshMenu();
+    } catch (err) {
+      /* 进管理台时再报具体原因 */
     }
   }
   async function sendCode() {
@@ -342,7 +409,8 @@
       if (res.error) throw res.error;
       pendingOtp = null;
       session = res.data && (res.data.session || res.data);
-      showAdmin();
+      loginHint('登录成功，正在进入管理台…');
+      await afterAuth();
     } catch (err) {
       loginHint(loginFail(err));
     }
@@ -350,10 +418,12 @@
   async function logout() {
     try { await client().auth.signOut(); } catch (e) { /* 忽略 */ }
     session = null;
+    isOwner = false;
     orders = [];
-    $('#adminPanel').hidden = true;
-    $('#authPanel').hidden = false;
+    refreshMenu();
+    showLogin();
     loginHint('');
+    location.hash = '#/home';
   }
   function showAdmin() {
     loginHint('');
@@ -455,6 +525,7 @@
     captureRef();
     renderHome();
     renderShare();
+    refreshMenu();
 
     document.addEventListener('click', function (e) {
       var trigger = e.target && e.target.closest ? e.target.closest('[data-go]') : null;
@@ -464,16 +535,30 @@
       location.hash = '#/' + v;
     });
 
+    $('#btnMenu').addEventListener('click', function (e) {
+      e.stopPropagation();
+      menuOpen($('#menuPanel').hidden);
+    });
+    $('#menuMask').addEventListener('click', closeMenu);
+    $('#btnBrand').addEventListener('click', closeMenu);
+    $$('#menuPanel .menu-item').forEach(function (item) {
+      item.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeMenu();
+    });
+
     $('#bookForm').addEventListener('submit', submitBooking);
     $('#loginForm').addEventListener('submit', submitLogin);
     $('#btnSendCode').addEventListener('click', sendCode);
-    $('#btnLogout').addEventListener('click', logout);
+    $('#menuLogout').addEventListener('click', logout);
     $('#btnRefresh').addEventListener('click', loadOrders);
     $('#btnCopy').addEventListener('click', copyLink);
     window.addEventListener('hashchange', route);
 
     route();
     window.__APP_READY = true;
+    restoreSession();
   }
 
   if (document.readyState === 'loading') {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * 真实浏览器闸门：390×844 走完四视图，验证结构与交互真的成立。
+ * 真实浏览器闸门：390×844 走完四个独立页面，验证右上菜单与主流程真的成立。
  *
  * 用法：
  *   node verify_flow.mjs --spec examples/salon.spec.json --url http://127.0.0.1:8767/salon.html
@@ -73,6 +73,9 @@ async function endpoint() {
   throw new Error('CDP 未就绪');
 }
 const add = (name, value, ok) => checks.push([name, String(value).slice(0, 70), !!ok]);
+const ITEMS = 'document.querySelectorAll("#menuPanel .menu-item")';
+
+let openMenu = async () => {};
 
 try {
   const url = await endpoint();
@@ -94,7 +97,18 @@ try {
   add('应用启动完成', await evalJs('window.__APP_READY === true'), await evalJs('window.__APP_READY === true'));
   add('视口回读', await evalJs('innerWidth + "x" + innerHeight'), (await evalJs('innerWidth')) === WIDTH);
 
-  /* ① 首页 */
+  openMenu = async () => {
+    if (await evalJs('!document.getElementById("menuPanel").hidden')) return;
+    await evalJs('document.getElementById("btnMenu").click()');
+    await sleep(260);
+  };
+  const goMenu = async key => {
+    await openMenu();
+    await evalJs(`document.querySelector('#menuPanel .menu-item[data-menu="${key}"]').click()`);
+    await sleep(420);
+  };
+
+  /* ① 首页：没有底部导航，导航只在右上菜单 */
   add('首页默认可见', await evalJs('!document.getElementById("view-home").hidden'),
     await evalJs('!document.getElementById("view-home").hidden'));
   add('首页店名', await evalJs('document.querySelector(".bname").textContent'),
@@ -105,13 +119,42 @@ try {
     await evalJs('!!document.querySelector("#storeInfo a[href^=\\"tel:\\"]")'));
   add('首页无横向溢出', await evalJs('document.documentElement.scrollWidth + "/" + innerWidth'),
     (await evalJs('document.documentElement.scrollWidth')) <= WIDTH);
+  add('无底部导航', await evalJs('document.querySelectorAll(".tabbar,.tab").length'),
+    (await evalJs('document.querySelectorAll(".tabbar,.tab").length')) === 0);
+  add('菜单默认收起', await evalJs('document.getElementById("menuPanel").hidden'),
+    await evalJs('document.getElementById("menuPanel").hidden'));
   await shot('home');
 
-  /* ② 预约 */
-  await evalJs('document.querySelector(\'.tab[data-tab="book"]\').click()');
-  await sleep(350);
-  add('进入预约视图', await evalJs('!document.getElementById("view-book").hidden'),
+  /* ② 右上菜单：预约 / 分享 / 登录 / 退出 */
+  await openMenu();
+  add('菜单可展开', await evalJs('!document.getElementById("menuPanel").hidden'),
+    await evalJs('!document.getElementById("menuPanel").hidden'));
+  const keys = await evalJs(`[...${ITEMS}].map(e => e.dataset.menu).join("/")`);
+  add('菜单四项与顺序', keys, keys === 'book/share/admin/logout');
+  const labels = await evalJs(`[...${ITEMS}].map(e => e.innerText.trim()).join("/")`);
+  add('菜单文案 预约/分享/登录/退出', labels, labels === '预约/分享/登录/退出');
+  add('未登录时退出不可点', await evalJs('document.getElementById("menuLogout").disabled'),
+    (await evalJs('document.getElementById("menuLogout").disabled')) === true);
+  add('菜单盖在内容之上', await evalJs('getComputedStyle(document.getElementById("menuPanel")).position'),
+    (await evalJs('getComputedStyle(document.getElementById("menuPanel")).position')) === 'absolute');
+  await shot('home-menu');
+  await evalJs('document.getElementById("menuMask").click()');
+  await sleep(220);
+  add('点遮罩收起菜单', await evalJs('document.getElementById("menuPanel").hidden'),
+    await evalJs('document.getElementById("menuPanel").hidden'));
+
+  /* ③ 预约页（独立） */
+  await goMenu('book');
+  add('菜单点预约进入预约页', await evalJs('!document.getElementById("view-book").hidden'),
     await evalJs('!document.getElementById("view-book").hidden'));
+  add('进入后菜单收起', await evalJs('document.getElementById("menuPanel").hidden'),
+    await evalJs('document.getElementById("menuPanel").hidden'));
+  add('预约页有自己的页头', await evalJs('document.querySelector("#view-book .page-t").textContent'),
+    (await evalJs('document.querySelector("#view-book .page-t").textContent')) === '预约到店');
+  add('页面标题随视图切换', await evalJs('document.title'),
+    String(await evalJs('document.title')).includes('预约'));
+  add('预约页不含首页服务列表', await evalJs('!!document.querySelector("#view-book #svcList")'),
+    (await evalJs('!!document.querySelector("#view-book #svcList")')) === false);
   add('默认选中服务与日期', await evalJs('[document.querySelectorAll("#svcChips .is-on").length, document.querySelectorAll("#dateChips .is-on").length].join("/")'),
     (await evalJs('document.querySelectorAll("#svcChips .is-on").length')) === 1
     && (await evalJs('document.querySelectorAll("#dateChips .is-on").length')) === 1);
@@ -140,9 +183,14 @@ try {
   }
   await shot('book');
 
-  /* ③ 分享 */
-  await evalJs('document.querySelector(\'.tab[data-tab="share"]\').click()');
-  await sleep(300);
+  /* ④ 分享页（独立） */
+  await goMenu('share');
+  add('菜单点分享进入分享页', await evalJs('!document.getElementById("view-share").hidden'),
+    await evalJs('!document.getElementById("view-share").hidden'));
+  add('分享页有自己的页头', await evalJs('document.querySelector("#view-share .page-t").textContent'),
+    !!(await evalJs('document.querySelector("#view-share .page-t")')));
+  add('分享页不含预约表单', await evalJs('!!document.querySelector("#view-share #bookForm")'),
+    (await evalJs('!!document.querySelector("#view-share #bookForm")')) === false);
   const link = String(await evalJs('document.getElementById("shareLink").textContent'));
   const code = String(await evalJs('document.getElementById("inviteCode").textContent'));
   add('分享链接带 ref', link, link.includes('?ref='));
@@ -152,13 +200,14 @@ try {
     !!String(await evalJs('document.getElementById("inviteReward").textContent')).trim());
   await shot('share');
 
-  /* ④ 店主管理 */
-  await evalJs('document.querySelector(\'.tab[data-tab="admin"]\').click()');
-  await sleep(400);
-  add('进入管理视图', await evalJs('!document.getElementById("view-admin").hidden'),
+  /* ⑤ 店长登录入口（菜单第三项） */
+  await goMenu('admin');
+  add('菜单点登录进入店主页', await evalJs('!document.getElementById("view-admin").hidden'),
     await evalJs('!document.getElementById("view-admin").hidden'));
   add('登录面板可见', await evalJs('!document.getElementById("authPanel").hidden'),
     await evalJs('!document.getElementById("authPanel").hidden'));
+  add('登录按钮写明店长', await evalJs('document.querySelector("#loginForm button[type=submit]").textContent'),
+    (await evalJs('document.querySelector("#loginForm button[type=submit]").textContent')).includes('店长'));
   add('登录入口有验证码按钮', await evalJs('!!document.getElementById("btnSendCode")'),
     await evalJs('!!document.getElementById("btnSendCode")'));
   if (!CLOUD) {
@@ -167,7 +216,7 @@ try {
   }
   await shot('admin');
 
-  /* ⑤ 邀请参数落地 */
+  /* ⑥ 邀请参数落地 */
   await send('Page.navigate', { url: URL_ARG + (URL_ARG.includes('?') ? '&' : '?') + 'ref=CH-TEST#/book' });
   for (let i = 0; i < 40; i++) {
     if (await evalJs('window.__APP_READY === true')) break;
@@ -175,6 +224,8 @@ try {
   }
   add('带 ref 进入后记住邀请码', await evalJs('localStorage.getItem("auto-h5.ref")'),
     (await evalJs('localStorage.getItem("auto-h5.ref")')) === 'CH-TEST');
+  add('深链直达预约页', await evalJs('!document.getElementById("view-book").hidden'),
+    await evalJs('!document.getElementById("view-book").hidden'));
 
   for (const [name, value, ok] of checks) {
     console.log((ok ? 'PASS ' : 'FAIL ') + name + ' :: ' + value);
