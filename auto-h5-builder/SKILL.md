@@ -63,11 +63,25 @@ triggers:
 
 不做底部 tab、不做顾客账号体系、不加第二个导航入口。门店差异只走 `spec.json`：文案、服务、价格、配色、时段。
 
+## 首页版式
+
+首页不是一套固定样式：`templates/home/` 下有四种版式，构建时抽一套，四页结构与菜单都不变。
+
+| 版式 | 观感 |
+|---|---|
+| `magazine` | 纸媒编辑：衬线大标、编号清单、细线分隔 |
+| `poster` | 深色海报首屏 + 白卡列表，第一眼最强 |
+| `split` | 左文右色块首屏，服务双列卡，信息密度高 |
+| `quiet` | 极简居中、发丝线、描边按钮 |
+
+默认随机；店主想固定就 `--layout poster`，或在 `spec.store.layout` 写死。四套共同底线：首屏「立即预约」可见、服务与到访信息齐全、`390px` 不出横向滚动条、按钮 ≥44px。新增版式只加 `templates/home/<名>.html` 与 `.css` 两个文件，不碰路由和业务逻辑。
+
 ## 生成
 
 ```bash
-# 预览：云端未接通，提交按钮禁用并给出提示
+# 预览：云端未接通，提交按钮禁用并给出提示；不写 --layout 就随机一套首页版式
 python3 scripts/build_app.py --spec store.json --out index.html
+python3 scripts/build_app.py --spec store.json --out index.html --layout poster
 
 # 收单：注入云配置与真实域名
 python3 scripts/build_app.py --spec store.json --out index.html \
@@ -107,6 +121,7 @@ references/cloud-schema.md  建表 / RLS / 首登认领 / 邀请统计
 references/delivery.md      上线清单、验收记录、常见阻塞
 templates/app.html          四页骨架 + 右上菜单
 templates/app.css           移动端样式（品牌色走 CSS 变量）
+templates/home/*.html|css   四套首页版式（构建时随机注入一套）
 templates/app.js            路由、菜单、渲染、云端读写、管理台
 scripts/build_app.py        spec + 模板 → 单文件 H5
 scripts/verify_app.py       静态闸门

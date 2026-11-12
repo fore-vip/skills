@@ -1,9 +1,11 @@
 :root{
-  --brand:#b4735a;--brand-soft:#f8ece6;--on-brand:#fff;
+  --brand:#b4735a;--brand-soft:#f8ece6;--brand-wash:#fdfaf8;--brand-deep:#6f4737;--on-brand:#fff;
   --bg:#faf7f4;--card:#fff;--text:#241d1a;--sub:#6b5d57;--muted:#9b8d86;--line:#ece2dc;
   --r:16px;--r-sm:10px;--h:48px;--h-sm:36px;
   --shadow:0 8px 24px rgba(36,29,26,.06);
+  --font-serif:"Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,"Times New Roman",serif;
 }
+__ROOT_TOKENS__
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
@@ -37,33 +39,7 @@ main{max-width:560px;margin:0 auto;padding:0 0 20px}
 .hint{font-size:12.5px;color:var(--muted);line-height:1.55}
 .hint--warn{color:#a1553a}
 
-/* 首屏 */
-.hero{
-  padding:22px 18px;border-radius:var(--r);border:1px solid var(--line);
-  background:linear-gradient(155deg,var(--brand-soft),var(--card) 72%);
-}
-.hero h1{font-size:25px;line-height:1.34;letter-spacing:-.4px;text-wrap:balance}
-.hero-sub{margin-top:8px;color:var(--sub);font-size:14px}
-.hero .cta{margin-top:18px}
-
-/* 服务列表 */
-.svc-item{
-  display:flex;align-items:baseline;gap:10px;padding:13px 14px;background:var(--card);
-  border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:8px;
-}
-.svc-main{flex:1;min-width:0}
-.svc-name{font-weight:600;font-size:15px}
-.svc-desc{font-size:12.5px;color:var(--sub);margin-top:2px}
-.svc-meta{flex:none;text-align:right}
-.svc-price{font-weight:600;color:var(--brand)}
-.svc-dur{font-size:12px;color:var(--muted)}
-
-/* 到店信息 */
-.info{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:4px 14px}
-.info-row{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
-.info-row:last-child{border-bottom:0}
-.info-k{flex:none;width:64px;color:var(--muted);font-size:13px}
-.info-v{flex:1;min-width:0}
+/* 首屏与服务、到访信息：样式在 templates/home/<版式>.css 里，随版式注入 */
 
 /* 按钮与控件 */
 .cta,.ghost,.chip{

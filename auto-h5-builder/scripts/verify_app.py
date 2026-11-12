@@ -15,6 +15,7 @@ import pathlib
 import re
 
 SDK = "https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"
+LAYOUTS = ("magazine", "poster", "split", "quiet")
 CHECKS = []
 
 
@@ -132,6 +133,21 @@ def main():
     # ⑮ 单文件自包含
     check("样式与脚本内联", html.count("<style>") >= 1 and html.count("<script>") >= 2,
           html.count("<style>") >= 1)
+
+    # ⑯ 首页版式：四套之一，只注入一套，接线齐全
+    layout = re.search(r'data-layout="([a-z]+)"', html)
+    name = layout.group(1) if layout else ""
+    check("首页版式在四套之内", name or "无", name in LAYOUTS)
+    marks = sorted(set(re.findall(r"/\* layout:([a-z]+) \*/", html)))
+    check("只注入一套版式样式", ",".join(marks) or "0", marks == [name])
+    home_block = re.search(r'data-view="home".*?</section>', html, re.S)
+    home_block = home_block.group(0) if home_block else ""
+    check("首页有主行动按钮", 'data-go="book"' in home_block, 'data-go="book"' in home_block)
+    check("首页服务与到访均接线",
+          'id="svcList"' in home_block and 'id="storeInfo"' in home_block,
+          'id="svcList"' in home_block and 'id="storeInfo"' in home_block)
+    check("首页样式不外挂", "style=" not in home_block and "<style" not in home_block,
+          "style=" not in home_block)
 
     failed = 0
     for name, value, ok in CHECKS:

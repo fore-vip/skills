@@ -1,0 +1,42 @@
+/* 首页版式 quiet —— 极简留白：居中排版、发丝线、描边按钮 */
+.home--quiet{padding:34px 26px 30px;background:var(--bg);--line:#e3d8d1}
+.qt-hero{text-align:center}
+.qt-eyebrow{
+  margin:0 0 22px;font-size:10.5px;letter-spacing:.3em;color:var(--muted);
+}
+.qt-title{
+  word-break:auto-phrase;
+  margin:0;font-family:var(--font-serif);font-size:27px;line-height:1.5;font-weight:400;
+  letter-spacing:-.2px;color:var(--text);text-wrap:balance;
+}
+.qt-mark{display:block;width:1px;height:30px;margin:20px auto;background:var(--brand);opacity:.55}
+.qt-sub{margin:0;font-size:13px;line-height:1.8;color:var(--sub)}
+.qt-actions{margin-top:36px;display:grid;gap:18px;justify-items:center}
+.qt-cta{
+  width:100%;height:50px;border:1px solid var(--brand);border-radius:2px;background:transparent;
+  color:var(--brand);font:inherit;font-size:14.5px;font-weight:600;letter-spacing:.18em;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.qt-cta:active{background:var(--brand-soft)}
+.qt-link{font-size:12.5px;letter-spacing:.06em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:2px}
+.qt-block{margin-top:44px}
+.qt-label{
+  margin:0 0 6px;text-align:center;font-size:10.5px;letter-spacing:.3em;color:var(--muted);
+}
+.qt-list{margin:0;padding:0;list-style:none}
+.qt-list li{
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  padding:15px 0;border-bottom:1px dotted var(--line);
+}
+.qt-list .svc-main{min-width:0}
+.qt-list .svc-name{font-size:15px;line-height:1.5;color:var(--text)}
+.qt-list .svc-desc{margin-top:3px;font-size:12px;line-height:1.6;color:var(--muted)}
+.qt-list .svc-meta{flex:none;text-align:right;white-space:nowrap}
+.qt-list .svc-price{font-family:var(--font-serif);font-size:15px;color:var(--text);font-variant-numeric:tabular-nums}
+.qt-list .svc-dur{margin-top:2px;font-size:11px;color:var(--muted)}
+.qt-info{text-align:center;font-size:13px;line-height:1.9;color:var(--sub)}
+.qt-info .info-row{display:flex;justify-content:center;gap:10px;padding:3px 0}
+.qt-info .info-k{flex:none;color:var(--muted)}
+.qt-info .info-k::after{content:":"}
+.qt-info .info-v{min-width:0}
+.qt-info .info-v a{color:var(--brand);border-bottom:1px solid var(--brand-soft)}

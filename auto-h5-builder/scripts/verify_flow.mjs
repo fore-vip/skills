@@ -123,6 +123,29 @@ try {
     (await evalJs('document.querySelectorAll(".tabbar,.tab").length')) === 0);
   add('菜单默认收起', await evalJs('document.getElementById("menuPanel").hidden'),
     await evalJs('document.getElementById("menuPanel").hidden'));
+
+  /* ①b 首页版式：首屏行动点、标题字号、元素不出屏 */
+  const LAYOUTS = ['magazine', 'poster', 'split', 'quiet'];
+  const lay = await evalJs('document.getElementById("view-home").dataset.layout');
+  add('首页版式可识别', lay, LAYOUTS.includes(lay));
+  const hero = JSON.parse(await evalJs(`(() => {
+    const b = document.querySelector('#view-home [data-go="book"]');
+    const t = document.querySelector('#view-home h1');
+    const r = b.getBoundingClientRect();
+    const rows = [...document.querySelectorAll('#view-home li, #view-home .info-row')];
+    return JSON.stringify({
+      top: Math.round(r.top), h: Math.round(r.height), w: Math.round(r.width),
+      fs: parseFloat(getComputedStyle(t).fontSize),
+      th: Math.round(t.getBoundingClientRect().height),
+      right: Math.round(Math.max(${WIDTH}, ...rows.map(e => e.getBoundingClientRect().right))),
+      bleed: document.documentElement.scrollWidth
+    });
+  })()`));
+  add('首页主按钮在首屏内', hero.top + 'px', hero.top > 0 && hero.top < HEIGHT - 120);
+  add('首页主按钮可点尺寸', hero.w + '×' + hero.h,
+    hero.h >= 44 && hero.w >= Math.round(WIDTH * 0.55));
+  add('首页标题够醒目', hero.fs + 'px/' + hero.th + 'px', hero.fs >= 22 && hero.th >= 30);
+  add('首页内容不出屏', hero.right + '/' + hero.bleed, hero.right <= WIDTH && hero.bleed <= WIDTH);
   await shot('home');
 
   /* ② 右上菜单：预约 / 分享 / 登录 / 退出 */
