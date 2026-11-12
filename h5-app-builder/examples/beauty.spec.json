@@ -1,135 +1,136 @@
 {
   "meta": {
+    "topic": "社区美容门店 护肤 SPA 预约宣传页",
     "slug": "index",
-    "title": "美容台账 · 护理与回访演示",
-    "siteName": "美容台账",
-    "description": "护理、回访、补货、预约，收成一张待确认清单；经营数字是示例数据，待办状态已经存进云端、刷新后仍保留。这一页按 H5 应用创建模板生成，用来把应用创建全过程走一遍。",
-    "brand": "前凌智选",
-    "authorUrl": "https://skillhub.cn/user/user_c3d829cb",
-    "authorLabel": "skillhub.cn/user/user_c3d829cb",
-    "decision": "用户本轮指令：cloud service 按 SKILL 走一遍，主题是美容；P1 命中「数据要跨刷新保留」，已激活云服务；AUTO 站点只作参考，不作为本实例依赖",
-    "prototype": true,
-    "disclaimer": "经营数字为示例数据 · 待办状态存云端、刷新保留",
+    "title": "悦己研肤 · 按皮肤状态做护理",
+    "description": "一家预约制社区美容小店：面部护理、肩颈舒缓、换季修护，流程公开、不推销，先约一次看看合不合适。",
+    "brand": "悦己研肤",
+    "themeColor": "#faf6f2",
+    "footerNote": "示例品牌与示例内容 · 未开放真实预约",
+    "disclaimer": "示例品牌与示例内容 · 提交只写入演示表，不会有人联系你",
+    "ctaHref": "#cta",
+    "ctaLabel": "预约体验",
+    "nav": [
+      { "label": "服务项目", "href": "#features" },
+      { "label": "到店流程", "href": "#steps" },
+      { "label": "常见问题", "href": "#faq" }
+    ],
+    "footerLinks": [
+      { "label": "服务项目", "href": "#features" },
+      { "label": "预约体验", "href": "#cta" }
+    ],
+    "requiredTerms": ["护理", "皮肤", "预约", "美容"],
+    "forbiddenTerms": ["营业额", "订单数", "客单价", "品类动销", "门店经营", "18938678151", "skillhub", "自动门店"],
     "cloud": {
       "needed": true,
-      "table": "beauty_tasks",
-      "status": "activated · billingStatus=normal / provisionStatus=assigned",
-      "reason": "待办确认状态要跨刷新保留；平台确认框已通过，按规范接入 CDN SDK 与数据库 CRUD",
-      "boundary": "本机预览的来源与应用保留域名不一致，前端云请求可能被拒绝；需发布到应用域名后才生效。未上线、未开放安装。"
+      "table": "beauty_leads",
+      "columns": ["name", "contact", "service"],
+      "prefix": "预约 · "
     }
   },
   "hero": {
-    "eyebrow": "当前场景 · 美容台账",
-    "h1": "护理、回访、补货，",
-    "em": "收成一张清单",
-    "p": "三家店每天重复的那几件事，先归到一处，排成一张等你点头的清单。经营数字是示例数据，随手点着看；待办状态这一版真的存进了云端，刷新不会丢。",
-    "primary": "点开现场演示",
-    "secondary": "先看怎么用"
+    "eyebrow": "社区美容 · 预约制",
+    "h1": "把皮肤交给",
+    "em": "一套慢慢来的护理",
+    "p": "不办卡、不赶时间、不追着推销。第一次来先看皮肤当下什么状态，再决定做哪一项；流程写清楚，做完就走。",
+    "primary": "预约一次体验",
+    "secondary": "看看有哪些护理",
+    "primaryHref": "#cta",
+    "secondaryHref": "#features"
   },
-  "tabs": [
-    { "k": "demo", "label": "现场演示" },
-    { "k": "usage", "label": "使用方式" },
-    { "k": "notes", "label": "说明与边界" }
-  ],
-  "demo": {
-    "title": "今日护理台",
-    "hint": "经营数字为示例数据 · 待办状态存云端，刷新后仍保留",
-    "chartTitle": "各时段护理人次",
-    "lowLabel": "个护理项目预约偏少",
-    "todoTitle": "等你确认的事",
-    "askTitle": "说一句话试试",
-    "askHint": "下面是演示回话，点一句或自己写一句，看看它怎么把活儿排成清单。",
-    "inputPlaceholder": "比如：哪些客该回访了",
-    "hours": ["09时", "11时", "13时", "15时", "17时", "19时", "21时", "22时"],
-    "kpiLabels": ["护理成交额", "到店人次", "单次均价", "等你确认"],
-    "dimensions": [
-      { "id": "stStore", "key": "shop", "options": [
-        { "k": "flagship", "n": "旗舰店" },
-        { "k": "community", "n": "社区店" },
-        { "k": "mall", "n": "商场店" }
-      ] },
-      { "id": "stDay", "key": "day", "options": [
-        { "k": "today", "n": "今日" },
-        { "k": "yesterday", "n": "昨日" }
-      ] }
-    ],
-    "tasks": [
-      { "id": "b1", "title": "三位顾客该回访了", "detail": "上次护理满一个月，回话草稿已写好，发出前你过一眼", "tag": "写草稿" },
-      { "id": "b2", "title": "精华与面膜各补一箱", "detail": "按近七天用量估的，确认后再走下一步", "tag": "要花钱" },
-      { "id": "b3", "title": "昨天的护理日报底稿", "detail": "成交额、高峰时段、项目分布已经排好", "tag": "写草稿" },
-      { "id": "b4", "title": "两位顾客预约待确认", "detail": "时间改到本周六下午，发出前你过一眼", "tag": "等确认" }
-    ],
-    "numbers": {
-      "flagship": {
-        "today": { "rev": 9860, "ord": 42, "bars": [8, 20, 36, 30, 52, 78, 60, 18], "peak": "19 时前后", "low": 2 },
-        "yesterday": { "rev": 8720, "ord": 38, "bars": [6, 18, 32, 28, 46, 70, 54, 16], "peak": "19 时前后", "low": 3 }
-      },
-      "community": {
-        "today": { "rev": 6240, "ord": 29, "bars": [10, 14, 22, 26, 38, 48, 34, 8], "peak": "17 时前后", "low": 4 },
-        "yesterday": { "rev": 5880, "ord": 27, "bars": [8, 12, 20, 24, 34, 44, 30, 6], "peak": "17 时前后", "low": 4 }
-      },
-      "mall": {
-        "today": { "rev": 12480, "ord": 56, "bars": [22, 38, 44, 62, 80, 96, 72, 26], "peak": "19 时前后", "low": 1 },
-        "yesterday": { "rev": 11060, "ord": 49, "bars": [20, 34, 40, 56, 72, 86, 64, 22], "peak": "19 时前后", "low": 2 }
-      }
+  "sections": [
+    {
+      "type": "features",
+      "id": "features",
+      "title": "按皮肤状态选，不按套餐选",
+      "text": "三种基础护理，第一次来也可以只做一项。价格与时长都写在卡片上，到店前你就能算清楚。",
+      "items": [
+        {
+          "kicker": "基础护理 · 70 分钟",
+          "h": "面部深层清洁与修护",
+          "p": "先做皮肤观察，再定清洁力度；换季泛红时会把去角质环节直接去掉，只留镇静与保湿。",
+          "foot": ["¥268", "敏感肌可做"]
+        },
+        {
+          "kicker": "舒缓护理 · 50 分钟",
+          "h": "肩颈与头部放松",
+          "p": "面向久坐、长时间看屏幕的人，重点是肌肉放松和呼吸节奏，不做额外项目叠加。",
+          "foot": ["¥198", "无需办卡"]
+        },
+        {
+          "kicker": "周期护理 · 80 分钟",
+          "h": "换季屏障修护",
+          "p": "按四次一个周期记录皮肤变化，每次拍照留档只存在你自己的相册，不上传、不用于宣传。",
+          "foot": ["¥328", "可单次购买"]
+        }
+      ]
     },
-    "questions": ["哪些客该回访了", "把预约排一下", "三家店比一比"],
-    "replyRules": [
-      { "match": "回访|客|回", "reply": "三位顾客的回话草稿排好了，发出前会先给你看。" },
-      { "match": "预约|排|补|货", "reply": "两条预约和一份补货建议已经排进清单，等你点头再往下走。" },
-      { "match": "比|日报|账|忙", "reply": "三家店的今日概览已经并排摆好，高峰都在 19 时前后。" }
-    ],
-    "fallbackReply": "这句先记下了。这一版只认回访、预约补货、对比三种说法，其余等正式版再补。",
-    "afterDemo": "换一家店、换一天，经营数字和柱子跟着变；点「确认」或「稍后」，清单会写到云端、刷新后仍保留；下面那句输入框点一下就有回话。经营数字仍是示例，只在这一页里变。"
-  },
-  "sections": {
-    "usage": [
-      { "type": "note", "text": "下面写的是这一版的走法，不是已经上线的能力；经营数字、顾客和回话都是示例，只有待办状态真的存进了云端。" },
-      { "type": "block", "title": "一句话就能唤起", "text": "这些说法按店里真会讲的话写，前三条在演示里可以直接试。", "chips": ["今天店里怎么样", "哪些客该回访了", "把预约排一下", "出一份昨天的日报", "三家店放一起比一比", "精华还剩多少", "这周哪天最忙", "还差几件没确认"], "tail": "带店名和日期的，落到那家店那天的概览；只说事的，排进待确认清单；问忙闲的，给时段高低。" },
-      { "type": "block", "title": "按四步走", "timeline": [
-        { "h": "把散的收拢", "p": "护理记录、库存、回访、预约，先归到一处，原来的东西不动。" },
-        { "h": "排成一张清单", "p": "按要不要你点头分成两类：能自己算的先算，要对外说的先写成草稿。" },
-        { "h": "先摆给你看", "p": "清单、草稿、补货建议逐条能改，不替你直接发出去。" },
-        { "h": "你点头再往下", "p": "确认过的状态写进云端，第二天打开还在；没点的留在清单里。" }
-      ] },
-      { "type": "block", "title": "分好了轻重，不一把梭", "text": "越是要花钱、要对外的事，越往后放；拿不准的一律按重的那档处理。", "table": {
-        "head": ["级别", "是什么", "怎么处理"],
-        "rows": [
-          ["只看不动", "读数字、算概览、排时段高低", "直接看结果，做完在清单里留一行说明"],
-          ["写草稿", "回访话术、日报、活动文案", "先给草稿，你改完再定，不自动对外"],
-          ["要花钱 / 要对外", "补货下单、改预约、发给顾客", "逐条问，一次一条，并给一个不动账的替代做法"]
-        ],
-        "badges": ["a", "b", "c"]
-      } },
-      { "type": "block", "title": "看完你会拿到这些", "arts": [
-        { "h": "今日概览", "p": "护理成交额、到店人次、单次均价、时段高低，一屏看完。" },
-        { "h": "待确认清单", "p": "回访、补货、日报、预约，谁等你点头一目了然。" },
-        { "h": "回话草稿", "p": "回访和活动文案先写成话，改两个字就能用。" },
-        { "h": "云端留痕", "p": "确认过的状态存在云数据库，刷新或换浏览器回来还在。" }
-      ], "tail": "经营数字先摆在这一页里给你过目；待办状态已经写进云端，别的都还是示例。" },
-      { "type": "block", "title": "它不会做的事", "note": "不会替你下单付款，不会把话直接发给顾客，不会改真实账目，也不会在你没看之前把草稿当成定稿。", "noteOk": "这一版只把「确认 / 稍后」两种状态写进云端，顾客姓名、手机号、消费明细都没有入库。" }
-    ],
-    "notes": [
-      { "type": "block", "title": "现在到哪一步", "text": "这是一台按模板生成的移动应用：主题换成美容，云服务已激活并接上数据库。经营数字、店名、顾客和回话都是编的示例；只有四条待办的确认状态写进了云端，刷新后仍保留。这一版未开放安装，也没有接真实门店系统。" },
-      { "type": "block", "title": "看之前你可能想先知道", "arts": [
-        { "h": "现在能不能装", "p": "还不能。未开放安装，这一版只做交互演示与云端状态验证。" },
-        { "h": "数字从哪来", "p": "经营数字全是示例，写在这一页里；换店换天只是换一组示例。" },
-        { "h": "什么真的存了", "p": "只有待办状态存进云端的一张共享演示表，任何人都能改，别放真实顾客资料。" },
-        { "h": "预览为什么连不上", "p": "本机预览的来源与应用保留域名不一致时，云端读写会被拒绝；页面会显示原因，发布到应用域名后才生效。" }
-      ] },
-      { "type": "block", "title": "出品", "text": "前凌智选 AUTO 工作室。觉得哪一步别扭，微信 18938678151 说一声就行。已经上架的其他场景在作者主页，可以顺手看看。", "link": { "label": "skillhub.cn/user/user_c3d829cb", "urlFromMeta": "authorUrl" } }
-    ]
-  },
+    {
+      "type": "showcase",
+      "id": "showcase",
+      "title": "一次护理里会发生什么",
+      "text": "把过程摊开讲，免得第一次来心里没底。",
+      "items": [
+        { "h": "先看再定", "p": "坐下先聊十分钟：最近睡得怎么样、换了什么护肤品、哪里不舒服。项目在此之后才确定。", "tag": "不额外收费" },
+        { "h": "过程安静", "p": "护理中不介绍产品、不推荐加项。你想聊天就聊，想睡一会儿我们就不说话。", "tag": "无推销" },
+        { "h": "做完就走", "p": "结束给一张纸质护理记录，写明这次做了什么、下次可以隔多久。不留联系方式也能离店。", "tag": "可带走" }
+      ]
+    },
+    {
+      "type": "quote",
+      "id": "quote",
+      "text": "第一次遇到不劝我办卡的地方，反而每次都愿意再来。",
+      "cite": "住在附近的顾客 · 到店第 7 次"
+    },
+    {
+      "type": "steps",
+      "id": "steps",
+      "title": "从预约到离店，四步",
+      "text": "每一步都能改主意，改约不收手续费。",
+      "items": [
+        { "h": "留个时间", "p": "在下面填称呼和方便联系的号码，我们按你选的时段回一条确认消息。" },
+        { "h": "到店先看皮肤", "p": "不急着躺下，先聊十分钟，确认今天适合做什么，不适合就换或取消。" },
+        { "h": "安静做完护理", "p": "过程中只做说好的项目；临时想加减，随时说一声就行。" },
+        { "h": "带走一张记录", "p": "写明本次项目和下次建议间隔，回不回访由你决定。" }
+      ]
+    },
+    {
+      "type": "cta",
+      "id": "cta",
+      "title": "先约一次，看看合不合适",
+      "text": "留下称呼、联系方式和想做的项目，我们按你方便的时间回一条确认。",
+      "fields": [
+        { "id": "name", "placeholder": "怎么称呼你", "label": "称呼" },
+        { "id": "contact", "placeholder": "手机号或微信", "label": "联系方式" },
+        { "id": "service", "placeholder": "想做的项目，或写「先看看」", "label": "意向项目" }
+      ],
+      "submit": "提交预约意向",
+      "note": "示例品牌与示例内容 · 提交只写入演示表，不会有人联系你"
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "常问的几件事",
+      "items": [
+        { "q": "第一次来一定要办卡吗？", "a": "不用。所有项目都能单次购买，价格就在上面三张卡片里，到店前就能算清楚。" },
+        { "q": "敏感肌、正在爆痘能做吗？", "a": "先看皮肤状态再定；泛红或破损时会改成纯镇静保湿，或者直接建议改天再来。" },
+        { "q": "一次大概要待多久？", "a": "含前十分钟沟通，整体 60 到 90 分钟。不排队、不插队，一天只接固定几位。" },
+        { "q": "约好了临时来不了怎么办？", "a": "直接说一声改时间就行，不收手续费，也不需要解释原因。" }
+      ]
+    }
+  ],
   "assertions": [
-    { "name": "初始数据已渲染", "eval": "document.getElementById('stKpis').textContent", "op": "includes", "expect": "9,860" },
-    { "name": "切店联动", "click": "[data-shop=mall]", "eval": "document.getElementById('stKpis').textContent", "op": "includes", "expect": "12,480" },
-    { "name": "切日联动", "click": "[data-day=yesterday]", "eval": "document.getElementById('stKpis').textContent", "op": "includes", "expect": "11,060" },
-    { "name": "待办确认回写", "click": "[data-act=ok]", "eval": "document.getElementById('stLeft').textContent", "op": "includes", "expect": "3 件" },
-    { "name": "一句话回话", "click": "#stChips button", "eval": "document.getElementById('stReply').innerText", "op": "includes", "expect": "回话草稿" },
-    { "name": "柱图提示随 spec 切换", "eval": "document.getElementById('stHint').textContent", "op": "includes", "expect": "护理项目预约偏少" },
-    { "name": "云端状态条已渲染", "eval": "document.getElementById('h5Cloud').textContent", "op": "includes", "expect": "云端" },
-    { "name": "使用方式深链", "hash": "#usage", "eval": "!document.getElementById('panel-usage').hidden && document.getElementById('panel-demo').hidden", "op": "true", "expect": true },
-    { "name": "说明与边界深链", "hash": "#notes", "eval": "!document.getElementById('panel-notes').hidden && document.getElementById('panel-demo').hidden", "op": "true", "expect": true },
-    { "name": "无横向溢出", "hash": "#demo", "eval": "document.documentElement.scrollWidth + '/' + document.documentElement.clientWidth", "op": "lteWidth", "expect": 390 }
+    { "name": "主题路由选中暖调版式", "eval": "document.body.getAttribute('data-layout')", "op": "equals", "expect": "warm" },
+    { "name": "六个区块按叙事顺序渲染", "eval": "document.querySelectorAll('section.sect').length", "op": "equals", "expect": 6 },
+    { "name": "首屏是皮肤护理主张", "eval": "document.querySelector('.hero h1').textContent", "op": "includes", "expect": "皮肤" },
+    { "name": "服务项目卡完整", "eval": "document.querySelectorAll('#features .card').length", "op": "equals", "expect": 3 },
+    { "name": "常见问题可展开", "click": "#faq details summary", "eval": "document.querySelector('#faq details').open", "op": "true", "expect": true },
+    { "name": "空表单给出可见提示", "click": "#leadForm button[type=submit]", "eval": "document.getElementById('leadStatus').textContent", "op": "includes", "expect": "填完整" },
+    { "name": "填完信息后状态条可见", "fills": [
+        { "sel": "#f_name", "value": "林小姐" },
+        { "sel": "#f_contact", "value": "13800000000" },
+        { "sel": "#f_service", "value": "面部深层清洁与修护" }
+      ], "click": "#leadForm button[type=submit]", "eval": "!document.getElementById('leadStatus').hidden", "op": "true", "expect": true },
+    { "name": "无横向溢出", "eval": "document.documentElement.scrollWidth + '/' + document.documentElement.clientWidth", "op": "lteWidth", "expect": 390 }
   ]
 }

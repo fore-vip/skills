@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 /**
- * 真实视口交互断言：CDP 强制 390x844（--window-size 会被夹到 500，不可信）。
- * 断言从 spec.assertions 读，换业务只改 spec。
- * 用法: node verify_viewport.mjs --spec templates/app.spec.json --url http://127.0.0.1:8765/index.html
+ * 真实视口闸门：CDP 强制 390x844（--window-size 会被夹到 500，不可信）。
+ * ① 计算样式一致性（页内所有 .ctl 的圆角/高度/字号/主色必须统一）
+ * ② spec.assertions 业务交互断言（换主题只改 spec）
+ * ③ 首屏 / 中段 / 页尾三张截图
+ * 用法: node verify_viewport.mjs --spec examples/beauty.spec.json --url http://127.0.0.1:8767/index.html
  */
 import { spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const argv = process.argv.slice(2);
-const arg = k => {
-  const i = argv.indexOf(k);
-  return i >= 0 ? argv[i + 1] : undefined;
-};
-const SPEC = resolve(arg('--spec') || 'templates/app.spec.json');
+const arg = k => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : undefined; };
+const SPEC = resolve(arg('--spec') || 'examples/beauty.spec.json');
 const URL = arg('--url') || 'http://127.0.0.1:8765/index.html';
 const WIDTH = Number(arg('--width') || 390);
 const HEIGHT = Number(arg('--height') || 844);
@@ -42,9 +41,7 @@ function send(method, params = {}) {
     const id = ++seq;
     pending.set(id, resolve);
     ws.send(JSON.stringify({ id, method, params }));
-    setTimeout(() => {
-      if (pending.has(id)) { pending.delete(id); reject(new Error('超时 ' + method)); }
-    }, 15000);
+    setTimeout(() => { if (pending.has(id)) { pending.delete(id); reject(new Error('超时 ' + method)); } }, 15000);
   });
 }
 async function evalJs(expression) {
@@ -69,7 +66,6 @@ async function endpoint() {
   }
   throw new Error('CDP 未就绪');
 }
-
 function judge(op, value, expect) {
   switch (op) {
     case 'includes': return String(value).includes(String(expect));
@@ -79,6 +75,28 @@ function judge(op, value, expect) {
     default: throw new Error('未知断言 op: ' + op);
   }
 }
+
+const STYLE_PROBE = `(() => {
+  const cs = e => getComputedStyle(e);
+  const all = [...document.querySelectorAll('.ctl')];
+  const uniq = a => [...new Set(a)];
+  const h = { lg: [], md: [], sm: [] };
+  all.forEach(e => {
+    const k = e.classList.contains('ctl--lg') ? 'lg' : e.classList.contains('ctl--sm') ? 'sm' : 'md';
+    h[k].push(cs(e).height);
+  });
+  return JSON.stringify({
+    count: all.length,
+    radii: uniq(all.map(e => cs(e).borderRadius)),
+    fontSizes: uniq(all.map(e => cs(e).fontSize)),
+    heights: { lg: uniq(h.lg), md: uniq(h.md), sm: uniq(h.sm) },
+    primaryBg: uniq(all.filter(e => e.classList.contains('ctl--primary')).map(e => cs(e).backgroundColor)),
+    fieldHeights: uniq([...document.querySelectorAll('.field')].map(e => cs(e).height)),
+    fieldRadii: uniq([...document.querySelectorAll('.field')].map(e => cs(e).borderRadius)),
+    inlineStyles: document.querySelectorAll('[style]').length,
+    layout: document.body.getAttribute('data-layout')
+  });
+})()`;
 
 try {
   const url = await endpoint();
@@ -99,31 +117,45 @@ try {
   const vp = await evalJs('innerWidth + "x" + innerHeight');
   checks.push(['视口回读', vp, vp === WIDTH + 'x' + HEIGHT]);
 
+  // ① 计算样式一致性（页内必须统一，跨主题允许不同）
+  const s = JSON.parse(await evalJs(STYLE_PROBE));
+  checks.push(['控件数量 > 0', s.count, s.count > 0]);
+  checks.push(['页内圆角统一（版式 ' + s.layout + '）', s.radii.join(','), s.radii.length === 1]);
+  checks.push(['字号仅用三档 token', s.fontSizes.join(','), s.fontSizes.length <= 3]);
+  checks.push(['大号控件高度一致', s.heights.lg.join(','), s.heights.lg.length <= 1]);
+  checks.push(['中号控件高度一致', s.heights.md.join(','), s.heights.md.length <= 1]);
+  checks.push(['小号控件高度一致', s.heights.sm.join(','), s.heights.sm.length <= 1]);
+  checks.push(['主色按钮底色统一', s.primaryBg.join(','), s.primaryBg.length === 1]);
+  checks.push(['输入框高度与中号控件一致', s.fieldHeights.join(','),
+    s.fieldHeights.length <= 1 && s.fieldHeights[0] === s.heights.md[0]]);
+  checks.push(['输入框圆角与控件一致', s.fieldRadii.join(','),
+    s.fieldRadii.length <= 1 && s.fieldRadii[0] === s.radii[0]]);
+  checks.push(['页面零内联样式', s.inlineStyles, s.inlineStyles === 0]);
+
+  // ② 业务交互断言
   for (const a of assertions) {
     if (a.click) await evalJs('document.querySelector(' + JSON.stringify(a.click) + ').click()');
     if (a.hash) { await evalJs('location.hash=' + JSON.stringify(a.hash)); await sleep(150); }
+    const fills = a.fills || (a.fill ? [a.fill] : []);
+    for (const f of fills) {
+      await evalJs('(function(){var e=document.querySelector(' + JSON.stringify(f.sel) + ');'
+        + 'if(e){e.value=' + JSON.stringify(f.value) + ';'
+        + 'e.dispatchEvent(new Event("input",{bubbles:true}));}})()');
+    }
     const value = await evalJs(a.eval);
     checks.push([a.name, String(value).slice(0, 60), judge(a.op, value, a.expect)]);
   }
 
-  await evalJs('location.hash="#' + spec.tabs[0].k + '"; window.scrollTo(0,0)');
-  await sleep(180);
-  await shot('hero');
-  await evalJs('window.scrollTo(0, 620)');
-  await sleep(200);
-  await shot('demo');
-  const usage = spec.tabs.find(t => t.k === 'usage');
-  if (usage) {
-    await evalJs('location.hash="#usage"; window.scrollTo(0, 560)');
-    await sleep(200);
-    await shot('usage');
-  }
+  // ③ 三档截图
+  await evalJs('window.scrollTo(0,0)'); await sleep(200); await shot('hero');
+  await evalJs('window.scrollTo(0, 620)'); await sleep(200); await shot('mid');
+  await evalJs('window.scrollTo(0, document.body.scrollHeight)'); await sleep(200); await shot('bottom');
 
   for (const [name, value, ok] of checks) {
     console.log((ok ? 'PASS ' : 'FAIL ') + name + ' :: ' + value);
     if (!ok) failed = true;
   }
-  console.log('截图: ' + SHOT_PREFIX + '-{hero,demo,usage}.png');
+  console.log('截图: ' + SHOT_PREFIX + '-{hero,mid,bottom}.png');
   console.log(failed ? 'RESULT FAIL' : 'RESULT ALL PASS (' + checks.length + ')');
 } catch (e) {
   console.log('ERROR ' + (e && e.message ? e.message : String(e)));

@@ -1,84 +1,65 @@
-# 云服务：判据、激活流程与接通后的处置
+# 可选云接线（预约 / 留资表单）
 
-> 这一份是**通用判据**，不绑定任何站点、任何业务。两个实例（自动门店 / 美容台账）的真实结论写在第六、七节。
+## 判据：什么时候才接
 
-## 一、什么时候必须接后端
+落地宣传页默认纯前端即可。命中任一条才考虑后端：
 
-命中任意一条即需要云服务，四条都不命中就保持纯前端：
+1. 表单提交要跨刷新 / 跨设备保留
+2. 需要登录、用户隔离或私有数据
+3. 要存文件、调大模型
+4. 需要真实业务回写（订单、库存、排期）
 
-1. 数据要跨刷新保留（清单、记录、设置、订单）；
-2. 要有用户体系（注册登录、按人隔离数据）；
-3. 要上传文件并拿到可访问链接；
-4. 要免密钥调用大模型。
+纯展示 + 一次性演示表单 → 不接，表单明确提示「没有发送、也不会保存」。**不要为了显得完整而接后端**，接了就要跑通写入读回。
 
-**纯静态页、纯前端交互、无持久化 → 不激活后端**。但结论要**主动告诉用户**，不能默默跳过；用户明确点名「云服务」时，至少要跑一次只读 `inspect` 把事实摆出来。
+## 流程
 
-## 二、激活流程（顺序不可换）
+1. `workbuddy_cloud_service` 的 `inspect` 看本会话已有应用；能复用就复用同一个 applicationId，**换 ID 会让保留域名与 Origin 精确匹配失效**
+2. `activate`（`applicationMode=create`、`appName`、`domainPrefix`、`appType=web`）→ 平台确认框由用户决定
+3. **确认框被取消（`cancelled=true`）→ 不重试、不绕路、不静默降级成 localStorage 后谎称已接后端**，如实记为「未接入」
+4. 激活成功后拿 `publicConfig`，只把 `endpoint / oauthRelayBaseUrl / publishableKey` 三个值写进前端；`applicationId / resourceId` 不落前端
+5. 管理侧建表（DDL → ENABLE RLS → GRANT → POLICY，顺序不能反；漏 GRANT 会得到形似策略失效的 42501）
+6. `build_page.py --cloud-config /tmp/public-config.json` 生成带云表单提交的页面
 
-1. `inspect`（只读）列出本会话应用及真实云端状态；本地清单里有条目不等于云端已开启。
-2. 判定归属：沿用已有应用用 `reuse + applicationId`；另起独立应用用 `create + appName + domainPrefix`。`domainPrefix` 在创建时预留域名首段，**之后改不了**，要取与业务相关的 ASCII slug。
-3. `activate`：授权由**平台确认框**收集。禁止自己用问答或参数去替代确认，也不要传任何自造的确认标志。
-4. 只有确认 `billingStatus` 正常、`provisionStatus` 为 assigned 之后，才动手写云代码。没确认就写代码等于对着不存在的环境编程。
+## 表结构示例
 
-`publicConfig` 里只有 `endpoint` / `publishableKey` / `oauthRelayBaseUrl` 等端上可用值可以进前端源码；每个 client 初始化点都必须带 `endpoint`，**不能硬编码域名、不能从 `location` 或环境变量推**。单文件 HTML 用 CDN 形式，初始化一次、四个模块共用同一个 client。
+```sql
+CREATE TABLE beauty_leads (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  name TEXT NOT NULL, contact TEXT NOT NULL, service TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+ALTER TABLE beauty_leads ENABLE ROW LEVEL SECURITY;
+GRANT SELECT, INSERT ON TABLE public.beauty_leads TO authenticated, anon;
+CREATE POLICY beauty_leads_read ON beauty_leads FOR SELECT TO authenticated, anon USING (true);
+CREATE POLICY beauty_leads_insert ON beauty_leads FOR INSERT TO authenticated, anon WITH CHECK (true);
+```
 
-建表与 RLS 走管理侧工具（一条语句一次调用，`migrate` 模式），业务代码只做 CRUD；用户维度表要有 `owner_id TEXT DEFAULT auth.uid()`，前端**不要传 owner_id**。写入后必须读回验证，`update` 返回空数组要当成「权限拦了」而不是成功。
+`meta.cloud` 填 `{"needed":true,"table":"beauty_leads","columns":["name","contact","service"],"prefix":"预约 · "}`。`columns` 必须与表列名一致，生成器会按 `f_<列名>` 取输入框。
 
-## 三、取消 / 不可用时的正确处置
+**没有登录时这是应用级共享表**：任何人都能写，页面要如实说明「演示表、别填真实个人信息」。要做用户隔离就加 `owner_id` + 基于 `auth.uid()` 的 RLS 策略，并接登录。
 
-| 结果 | 怎么做 |
-|---|---|
-| 确认框被取消 / `declinedByUser` | 正常结果，**停止，不重试、不换工具绕路、不反复问** |
-| 能力未接通 / 池暂时空 / 后端忙 | 如实转达平台消息并停止，不重试 |
-| 配额用尽且带 `useLocalImplementation: true` | 平台明确允许本地实现，直接继续，无需再问 |
-| 其余情况想退回 localStorage | **必须先明确征求同意**，不能静默降级还宣称已接后端 |
+## 前端接法与白名单
 
-激活 ≠ 发布。之后要上线，发布动作必须**复用同一个 applicationId**，否则域名变了、Origin 精确匹配失败，云端登录会坏。
+云模式只允许加载一个外部脚本：
 
-## 四、模板里的云适配层
+```
+https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js
+```
 
-`scripts/build_app.py` 给 `--cloud-config <publicConfig.json>` 即进入云模式：
+`verify_static.py` 会断言脚本 src 精确等于它、初始化三字段都从 `CFG` 取、页面无 `applicationId / resourceId`。前端只做 `insert` 一类 CRUD，初始化一次 client。
 
-- 只把 `endpoint` / `oauthRelayBaseUrl` / `publishableKey` 三个值写进页面，其余配置不落前端；
-- 注入唯一的 SDK CDN 脚本，初始化一次 client，写盘前自检把它列为白名单，其余外链仍一律拒绝；
-- 演示区的「确认 / 稍后」动作接到 `upsert`，页面加载时把云端状态回灌进演示状态表；
-- 页面上有可见的云端状态条，连通、初始化失败、读取失败、写入失败、权限拦下、空结果都给不同提示；SDK 没加载出来时明确说「本次操作只在本页生效」，不假装已存云端；
-- spec 的 `meta.cloud` 记录本轮结论，`meta.cloud.table` 指定表名。
+## 失败路径（必须可见）
 
-**这是模板能力，不是某个业务的专用代码**。换业务只改 spec 与表名，页面骨架和适配层不用动。
+- SDK 没加载出来 → 状态条提示「本次提交不会保存」
+- 字段没填完 → 提示「请先把信息填完整」
+- 初始化 / 写入异常或 RLS 拒绝 → 显示可读原因，不吞错
+- 成功 → 明确写「已收到」并清空表单
 
-## 五、表策略要如实标注
+**绝不把本地操作说成已存云端。** 本机沙箱对 CDN 时通时不通（`curl` 可能返回 000），这是环境限制，不是功能缺失；如实在交付说明里写清。
 
-带登录、按人隔离的数据用标准 `owner_id` 形状。若本轮做的是**应用级共享演示台账**（没有登录、所有访问者都能改状态），就别假装是私有数据：表里不放 `owner_id`，RLS 用公开读 + 公开写策略，并在页面「说明与边界」里写明「任何访问者都能改，别放真实资料」。将来要加登录，必须重建表策略，不能只改前端。
+## 本轮验证记录
 
-## 六、实例一：自动门店 H5（未接通）
-
-- 只读 `inspect`：本会话 `count = 0`，此前从未激活任何云服务应用。
-- 按用户点名，创建独立应用目录后调用 `activate`（create，`appName=自动门店`，`domainPrefix=auto-store`）。
-- 平台确认框**被取消**，返回 `cancelled: true` / `useLocalImplementation: true`。
-- 按第三节处置：**不再重试、不绕路、不伪装成已接后端**。该轮应用保持纯前端、示例数据、刷新复位；`app.spec.json` 的 `meta.cloud` 如实记录原因与状态，没有云表、没有 SDK 初始化代码、没有线上应用卡片。
-
-## 七、实例二：美容台账 H5（已接通）
-
-- `inspect` → `count = 0`；`activate`（create，`appName=美容台账`，`domainPrefix=beauty-salon`，`appType=web`），平台确认框**通过**，返回 `billingStatus=normal` / `provisionStatus=assigned` 与 `publicConfig`。
-- 管理侧建 `beauty_tasks`（`task_id` 唯一、`state`、时间戳），开启 RLS，授权 `authenticated, anon`，建读 / 插 / 改三条策略；没有登录，属于应用级共享演示台账，按第五节在页面写明。
-- 验证链路：`INSERT` 四行 → `SELECT` 读回 → 模拟前端 `upsert` 的冲突更新 → 再 `SELECT` 读回，`b1` 从 `pending` 变为 `ok`。
-- 前端端到端：一次连通运行中，页面点击「确认」把 `b1` 写成 `ok`（数据库读回为证）；重新加载页面后读到 `b1=ok`，剩余数从 4 件变 3 件、首条待办呈已确认样式，状态条显示已连通。
-- 失败路径：屏蔽 SDK CDN 后，页面显示「云端组件没加载出来」，待办仍是 4 件、本地交互照常可用；CDN 时通时不通的几次运行里，页面从未把本地操作说成已存云端。
-- 真实 390×844 视口 11 项断言全 PASS，包含「柱图提示随 spec 切换」与「无横向溢出」。
-- **状态：未上线**。只在本地预览端口可访问；前端云读写已经跑通，但页面本身没有发布到应用域名。
-
-## 八、本轮踩到的坑（写进模板，下次别再踩）
-
-1. **CDN 抖动**：本机 `curl` 访问 SDK 的 CDN 一直失败，浏览器里时通时不通。单文件 HTML 用 CDN 形式就有这个运行时依赖，必须在页面留可见失败提示，并在交付说明里写清，不能只在自己机器上跑通一次就宣称稳定。
-2. **结构化回读可能滞后**：`describe_table` 返回的 `RLSOn` 显示 false、表注释为空，但直接查系统表确认 `relrowsecurity=true`、注释也在。关键状态要用只读 SQL 复核，别只看结构化工具的一个字段。
-3. **零外链自检会误伤云模式**：生成器原本见到 `<script src=` 就 reject。正确做法是「纯前端模式零外链，云模式只允许 SDK 白名单」，而不是关掉检查。
-4. **静态引用检查要分两类**：`canonical`、`og:url`、作者主页这类导航/元信息外链不是运行依赖；只把 `script/img/stylesheet` 当运行依赖判白名单，否则会误报。
-5. **断言依赖初始云端状态**：跑交互断言前先把云表状态复位，否则「点一次确认后剩 3 件」会因为云端已是已确认状态而变成 2 件，看起来像功能坏了。
-6. **柱图提示别硬编码**：「N 个品类动销偏快」这种业务措辞要放进 spec（现在叫 `demo.lowLabel`），否则换个行业就露馅。
-
-## 九、禁止事项
-
-- 不手写 fetch 打数据面路径，不引入第二套云客户端。
-- 不把长期密钥、服务端环境 id 写进前端或日志。
-- 不把「取消了」写成「已接入」，不把「已激活」写成「已上线」，不把「连不上」写成「已存云端」。
+- 应用 `wbapp_ZwQZBhDOo16VOG4OVnIe2r` 已在上一轮激活成功（`billingStatus=normal / provisionStatus=assigned`）
+- 新建 `beauty_leads`：`pg_class` 回读 `rls=true`、2 条策略；管理侧 insert / read / delete 全通过
+- 前端端到端：本机 CDN 本次未加载出 SDK（`typeof WorkBuddyCloud === "undefined"`），页面显示「云端组件没加载出来，本次提交不会保存」，提交后显示「当前未连到云端，这条没有保存」，**失败路径符合预期、没有假装成功**
+- 上一轮在 `beauty_tasks` 上曾完成过一次真实端到端写入读回（前端点击 → SQL 回读状态变化 → 刷新保留），证明接线本身可用
