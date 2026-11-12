@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="__THEME_COLOR__">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<!--__HEAD_EXTRA__-->
+<style>
+__CSS__
+</style>
+</head>
+<body data-app="store-h5">
+
+<header class="topbar">
+  <a class="brand" href="#/home"><span class="logo">__LOGO__</span><span class="bname">__STORE_NAME__</span></a>
+  <a class="ghost" href="#/share">分享有礼</a>
+</header>
+
+<main>
+  <!-- ① 首页 -->
+  <section class="view" data-view="home" id="view-home">
+    <div class="hero">
+      <h1>__SLOGAN__</h1>
+      <p class="hero-sub">__HERO_SUB__</p>
+      <button class="cta" type="button" data-go="book">立即预约</button>
+    </div>
+
+    <h2 class="sec">服务与价目</h2>
+    <ul id="svcList"></ul>
+
+    <h2 class="sec">到店信息</h2>
+    <div class="info" id="storeInfo"></div>
+
+    <p class="footlink"><a href="#/admin">店主管理</a></p>
+  </section>
+
+  <!-- ② 预约 -->
+  <section class="view" data-view="book" id="view-book" hidden>
+    <h1 class="page-t">预约到店</h1>
+    <p class="hint hint--warn" id="cloudHint" hidden></p>
+
+    <h2 class="sec">1 · 选服务</h2>
+    <div class="chips" id="svcChips"></div>
+
+    <h2 class="sec">2 · 选日期</h2>
+    <div class="chips chips--dates" id="dateChips"></div>
+
+    <h2 class="sec">3 · 选时间</h2>
+    <div class="grid" id="slotGrid"></div>
+
+    <h2 class="sec">4 · 联系方式</h2>
+    <form class="form" id="bookForm" novalidate>
+      <label>称呼
+        <input id="fName" name="customer_name" autocomplete="name" placeholder="怎么称呼您">
+      </label>
+      <label>手机号
+        <input id="fPhone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="11 位手机号">
+      </label>
+      <label>备注（可不填）
+        <textarea id="fNote" name="note" rows="2" placeholder="例如：想安静一点的房间"></textarea>
+      </label>
+      <button class="cta" id="btnSubmit" type="submit">提交预约</button>
+      <p class="hint" id="formHint"></p>
+    </form>
+
+    <div class="done" id="doneCard" hidden>
+      <h2>预约已提交</h2>
+      <p>单号 <b id="doneCode">—</b></p>
+      <p class="hint">到店出示单号即可；店主确认后会按您留的手机号联系。</p>
+      <button class="ghost" type="button" data-go="home">回首页</button>
+    </div>
+  </section>
+
+  <!-- ③ 分享 -->
+  <section class="view" data-view="share" id="view-share" hidden>
+    <h1 class="page-t">__INVITE_TITLE__</h1>
+    <p class="lead" id="inviteReward"></p>
+
+    <div class="codebox">
+      <span>我的邀请码</span>
+      <b id="inviteCode">—</b>
+    </div>
+    <div class="linkbox" id="shareLink">—</div>
+
+    <div class="form">
+      <button class="cta" id="btnCopy" type="button">复制邀请链接</button>
+      <p class="hint" id="copyHint">微信里点右上角「···」发送给朋友，好友通过你的链接下单会自动记到你名下。</p>
+    </div>
+
+    <div class="poster" id="posterText"></div>
+  </section>
+
+  <!-- ④ 店主管理 -->
+  <section class="view" data-view="admin" id="view-admin" hidden>
+    <h1 class="page-t">店主管理</h1>
+
+    <div id="authPanel">
+      <p class="hint">用店主的手机号或邮箱收验证码登录，登录后只能看到本店订单。</p>
+      <form class="form" id="loginForm" novalidate>
+        <label>__LOGIN_LABEL__
+          <input id="fLogin" autocomplete="username" placeholder="__LOGIN_PLACEHOLDER__">
+        </label>
+        <label>验证码
+          <div class="row">
+            <input id="fCode" inputmode="numeric" autocomplete="one-time-code" placeholder="6 位验证码">
+            <button class="ghost" id="btnSendCode" type="button">获取验证码</button>
+          </div>
+        </label>
+        <button class="cta" type="submit">登录</button>
+        <p class="hint hint--warn" id="loginHint"></p>
+      </form>
+    </div>
+
+    <div id="adminPanel" hidden>
+      <div class="stats" id="stats"></div>
+      <div class="chips" id="statusTabs"></div>
+      <div id="orderList"></div>
+      <button class="ghost" id="btnRefresh" type="button">刷新订单</button>
+      <p class="hint" id="adminHint"></p>
+      <button class="ghost mt" id="btnLogout" type="button">退出登录</button>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar" aria-label="主导航">
+  <a class="tab" href="#/home" data-tab="home">首页</a>
+  <a class="tab" href="#/book" data-tab="book">预约</a>
+  <a class="tab" href="#/share" data-tab="share">分享</a>
+  <a class="tab" href="#/admin" data-tab="admin">管理</a>
+</nav>
+
+__SDK__
+<script>window.APP_SPEC=__SPEC_JSON__;window.APP_CFG=__CFG_JSON__;</script>
+<script>
+__JS__
+</script>
+</body>
+</html>
