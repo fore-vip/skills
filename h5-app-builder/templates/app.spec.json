@@ -12,6 +12,7 @@
     "disclaimer": "示例数据 · 只在这一页里变化，刷新即复位",
     "cloud": {
       "needed": false,
+      "table": "",
       "reason": "纯前端演示、无持久化、无登录、无文件、无大模型调用；平台确认框被取消后按规范不重试、不静默降级",
       "status": "confirmation dismissed · 本轮未接入云端，保持纯前端"
     }
@@ -33,6 +34,7 @@
     "title": "今日门店台",
     "hint": "示例数据 · 只在这一页里变化，刷新即复位",
     "chartTitle": "各时段订单",
+    "lowLabel": "个品类动销偏快",
     "todoTitle": "等你确认的事",
     "askTitle": "说一句话试试",
     "askHint": "下面是演示回话，点一句或自己写一句，看看它怎么把活儿排成清单。",

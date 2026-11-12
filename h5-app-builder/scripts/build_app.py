@@ -244,7 +244,8 @@ DEMO_JS = """<script>
     var names = [];
     for (i = 0; i < DIM.length; i++) names.push(nameOf(DIM[i], cur[DIM[i].key]));
     el('stHint').textContent = names.join(' \\u00b7 ') + '\\uff0c\\u9ad8\\u5cf0\\u5728 ' + d.peak
-      + '\\uff1b' + d.low + ' \\u4e2a\\u54c1\\u7c7b\\u52a8\\u9500\\u504f\\u5feb\\uff08\\u793a\\u4f8b\\u6570\\u636e\\uff09';
+      + '\\uff1b' + d.low + ' ' + (SPEC.lowLabel || '\\u4e2a\\u54c1\\u7c7b\\u52a8\\u9500\\u504f\\u5feb')
+      + '\\uff08\\u793a\\u4f8b\\u6570\\u636e\\uff09';
     var th = [];
     for (i = 0; i < TASKS.length; i++){
       var t = TASKS[i], st = done[t.id];
@@ -283,8 +284,10 @@ DEMO_JS = """<script>
   }
   el('stTasks').addEventListener('click', function(e){
     var b = btn(e); if (!b) return;
-    done[b.getAttribute('data-id')] = b.getAttribute('data-act');
+    var tid = b.getAttribute('data-id'), act = b.getAttribute('data-act');
+    done[tid] = act;
     renderMain();
+    if (window.H5AppOnAction) window.H5AppOnAction(tid, act);
   });
   el('stChips').addEventListener('click', function(e){
     var b = btn(e); if (!b) return;
@@ -294,13 +297,91 @@ DEMO_JS = """<script>
   el('stText').addEventListener('keydown', function(e){
     if (e.key === 'Enter') ask(el('stText').value);
   });
+  /* 云适配层入口：把云端读回的状态灌进演示状态表并刷新；纯前端模式下无人调用。 */
+  window.H5AppApply = function(rows){
+    for (var r = 0; r < (rows || []).length; r++){
+      var row = rows[r];
+      if (row && row.task_id && row.state && row.state !== 'pending')
+        done[row.task_id] = row.state;
+    }
+    renderMain();
+  };
   renderPicks(); renderMain();
+})();
+</script>"""
+
+
+SDK_CDN = "https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"
+
+CLOUD_JS = """<script src="__SDK_URL__"></script>
+<script>
+/* 云适配层：只做 CRUD；配置来自 publicConfig；所有失败路径都给出可见提示。 */
+(function(){
+  var CFG = __PUBLIC_CONFIG__, TABLE = __TABLE__;
+  var box = document.createElement('div');
+  box.id = 'h5Cloud';
+  box.style.cssText = 'margin:0 0 14px;padding:10px 14px;border:1px solid rgba(255,255,255,.16);'
+    + 'border-radius:10px;font-size:13px;color:#c6c6d0;background:rgba(255,255,255,.04)';
+  function say(t, ok){
+    box.textContent = '云端 · ' + t;
+    box.style.borderColor = ok ? 'rgba(74,222,128,.5)' : 'rgba(251,191,36,.5)';
+  }
+  function friendly(e){
+    if (!e) return '未知错误';
+    var m = e.message || String(e);
+    if (/401|origin|publishable/i.test(m)) return '当前访问来源与应用保留域名不一致，发布到应用域名后才会生效';
+    if (e.code === '42P01') return '数据表还没建好';
+    if (e.code === '42501') return '没有写入权限';
+    return String(m).slice(0, 80);
+  }
+  var cloud = null;
+  function boot(){
+    if (!window.WorkBuddyCloud || !window.WorkBuddyCloud.createWorkBuddyCloud){
+      say('云端组件没加载出来（本机可能访问不到 SDK 的 CDN），本次操作只在本页生效', false);
+      return;
+    }
+    try {
+      cloud = WorkBuddyCloud.createWorkBuddyCloud({
+        endpoint: CFG.endpoint,
+        oauthRelayBaseUrl: CFG.oauthRelayBaseUrl,
+        publishableKey: CFG.publishableKey
+      });
+    } catch (e) { say('云端初始化失败：' + friendly(e), false); return; }
+    load();
+  }
+  async function load(){
+    var r;
+    try { r = await cloud.database.from(TABLE).select('task_id,state').order('task_id'); }
+    catch (e) { say('读取失败：' + friendly(e), false); return; }
+    if (r.error){ say('读取失败：' + friendly(r.error), false); return; }
+    if (window.H5AppApply) window.H5AppApply(r.data || []);
+    say('已连通 · 待办状态跨刷新保留', true);
+  }
+  window.H5AppOnAction = async function(id, act){
+    if (!cloud){ say('云端未连接，本次操作只在本页生效', false); return; }
+    var r;
+    try {
+      r = await cloud.database.from(TABLE)
+        .upsert({ task_id: id, state: act }, { onConflict: 'task_id' }).select();
+    } catch (e) { say('保存失败：' + friendly(e), false); return; }
+    if (r.error){ say('保存失败：' + friendly(r.error), false); return; }
+    if (!r.data || !r.data.length){ say('没有写入成功，可能被权限拦下', false); return; }
+    say('已保存到云端 · ' + id + ' → ' + act, true);
+  };
+  function mount(){
+    var k = document.getElementById('stKpis');
+    if (k && k.parentNode) k.parentNode.insertBefore(box, k.nextSibling);
+    boot();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
+  else mount();
 })();
 </script>"""
 
 
 def render_script(spec):
     payload = {
+        "lowLabel": spec["demo"].get("lowLabel", "个品类动销偏快"),
         "demo": {
             "dimensions": spec["demo"]["dimensions"],
             "tasks": spec["demo"]["tasks"],
@@ -316,7 +397,7 @@ def render_script(spec):
     return DEMO_JS.replace("__SPEC__", js).replace("__SPEC__", "")
 
 
-def selfcheck(page, spec):
+def selfcheck(page, spec, cloud_mode=False):
     errs = []
     leftovers = re.findall(r"__[A-Z][A-Z0-9_]*__|\{\{[^{}]+\}\}", page)
     if leftovers:
@@ -327,8 +408,25 @@ def selfcheck(page, spec):
         c = page.count("</%s>" % tag)
         if o != c:
             errs.append("标签不平衡 %s %d/%d" % (tag, o, c))
-    if re.search(r"<script[^>]+src=|<link[^>]+rel=['\"]stylesheet|<img[^>]+src=['\"]https?://", page):
+    if not cloud_mode and re.search(r"<script[^>]+src=|<link[^>]+rel=['\"]stylesheet|<img[^>]+src=['\"]https?://", page):
         errs.append("存在外部脚本/样式/图片依赖，违反零外链")
+    if cloud_mode:
+        srcs = []
+        for s in re.findall(r"<script[^>]*\ssrc=([^\s>]+)", page):
+            srcs.append(s.strip().strip('"').strip("'"))
+        if SDK_CDN not in srcs:
+            errs.append("云模式缺少 SDK CDN 脚本")
+        other = [u for u in srcs if u != SDK_CDN]
+        if other:
+            errs.append("存在非白名单外部脚本: " + repr(other[:3]))
+        if "createWorkBuddyCloud" not in page:
+            errs.append("云模式缺少 SDK 初始化")
+        if "endpoint: CFG.endpoint" not in page:
+            errs.append("SDK 初始化未从 publicConfig 取 endpoint")
+        if re.search(r"<link[^>]+rel=.stylesheet", page):
+            errs.append("存在外部样式依赖")
+        if re.search(r"<img[^>]+src=.https?://", page):
+            errs.append("存在外部图片依赖")
     if spec["meta"].get("prototype"):
         for word in ["示例数据", "刷新", "未开放安装"]:
             if word not in page:
@@ -360,6 +458,8 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--base-url", default="https://example.com")
     ap.add_argument("--footer-links", default="")
+    ap.add_argument("--cloud-config", default="", help="publicConfig JSON；给了就启用云适配层")
+    ap.add_argument("--cloud-table", default="", help="云端表名；省略时取 spec.meta.cloud.table")
     a = ap.parse_args()
 
     spec = json.loads(Path(a.spec).read_text(encoding="utf-8"))
@@ -370,12 +470,26 @@ def main():
     page = page.replace("<!--__HEAD__-->", render_head(meta, a.base_url))
     page = page.replace("<!--__HERO__-->", render_hero(spec["hero"]))
     page = page.replace("<!--__SECTION__-->", render_section(spec))
-    page = page.replace("<!--__SCRIPT__-->", render_script(spec))
+    cloud_mode = bool(a.cloud_config)
+    if cloud_mode:
+        cfg = json.loads(Path(a.cloud_config).read_text(encoding="utf-8"))
+        # 只把端上可用的三个值写进页面，其余配置不落到前端
+        pub = {k: cfg[k] for k in ("endpoint", "oauthRelayBaseUrl", "publishableKey") if k in cfg}
+        table = a.cloud_table or meta.get("cloud", {}).get("table", "")
+        if not table:
+            print("[abort] 云模式缺少表名（--cloud-table 或 spec.meta.cloud.table）", file=sys.stderr)
+            return 1
+        cloud_js = (CLOUD_JS.replace("__SDK_URL__", SDK_CDN)
+                    .replace("__PUBLIC_CONFIG__", json.dumps(pub, ensure_ascii=False))
+                    .replace("__TABLE__", json.dumps(table, ensure_ascii=False)))
+        page = page.replace("<!--__SCRIPT__-->", render_script(spec) + "\n" + cloud_js)
+    else:
+        page = page.replace("<!--__SCRIPT__-->", render_script(spec))
     page = page.replace("__BRAND__", esc(meta.get("brand", "")))
     page = page.replace("__HERO_CTA__", esc(spec["hero"]["primary"]))
     page = page.replace("__FOOTER_LINKS__", a.footer_links)
 
-    errs = selfcheck(page, spec)
+    errs = selfcheck(page, spec, cloud_mode)
     if errs:
         for e in errs:
             print("[FAIL] " + e, file=sys.stderr)

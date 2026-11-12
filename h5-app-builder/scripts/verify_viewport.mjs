@@ -20,6 +20,7 @@ const HEIGHT = Number(arg('--height') || 844);
 const SHOT_PREFIX = arg('--shots') || '/tmp/h5app';
 const CHROME = arg('--chrome') || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = Number(arg('--port') || 9223);
+const WAIT = Number(arg('--wait') || 1500);
 const PROFILE = '/tmp/chrome-cdp-h5app-' + PORT;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -92,7 +93,7 @@ try {
   await send('Emulation.setDeviceMetricsOverride',
     { width: WIDTH, height: HEIGHT, deviceScaleFactor: 1, mobile: true });
   await send('Page.navigate', { url: URL });
-  await sleep(1500);
+  await sleep(WAIT);
 
   const checks = [];
   const vp = await evalJs('innerWidth + "x" + innerHeight');

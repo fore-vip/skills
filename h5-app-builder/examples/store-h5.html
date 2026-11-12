@@ -230,7 +230,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);f
 <script>
 /* 演示脚本：数据全部来自 spec，纯前端、刷新复位、不写回任何地方。 */
 (function(){
-  var SPEC = {"demo":{"dimensions":[{"id":"stStore","key":"shop","options":[{"k":"south","n":"城南店"},{"k":"campus","n":"大学城店"},{"k":"north","n":"城北店"}]},{"id":"stDay","key":"day","options":[{"k":"today","n":"今日"},{"k":"yesterday","n":"昨日"}]}],"tasks":[{"id":"t1","title":"酸奶、气泡水各补一箱","detail":"按近七天卖的速度估的，确认后再走下一步","tag":"要花钱"},{"id":"t2","title":"三条评价等着回","detail":"回话草稿已经写好，发出前你过一眼","tag":"写草稿"},{"id":"t3","title":"昨天的日报底稿","detail":"营业额、高峰时段、缺货品类已经排好","tag":"写草稿"},{"id":"t4","title":"周末活动文案两版","detail":"给店门口立牌用，选定后你自己打印","tag":"写草稿"}],"numbers":{"south":{"today":{"rev":8260,"ord":214,"bars":[12,26,38,30,52,88,64,18],"peak":"18 时前后","low":2},"yesterday":{"rev":7480,"ord":193,"bars":[10,22,34,28,46,78,58,16],"peak":"18 时前后","low":3}},"campus":{"today":{"rev":11340,"ord":302,"bars":[28,44,36,58,72,96,80,34],"peak":"20 时前后","low":1},"yesterday":{"rev":9960,"ord":271,"bars":[24,40,32,52,66,88,72,30],"peak":"20 时前后","low":2}},"north":{"today":{"rev":5680,"ord":156,"bars":[8,18,30,26,40,68,48,12],"peak":"18 时前后","low":4},"yesterday":{"rev":6120,"ord":168,"bars":[10,20,32,28,44,72,52,14],"peak":"18 时前后","low":3}}},"hours":["10时","12时","14时","16时","18时","20时","22时","24时"],"kpiLabels":["营业额","订单数","客单价","等你确认"],"questions":["哪些货该补了","把评价回一下","三家店比一比"],"replyRules":[{"match":"补|货","reply":"已经把 2 个缺货品类排进清单，等你点头再往下走。"},{"match":"评|回","reply":"三条评价的回话草稿排好了，发出前会先给你看。"},{"match":"比|日报|账|忙","reply":"三家店的今日概览已经并排摆好，高峰都在 18 时前后。"}],"fallbackReply":"这句先记下了。这一版只认补货、回评、对比三种说法，其余等正式版再补。"}};
+  var SPEC = {"lowLabel":"个品类动销偏快","demo":{"dimensions":[{"id":"stStore","key":"shop","options":[{"k":"south","n":"城南店"},{"k":"campus","n":"大学城店"},{"k":"north","n":"城北店"}]},{"id":"stDay","key":"day","options":[{"k":"today","n":"今日"},{"k":"yesterday","n":"昨日"}]}],"tasks":[{"id":"t1","title":"酸奶、气泡水各补一箱","detail":"按近七天卖的速度估的，确认后再走下一步","tag":"要花钱"},{"id":"t2","title":"三条评价等着回","detail":"回话草稿已经写好，发出前你过一眼","tag":"写草稿"},{"id":"t3","title":"昨天的日报底稿","detail":"营业额、高峰时段、缺货品类已经排好","tag":"写草稿"},{"id":"t4","title":"周末活动文案两版","detail":"给店门口立牌用，选定后你自己打印","tag":"写草稿"}],"numbers":{"south":{"today":{"rev":8260,"ord":214,"bars":[12,26,38,30,52,88,64,18],"peak":"18 时前后","low":2},"yesterday":{"rev":7480,"ord":193,"bars":[10,22,34,28,46,78,58,16],"peak":"18 时前后","low":3}},"campus":{"today":{"rev":11340,"ord":302,"bars":[28,44,36,58,72,96,80,34],"peak":"20 时前后","low":1},"yesterday":{"rev":9960,"ord":271,"bars":[24,40,32,52,66,88,72,30],"peak":"20 时前后","low":2}},"north":{"today":{"rev":5680,"ord":156,"bars":[8,18,30,26,40,68,48,12],"peak":"18 时前后","low":4},"yesterday":{"rev":6120,"ord":168,"bars":[10,20,32,28,44,72,52,14],"peak":"18 时前后","low":3}}},"hours":["10时","12时","14时","16时","18时","20时","22时","24时"],"kpiLabels":["营业额","订单数","客单价","等你确认"],"questions":["哪些货该补了","把评价回一下","三家店比一比"],"replyRules":[{"match":"补|货","reply":"已经把 2 个缺货品类排进清单，等你点头再往下走。"},{"match":"评|回","reply":"三条评价的回话草稿排好了，发出前会先给你看。"},{"match":"比|日报|账|忙","reply":"三家店的今日概览已经并排摆好，高峰都在 18 时前后。"}],"fallbackReply":"这句先记下了。这一版只认补货、回评、对比三种说法，其余等正式版再补。"}};
   var D = SPEC.demo, DIM = D.dimensions, TASKS = D.tasks, NUM = D.numbers;
   var cur = {}, done = {}, i;
   for (i = 0; i < DIM.length; i++) cur[DIM[i].key] = DIM[i].options[0].k;
@@ -276,7 +276,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);f
     var names = [];
     for (i = 0; i < DIM.length; i++) names.push(nameOf(DIM[i], cur[DIM[i].key]));
     el('stHint').textContent = names.join(' \u00b7 ') + '\uff0c\u9ad8\u5cf0\u5728 ' + d.peak
-      + '\uff1b' + d.low + ' \u4e2a\u54c1\u7c7b\u52a8\u9500\u504f\u5feb\uff08\u793a\u4f8b\u6570\u636e\uff09';
+      + '\uff1b' + d.low + ' ' + (SPEC.lowLabel || '\u4e2a\u54c1\u7c7b\u52a8\u9500\u504f\u5feb')
+      + '\uff08\u793a\u4f8b\u6570\u636e\uff09';
     var th = [];
     for (i = 0; i < TASKS.length; i++){
       var t = TASKS[i], st = done[t.id];
@@ -315,8 +316,10 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);f
   }
   el('stTasks').addEventListener('click', function(e){
     var b = btn(e); if (!b) return;
-    done[b.getAttribute('data-id')] = b.getAttribute('data-act');
+    var tid = b.getAttribute('data-id'), act = b.getAttribute('data-act');
+    done[tid] = act;
     renderMain();
+    if (window.H5AppOnAction) window.H5AppOnAction(tid, act);
   });
   el('stChips').addEventListener('click', function(e){
     var b = btn(e); if (!b) return;
@@ -326,6 +329,15 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);f
   el('stText').addEventListener('keydown', function(e){
     if (e.key === 'Enter') ask(el('stText').value);
   });
+  /* 云适配层入口：把云端读回的状态灌进演示状态表并刷新；纯前端模式下无人调用。 */
+  window.H5AppApply = function(rows){
+    for (var r = 0; r < (rows || []).length; r++){
+      var row = rows[r];
+      if (row && row.task_id && row.state && row.state !== 'pending')
+        done[row.task_id] = row.state;
+    }
+    renderMain();
+  };
   renderPicks(); renderMain();
 })();
 </script>

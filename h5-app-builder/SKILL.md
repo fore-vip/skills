@@ -8,7 +8,7 @@ description: 把一个只有标题的模糊需求，做成可点开的移动 H5 
 description_zh: 把模糊的「做一个 XX H5」变成可点开、可验证、可交付的移动应用：需求锚定 → 形态决策（是否需要云服务）→ spec 驱动生成单文件页面 → 接线登记 → 真实视口交互断言 → 发布预演与沉淀归档。含模板、脚本与红线清单，换个业务只改配置。
 description_en: "Turn a vague build-me-an-H5 request into a clickable, verifiable, deliverable mobile app: anchor requirements, decide prototype vs cloud-backed app, generate a single-file page from a spec JSON, wire registrations, run real-viewport interaction assertions, rehearse publishing, and persist the playbook. Ships templates, scripts, case study and guardrails; swap the spec to swap the business."
 category: engineering
-version: 1.0.0
+version: 1.1.0
 author: fore.vip
 agent_created: true
 triggers:
@@ -69,7 +69,9 @@ triggers:
 
 需要后端时按平台规范走：`inspect` → 选定应用（reuse/create）→ `activate`（**由平台确认框收集授权，禁止自己用问答替代**）→ 拿到 `publicConfig` 后才写云代码。单文件 HTML 用 CDN 形式初始化一次 client，`endpoint` / `publishableKey` 必须来自 `publicConfig`，web 登录还要带 `oauthRelayBaseUrl`；建表与 RLS 走管理侧工具，业务代码只做 CRUD。
 
-**确认框被取消 / 能力不可用**：这是正常结果，**不重试、不换工具绕路、不静默降级成 localStorage 还宣称已接后端**。如实记录为「本轮未接入云端，保持纯前端」，并把接入步骤留在 spec 与报告里。详见 `references/cloud-service.md`。
+**确认框被取消 / 能力不可用**：这是正常结果，**不重试、不换工具绕路、不静默降级成 localStorage 还宣称已接后端**。如实记录为「本轮未接入云端，保持纯前端」，并把接入步骤留在 spec 与报告里。
+
+**确认框通过**：拿到 `billingStatus=normal` / `provisionStatus=assigned` 与 `publicConfig` 后才写云代码。建表与 RLS 走管理侧工具；单文件页面用生成器的 `--cloud-config` 接上 CDN SDK 与 CRUD 适配层。模板内置了该分支，实例见 `references/case-beauty-h5.md`，步骤与坑见 `references/cloud-service.md`。
 
 ---
 
@@ -81,7 +83,15 @@ triggers:
 python3 scripts/build_app.py --spec templates/app.spec.json --out index.html
 ```
 
-生成器做四件事：读 spec → 拼装 `templates/shell.html` 的四个占位块 → **写盘前自检**（占位符清零、标签平衡、零外链、JS 语法、声明口径存在）→ 输出单文件 `index.html`。自检不过直接非零退出，不产出半截文件。
+生成器做四件事：读 spec → 拼装 `templates/shell.html` 的四个占位块 → **写盘前自检**（占位符清零、标签平衡、外链受控、JS 语法、声明口径存在）→ 输出单文件 `index.html`。自检不过直接非零退出，不产出半截文件。
+
+**云适配层**：给 `--cloud-config <publicConfig.json>` 就启用，表名取 `--cloud-table` 或 `spec.meta.cloud.table`。生成器只把 `endpoint` / `oauthRelayBaseUrl` / `publishableKey` 三个端上可用值写进页面，注入唯一的 SDK CDN 脚本、初始化一次 client、把演示区的待办动作接到 `upsert`，并在页面上显示云端连通状态与所有失败原因。纯前端模式仍严格零外链；云模式只允许这一条 SDK 白名单。
+
+```bash
+python3 scripts/build_app.py --spec app.spec.json --out index.html --cloud-config publicConfig.json
+```
+
+**换业务只改 spec**：三段 TAB 文案、演示维度、数字、待办、话术规则、柱图提示（`demo.lowLabel`）、视口断言全部在 spec 里；`meta.cloud` 记录本轮云结论。已验证的两个实例：自动门店（纯前端）与美容台账（接通云端）。
 
 三段式 TAB 是默认骨架，不是强制：**现场演示**（可点的数据）/ **使用方式**（怎么唤起、分几步、轻重分级）/ **说明与边界**（现在到哪一步、数据从哪来、会不会动真账、能不能装）。第二、三段是将来接真实能力时的落点，别省。
 
@@ -109,8 +119,8 @@ python3 scripts/build_app.py --spec templates/app.spec.json --out index.html
 | # | 检查 | 命令 / 方式 | 通过标准 |
 |---|---|---|---|
 | 1 | 生成自检 | `python3 scripts/build_app.py …` | 非零退出即阻断 |
-| 2 | 静态引用 | 自建断链检查或 `check_assets.py` 同思路 | 本地引用零 404 |
-| 3 | 真实视口交互断言 | `node scripts/verify_viewport.mjs --url <本地URL> --assert <json>` | 全部 PASS，含「无横向溢出」 |
+| 2 | 静态引用 | 自建断链检查或 `check_assets.py` 同思路 | 本地引用零 404；运行依赖只允许云 SDK 白名单，导航/元信息外链只登记 |
+| 3 | 真实视口交互断言 | `node scripts/verify_viewport.mjs --spec <spec> --url <本地URL> --wait 6000` | 全部 PASS，含「无横向溢出」；云页面要留足 SDK 加载时间 |
 | 4 | 截图目视 | 断言脚本自动出图，PC / 390 各看一遍 | 无截断、无重叠、无错位 |
 
 **视口坑**：无头浏览器 `--window-size=390` 常被夹到最小 500 逻辑宽度，截图看着像内容被裁其实是假象。必须用 CDP 的 `Emulation.setDeviceMetricsOverride` 强制真实 390×844，再回读 `innerWidth` 确认。脚本模板在 `scripts/verify_viewport.mjs`，断言从 JSON 读，换业务只改断言。
@@ -134,11 +144,13 @@ python3 scripts/build_app.py --spec templates/app.spec.json --out index.html
 |---|---|
 | `templates/app.spec.json` | 配置模板：元信息、首屏、三段 TAB 文案、演示数据、话术规则、断言 |
 | `templates/shell.html` | 单文件页面骨架（自带 CSS，四个占位块，零外链） |
-| `scripts/build_app.py` | spec → HTML 生成器，含写盘前自检 |
+| `scripts/build_app.py` | spec → HTML 生成器，含写盘前自检与可选云适配层 |
 | `scripts/verify_viewport.mjs` | CDP 真实视口 + 参数化交互断言 + 截图 |
 | `references/cloud-service.md` | 云服务判据、激活流程、取消后的正确处置 |
 | `references/gates-and-pitfalls.md` | 验证闸门、口径红线、本机工具链已知坑 |
 | `references/case-store-h5.md` | 参考案例：自动门店 H5 的完整复盘（AUTO 仅作参考） |
+| `references/case-beauty-h5.md` | 参考案例：美容台账（云服务接通版）完整复盘 |
+| `examples/beauty.spec.json` | 第二个实例配置：只换数据就换业务，含云字段与可配柱图提示 |
 | `examples/` | 用本模板生成并经四道验证跑通的实例页面 |
 
 ## 验收清单（交付前逐条打勾）
@@ -147,7 +159,9 @@ python3 scripts/build_app.py --spec templates/app.spec.json --out index.html
 - [ ] 示例数据 / 未开放能力，三处口径都写明
 - [ ] 生成自检、断链、交互断言、截图目视四项都有输出
 - [ ] `innerWidth` 回读确认为目标宽度，且 `scrollWidth <= 视口宽`
-- [ ] 云服务结论（接了 / 没接 / 取消）已明确告知用户，无静默降级
+- [ ] 云模式：每个初始化点都从 `publicConfig` 取值，且写库后读回、失败提示可见
+- [ ] CDN 不通时不把本地交互说成已接云端，且页面给出可见原因
+- [ ] 云服务结论（接了 / 没接 / 取消）已明确告知用户，写入读回有证据，无静默降级
 - [ ] 上线状态如实，未发布不写成已发布
 - [ ] 沉淀物（SKILL / 专家 / 记忆）已归档
 
