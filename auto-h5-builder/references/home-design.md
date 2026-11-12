@@ -29,7 +29,7 @@
 
 ## 二、设计研究（生成前必做，不能凭记忆）
 
-对主题先做判断，再决定去哪看。判断三件事：**行业**（面部护理 / 咖啡 / 健身 / 修车…）、**调性**（手艺感、效率、亲密、克制、热闹）、**价格带**（社区平价 / 中客单 / 高客单）。
+对主题先做判断，再决定去哪看。判断三件事：**行业**（咖啡 / 健身 / 修车 / 摄影…）、**调性**（手艺感、效率、亲密、克制、热闹）、**价格带**（社区平价 / 中客单 / 高客单）。
 
 然后**当场**用检索工具打开真实页面，三类来源各取所需：
 
@@ -41,9 +41,9 @@
 
 检索式模板（换成具体行业）：
 
-- `beauty salon website design inspiration 2026`
+- `photography studio website design inspiration 2026`
 - `coffee shop landing page awwwards`
-- `spa booking site hero section design`
+- `fitness studio booking site hero section design`
 - `tailwind css hero section split layout`
 - `neubrutalism / editorial / swiss grid landing page`（挑一个语汇深入看）
 - `<行业> 门店 官网 首页`（中文同业，看信息顺序）
@@ -61,7 +61,7 @@
   "design_name": "linen-warm",              // 与页面 data-home 一致
   "design_family": "editorial-serif",       // 本次语汇，用于避免连续几家店撞风格
   "researched_at": "2026-11-13",            // 本次检索日期
-  "theme_keywords": ["社区面部护理", "安静", "手艺感", "中客单"],
+  "theme_keywords": ["社区摄影工作室", "安静", "手艺感", "中客单"],
   "references": [
     { "url": "https://…", "site": "Awwwards", "source_type": "showcase",
       "borrow": "首屏左侧竖排小字标 + 右侧满幅色块，标题只占 6 字宽" },

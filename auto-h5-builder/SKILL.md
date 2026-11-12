@@ -76,7 +76,7 @@ triggers:
 
 四步，一步不能省：
 
-1. **定主题**：行业 + 调性 + 价格带，写成 3–6 个关键词（例：社区面部护理 / 安静 / 手艺感 / 中客单）。
+1. **定主题**：行业 + 调性 + 价格带，写成 3–6 个关键词（例：社区咖啡 / 安静 / 手艺感 / 中客单）。
 2. **当场检索**（`WebSearch` / `WebFetch`，不许凭记忆编 URL）：
    - 开源社区与组件库：Tailwind UI、shadcn/ui、Aceternity UI、Magic UI、Uiverse、Flowbite、CSS-Tricks
    - 主题 / 灵感站：Awwwards、Dribbble、Behance、Land-book、Lapa Ninja、Godly
