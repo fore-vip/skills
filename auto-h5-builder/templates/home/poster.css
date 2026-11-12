@@ -2,7 +2,7 @@
 .home--poster{padding:0;background:var(--bg)}
 .po-hero{
   position:relative;overflow:hidden;padding:26px 22px 30px;color:#fff;
-  background:linear-gradient(158deg,var(--brand-deep) 6%,var(--brand) 92%);
+  background:linear-gradient(158deg,var(--brand-deep) 6%,var(--brand-hero) 92%);
   border-radius:0 0 28px 28px;
 }
 .po-hero::after{
@@ -46,7 +46,7 @@
 .po-list .svc-name{font-size:15px;font-weight:600;line-height:1.4}
 .po-list .svc-desc{margin-top:3px;font-size:12.5px;line-height:1.55;color:var(--muted)}
 .po-list .svc-meta{flex:none;text-align:right}
-.po-list .svc-price{font-size:15px;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums}
+.po-list .svc-price{font-size:15px;font-weight:700;color:var(--brand-ink);font-variant-numeric:tabular-nums}
 .po-list .svc-dur{margin-top:2px;font-size:11.5px;color:var(--muted)}
 .po-info{background:var(--card);border-radius:14px;padding:2px 16px;box-shadow:0 8px 20px rgba(28,20,16,.07)}
 .po-info .info-row{
@@ -56,10 +56,10 @@
 .po-info .info-row:last-child{border-bottom:0}
 .po-info .info-k{flex:none;color:var(--muted);font-size:13px}
 .po-info .info-v{flex:1;min-width:0;text-align:right}
-.po-info .info-v a{color:var(--brand);font-weight:600}
+.po-info .info-v a{color:var(--brand-ink);font-weight:600}
 .po-share{
   display:flex;align-items:center;justify-content:center;gap:8px;margin:22px 0 0;
   padding:15px 0;border-radius:14px;border:1px dashed var(--line);
   font-size:13.5px;color:var(--sub);background:var(--brand-wash);
 }
-.po-share i{font-style:normal;color:var(--brand)}
+.po-share i{font-style:normal;color:var(--brand-ink)}

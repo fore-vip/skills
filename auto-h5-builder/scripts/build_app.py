@@ -67,13 +67,16 @@ def luminance(hex_color):
 
 def root_tokens(brand):
     """品牌色派生：浅色品牌自动改用深字与深底色，避免白字压浅黄这类不可读组合。"""
-    light = luminance(brand) > 0.30  # 白字对比不足 3:1 时改用深字
-    deep = "#3d332e" if luminance(brand) > 0.72 else darken(brand)
-    on_brand = "#241d1a" if light else "#fff"
+    lum = luminance(brand)
+    light = lum > 0.30          # 白字对比不足 3:1 时改用深字
+    deep = "#3d332e" if lum > 0.72 else darken(brand, 0.42)
+    hero = darken(brand, 0.5) if light else brand   # 渐变亮端：浅色品牌压暗，保证白字可读
+    ink = darken(brand, 0.45) if lum > 0.55 else brand  # 浅底上的品牌文字色
     return (
         ":root{\n"
-        "  --brand:%s;--brand-soft:%s;--brand-wash:%s;--brand-deep:%s;--on-brand:%s;\n"
-        "}\n" % (brand.lower(), mix_with_white(brand), mix_with_white(brand, 0.055), deep, on_brand)
+        "  --brand:%s;--brand-soft:%s;--brand-wash:%s;--brand-deep:%s;--brand-hero:%s;--brand-ink:%s;--on-brand:%s;\n"
+        "}\n" % (brand.lower(), mix_with_white(brand), mix_with_white(brand, 0.055), deep, hero, ink,
+                  "#241d1a" if light else "#fff")
     )
 
 

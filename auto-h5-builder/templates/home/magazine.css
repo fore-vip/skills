@@ -25,7 +25,7 @@
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
   font-size:13px;color:var(--sub);letter-spacing:.03em;
 }
-.ed-link i{font-style:normal;color:var(--brand)}
+.ed-link i{font-style:normal;color:var(--brand-ink)}
 .ed-block{margin-top:34px}
 .ed-label{
   margin:0 0 4px;font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;
@@ -36,7 +36,7 @@
   padding:16px 0;border-bottom:1px solid var(--line);
 }
 .ed-list li::before{
-  content:counter(ed,decimal-leading-zero);font-size:11px;letter-spacing:.06em;color:var(--brand);
+  content:counter(ed,decimal-leading-zero);font-size:11px;letter-spacing:.06em;color:var(--brand-ink);
   font-variant-numeric:tabular-nums;
 }
 .ed-list .svc-main{min-width:0}
@@ -51,5 +51,5 @@
 }
 .ed-info .info-k{flex:none;font-size:11.5px;letter-spacing:.14em;color:var(--muted);padding-top:3px}
 .ed-info .info-v{flex:1;min-width:0;text-align:right;color:var(--text)}
-.ed-info .info-v a{color:var(--brand);border-bottom:1px solid var(--brand-soft)}
+.ed-info .info-v a{color:var(--brand-ink);border-bottom:1px solid var(--brand-soft)}
 .ed-foot{margin:26px 0 0;text-align:center;font-size:11.5px;letter-spacing:.04em;color:var(--muted)}
