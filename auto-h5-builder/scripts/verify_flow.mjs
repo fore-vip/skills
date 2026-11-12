@@ -3,7 +3,7 @@
  * 真实浏览器闸门：390×844 走完四个独立页面，验证右上菜单与主流程真的成立。
  *
  * 用法：
- *   node verify_flow.mjs --spec examples/salon.spec.json --url http://127.0.0.1:8767/salon.html
+ *   node verify_flow.mjs --spec examples/store.spec.json --url http://127.0.0.1:8767/store.html
  *   node verify_flow.mjs --spec out/spec.json --url https://xxx.example.com/ --cloud
  *
  * --cloud 时要求提交能落库并给出单号；不加则要求提交按钮禁用且有可见提示。
@@ -15,8 +15,8 @@ import { resolve } from 'node:path';
 const argv = process.argv.slice(2);
 const arg = k => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : undefined; };
 const flag = k => argv.includes(k);
-const SPEC = resolve(arg('--spec') || 'examples/salon.spec.json');
-const URL_ARG = arg('--url') || 'http://127.0.0.1:8767/salon.html';
+const SPEC = resolve(arg('--spec') || 'examples/store.spec.json');
+const URL_ARG = arg('--url') || 'http://127.0.0.1:8767/store.html';
 const WIDTH = Number(arg('--width') || 390);
 const HEIGHT = Number(arg('--height') || 844);
 const SHOT_PREFIX = arg('--shots') || '/tmp/store-h5';

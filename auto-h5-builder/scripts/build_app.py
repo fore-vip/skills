@@ -380,7 +380,7 @@ def main():
         "__STORE_NAME__": store["name"],
         "__SLOGAN__": store["slogan"],
         "__HERO_SUB__": store.get("heroSub") or "点下方按钮选服务与时间，到店核销",
-        "__INVITE_TITLE__": (spec.get("share") or {}).get("inviteTitle") or "邀请好友来做护理",
+        "__INVITE_TITLE__": (spec.get("share") or {}).get("inviteTitle") or "邀请好友到店体验",
         "__SVC_COUNT__": str(len(spec["services"])),
         "__HOURS__": html_escape(store["hours"]),
         "__ADDRESS__": html_escape(store["address"]),

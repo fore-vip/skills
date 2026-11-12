@@ -8,7 +8,7 @@ description: 门店预约 H5 应用 · 一店一设计的四页预约应用，�
 description_zh: 一店一设计的门店预约 H5 生成器，本地生活门店建站与运营。输入门店信息即产出四页独立单文件 H5（首页 / 预约 / 分享 / 店主管理），右上菜单统一导航；首页结构固定、视觉现场设计——按主题检索开源组件库、设计灵感站与同业品牌官网后再原创。流程：写 spec 与首页设计 → 选定并激活云应用 → 建 bookings / store_owner 两表并收紧策略 → 注入云配置生成正式页 → 静态与浏览器双闸门 → 店长首登认领。顾客提交即落库，首登账号成为店长、登录后直达管理台改单，分享链接带邀请码可统计拉新；正式页自带 canonical、Open Graph 与 LocalBusiness 结构化数据，转发有标题摘要、也便于搜索引擎与生成式引擎（SEO / GEO）收录。借语法不抄成品，不引外部字体与图片。
 description_en: "Store Booking H5 Builder · a four-page booking site designed per store, for local business websites (fore.vip). Turns store-h5 / build-a-booking-page / owner console / booking order management / invite-code referral / share-to-grow into a single-file H5 that ships as-is: the home page keeps a fixed functional contract while its visual design is produced from scratch for each store after researching open-source UI libraries, design showcases and real brand sites, and a top-right menu drives booking / share / sign-in / sign-out. Each published page ships canonical, Open Graph and LocalBusiness structured data, so search engines and generative engines (SEO/GEO) can read the store facts and social shares get a title and summary. Flow: spec.json plus the home design (design-brief.json + home.html + home.css), pick or reuse a cloud application, activate it, create the bookings and store_owner tables with 13 SQL statements tightening RLS, build the production page with the cloud config injected, clear the static and real-browser gates, then have the owner sign in once to claim ownership. Bookings land in the cloud, the first account to sign in becomes the owner and lands straight in the console to change order status, and shared links carry invite codes. Borrow layout grammar instead of copying finished work, keep external fonts and images out, and publish only on explicit instruction."
 category: engineering
-version: 1.1.3
+version: 1.0.0
 author: fore.vip
 agent_created: true
 triggers:
@@ -181,8 +181,8 @@ templates/app.js            路由、菜单、渲染、云端读写、管理台
 scripts/build_app.py        spec + 模板 + 现场设计 → 单文件 H5
 scripts/verify_app.py       静态闸门（结构 + 设计来源）
 scripts/verify_flow.mjs     真实浏览器四页流程
-examples/salon.spec.json    可跑样例
-examples/salon.home.*      样例的首页设计
-examples/salon.brief.json   样例的设计研究记录
-examples/salon.html         样例生成物
+examples/store.spec.json    可跑样例（摄影工作室）
+examples/store.home.*      样例的首页设计
+examples/store.brief.json   样例的设计研究记录
+examples/store.html         样例生成物
 ```

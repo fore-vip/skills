@@ -1,0 +1,35 @@
+{
+  "design_name": "proof-frame",
+  "design_family": "darkroom-proof",
+  "theme_keywords": ["社区摄影工作室", "干净", "当即交付", "中等客单"],
+  "researched_at": "2026-11-13",
+  "references": [
+    {
+      "url": "https://www.awwwards.com/websites/photography/",
+      "site": "Awwwards（摄影类站点合集）",
+      "source_type": "showcase",
+      "borrow": "TERAKAWA Photo Office、Almira Kho 这类站首屏只放一处视觉与极小的导航，文字压到「名字 + 一句」为止，不留第二重点"
+    },
+    {
+      "url": "https://flowbite.com/blocks/marketing/hero/",
+      "site": "Flowbite（开源组件库）",
+      "source_type": "open-source",
+      "borrow": "hero 纵向顺序固定为 小标 → 标题 → 一句说明 → 主 CTA → 一行事实，事实行用分隔线上压一条细线"
+    },
+    {
+      "url": "https://getbootstrap.com/docs/5.3/examples/",
+      "site": "Bootstrap Examples（开源示例）",
+      "source_type": "open-source",
+      "borrow": "卡片网格用等高单元、统一内边距，标题与元信息分成上下两层，价格与时长靠两端对齐"
+    }
+  ],
+  "tokens": {
+    "palette": ["#3f5a4a 深墨绿（首屏底与品牌色）", "#e9e4d8 米白（首屏文字）", "#faf7f4 纸白（内容底）", "#c8a15a 暖金（不用于正文，只做分隔与强调留白）"],
+    "type": "标题无衬线粗体（-0.6px 字距），正文系统无衬线，数字全部等宽（tabular-nums）",
+    "radius": "首屏底 18px、按钮 3px、卡片 10px——三档不混用",
+    "shape": "深墨色首屏压四角取景框线 + 下方双列价目卡；信息区用点线引导，不做整块底色",
+    "motion": "首屏一次上浮 10px / 0.3s，按钮按压缩放 0.985；prefers-reduced-motion 下全关"
+  },
+  "originality": "只借版式语法（首屏顺序、取景框、网格卡片），未复制任何站点的 CSS / HTML / 图片 / 字体文件；取景框、暗角与点线全部用渐变与边框自绘，无外部字体与外链图片。",
+  "notes": "与上一版 linen-ledger（浅色麻布、衬线价目清单）换了 design_family，不是只改品牌色。"
+}

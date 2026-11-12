@@ -2,9 +2,9 @@
 """静态闸门：检查生成出来的门店 H5 是否结构完整、接线正确、设计来源可追。
 
 用法：
-  python3 verify_app.py --spec examples/salon.spec.json \
+  python3 verify_app.py --spec examples/store.spec.json \
       --page out/index.html --brief design-brief.json
-  python3 verify_app.py --spec examples/salon.spec.json \
+  python3 verify_app.py --spec examples/store.spec.json \
       --page out/index.html --brief design-brief.json --cloud
 """
 import sys
