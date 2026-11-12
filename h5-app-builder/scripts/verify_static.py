@@ -90,6 +90,7 @@ def main():
        "检测到 %d 个变量块" % len(token_block))
     body_layout = re.search(r'<body data-layout="([^"]+)"', page)
     actual_layout = body_layout.group(1) if body_layout else ""
+    sys.dont_write_bytecode = True  # 运行不污染技能包
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from pick_layout import choose
     expected = choose(meta.get("topic", meta["title"]), override=meta.get("layoutId") or None)
