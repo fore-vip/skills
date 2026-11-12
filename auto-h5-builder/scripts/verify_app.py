@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
-"""静态闸门：检查生成出来的门店 H5 是否结构完整、接线正确、没有半成品痕迹。
+"""静态闸门：检查生成出来的门店 H5 是否结构完整、接线正确、设计来源可追。
 
 用法：
-  python3 verify_app.py --spec examples/salon.spec.json --page examples/salon.html
-  python3 verify_app.py --spec examples/salon.spec.json --page out/index.html --cloud
+  python3 verify_app.py --spec examples/salon.spec.json \
+      --page out/index.html --brief design-brief.json
+  python3 verify_app.py --spec examples/salon.spec.json \
+      --page out/index.html --brief design-brief.json --cloud
 """
 import sys
 
 sys.dont_write_bytecode = True
 
 import argparse
+import datetime
 import json
 import pathlib
 import re
+from urllib.parse import urlparse
 
 SDK = "https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"
-LAYOUTS = ("magazine", "poster", "split", "quiet")
+SOURCE_TYPES = ("open-source", "showcase", "brand")
 CHECKS = []
 
 
@@ -23,10 +27,17 @@ def check(name, value, ok):
     CHECKS.append((name, str(value)[:70], bool(ok)))
 
 
+def home_block_of(html):
+    """首页板块边界：到下个视图（book）或 main 结束。首页设计允许嵌套 section。"""
+    m = re.search(r'data-view="home".*?(?=data-view="book"|</main>)', html, re.S)
+    return m.group(0) if m else ""
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--spec", required=True)
     ap.add_argument("--page", required=True)
+    ap.add_argument("--brief", required=True, help="设计研究记录 design-brief.json")
     ap.add_argument("--cloud", action="store_true", help="按云端模式检查")
     args = ap.parse_args()
 
@@ -134,20 +145,74 @@ def main():
     check("样式与脚本内联", html.count("<style>") >= 1 and html.count("<script>") >= 2,
           html.count("<style>") >= 1)
 
-    # ⑯ 首页版式：四套之一，只注入一套，接线齐全
-    layout = re.search(r'data-layout="([a-z]+)"', html)
-    name = layout.group(1) if layout else ""
-    check("首页版式在四套之内", name or "无", name in LAYOUTS)
-    marks = sorted(set(re.findall(r"/\* layout:([a-z]+) \*/", html)))
-    check("只注入一套版式样式", ",".join(marks) or "0", marks == [name])
-    home_block = re.search(r'data-view="home".*?</section>', html, re.S)
-    home_block = home_block.group(0) if home_block else ""
+    # ⑯ 首页：结构契约固定，视觉由外部的现场设计注入
+    design = re.search(r'data-home="([a-z0-9-]+)"', html)
+    name = design.group(1) if design else ""
+    check("首页设计名已标注", name or "无", bool(name))
+    marks = sorted(set(re.findall(r"/\* home:([a-z0-9-]+) \*/", html)))
+    check("只注入一套首页设计样式", ",".join(marks) or "0", marks == [name])
+    check("无旧版式残留", "data-layout" in html,
+          "data-layout" not in html and "/* layout:" not in html)
+    home_block = home_block_of(html)
     check("首页有主行动按钮", 'data-go="book"' in home_block, 'data-go="book"' in home_block)
+    check("首页有 h1 主张", bool(re.search(r"<h1[^>]*>", home_block)),
+          bool(re.search(r"<h1[^>]*>", home_block)))
     check("首页服务与到访均接线",
           'id="svcList"' in home_block and 'id="storeInfo"' in home_block,
           'id="svcList"' in home_block and 'id="storeInfo"' in home_block)
+    check("首页服务容器是列表", bool(re.search(r'<(ul|ol)[^>]*id="svcList"', home_block)),
+          bool(re.search(r'<(ul|ol)[^>]*id="svcList"', home_block)))
     check("首页样式不外挂", "style=" not in home_block and "<style" not in home_block,
           "style=" not in home_block)
+    home_css = re.search(r"/\* home:[a-z0-9-]+ \*/(.*)$", html, re.S)
+    home_css = home_css.group(1) if home_css else ""
+    check("首页用品牌令牌驱动配色", "var(--brand" in home_css, "var(--brand" in home_css)
+    check("首页无外部字体与图片",
+          "@font-face" not in home_css and "url(http" not in home_css,
+          "@font-face" not in home_css and "url(http" not in home_css)
+    check("首页有动效就有减动效分支",
+          "reduced-motion" if "prefers-reduced-motion" in html else
+          ("无动效" if not re.search(r"(animation|transition)\s*:", home_css) else "有动效未关"),
+          "prefers-reduced-motion" in html or not re.search(r"(animation|transition)\s*:", home_css))
+
+    # ⑰ 设计研究：来源真实、覆盖两类以上、有原创声明
+    try:
+        brief = json.loads(pathlib.Path(args.brief).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        brief = None
+        check("设计研究记录存在", str(args.brief), False)
+    except json.JSONDecodeError as e:
+        brief = None
+        check("设计研究记录是合法 JSON", str(e), False)
+    if brief is not None:
+        check("设计名与页面一致", brief.get("design_name"), brief.get("design_name") == name)
+        keywords = [k for k in (brief.get("theme_keywords") or []) if str(k).strip()]
+        check("主题关键词 ≥2", len(keywords), len(keywords) >= 2)
+        refs = [r for r in (brief.get("references") or []) if isinstance(r, dict)]
+        kinds = sorted({r.get("source_type") for r in refs if r.get("source_type") in SOURCE_TYPES})
+        check("设计来源 ≥3 条且两类以上", "%d 条 / %s" % (len(refs), ",".join(kinds) or "无"),
+              len(refs) >= 3 and len(kinds) >= 2)
+        check("含开源或灵感站来源", ",".join(kinds) or "无",
+              any(k in kinds for k in ("open-source", "showcase")))
+        bad_url = [r.get("url", "") for r in refs
+                   if not re.match(r"^https?://", str(r.get("url", "")))]
+        hosts = {urlparse(str(r.get("url", ""))).netloc for r in refs if r.get("url")}
+        check("来源 URL 合法且跨站", "%d 个站" % len(hosts), not bad_url and len(hosts) >= 2)
+        weak = [r.get("borrow", "") for r in refs if len(str(r.get("borrow", "")).strip()) < 8]
+        check("每条来源写了借鉴点", weak or "0", not weak)
+        tokens = brief.get("tokens") or {}
+        palette = tokens.get("palette") or []
+        check("设计令牌 配色 + 字体", "%d 色" % len(palette),
+              len(palette) >= 3 and bool(tokens.get("type")))
+        check("有原创边界说明", str(brief.get("originality", ""))[:30],
+              len(str(brief.get("originality", "")).strip()) >= 10)
+        try:
+            stamp = datetime.date.fromisoformat(str(brief.get("researched_at", "")))
+            fresh = (datetime.date.today() - stamp).days <= 90
+        except ValueError:
+            fresh = False
+            stamp = None
+        check("检索日期是本次生成（≤90 天）", str(stamp), fresh)
 
     failed = 0
     for name, value, ok in CHECKS:

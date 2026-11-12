@@ -1,0 +1,39 @@
+{
+  "design_name": "linen-ledger",
+  "design_family": "editorial-ledger",
+  "researched_at": "2026-11-13",
+  "theme_keywords": ["社区面部护理", "安静", "手艺感", "中客单", "单次到店"],
+  "references": [
+    {
+      "url": "https://www.flowfav.com/template/minimal-skincare-clinic-webflow-website-template",
+      "site": "FlowFav（Webflow 模板站）",
+      "source_type": "showcase",
+      "borrow": "首屏叠一段紧凑小字标 + 一个预约按钮，白色区块里用粗黑标题配斜体衬线做点缀；学到的是「标题层级靠字体切换而非彩色」"
+    },
+    {
+      "url": "https://www.rocket.new/templates/glow-radiant-skincare-landing-page-template",
+      "site": "Rocket 模板库",
+      "source_type": "showcase",
+      "borrow": "可可色正文压沙色底、强调色只出现在 CTA 与细节边缘；衬线只用于展示层（标题、价格），正文全走无衬线"
+    },
+    {
+      "url": "https://flowbite.com/blocks/marketing/hero/",
+      "site": "Flowbite（开源 Tailwind 组件库）",
+      "source_type": "open-source",
+      "borrow": "default hero 的纵向顺序：小标 → 标题 → 一句说明 → 主 CTA → 一行事实；我把最后那行事实做成 dl 两列（营业 / 在册服务数）"
+    }
+  ],
+  "tokens": {
+    "palette": ["#b4735a", "#faf7f4", "#241d1a", "#efe4dc", "#8a7a72"],
+    "type": {
+      "display": "衬线 34/1.26，字距 -0.4px",
+      "body": "系统无衬线 15/1.72",
+      "label": "11/1.6，字距 .16–.24em"
+    },
+    "radius": "2px，按钮也近直角",
+    "shape": "3px 竖线小标 + 发丝虚线分项的价目单 + 标题下与页脚各一道实线 + 满页 4px 一格的竖向麻布纹，全页无卡片阴影",
+    "motion": "仅标题 280ms 上浮，其余只有 opacity 反馈；reduced-motion 下全部关闭"
+  },
+  "structure_idea": "把价目单当主角：首屏一句话 + 两列事实 + 主按钮，紧接着编号 01–04 的虚线价目，到访信息压成两列小格收尾，不做卡片墙",
+  "originality": "只借构图语法与信息顺序；未复制任何 CSS / HTML / 图片 / 字体文件，麻布纹与色晕由 repeating-linear-gradient、conic-gradient 自绘"
+}

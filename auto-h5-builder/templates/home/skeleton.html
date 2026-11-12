@@ -1,0 +1,27 @@
+<section class="view home" data-view="home" id="view-home" data-home="skeleton">
+  <!-- 结构起点，不是版式。复制到 <工作目录>/home.html 后按 references/home-design.md
+       的 brief 重写视觉：板块顺序、构图、装饰、字体语气都归你定。
+       下面这些锚点不能动：#svcList / #storeInfo / data-go="book" / data-go="share"。 -->
+
+  <div class="home-hero">
+    <p class="home-eyebrow">__STORE_NAME__ · 预约到店</p>
+    <h1 class="home-title">__SLOGAN__</h1>
+    <p class="home-sub">__HERO_SUB__</p>
+    <div class="home-actions">
+      <button class="home-cta" type="button" data-go="book">立即预约</button>
+      <a class="home-alt" href="#/share" data-go="share">分享给朋友</a>
+    </div>
+  </div>
+
+  <div class="home-sec">
+    <h2 class="home-sec-t">服务与价目</h2>
+    <ul class="home-svc" id="svcList"></ul>
+  </div>
+
+  <div class="home-sec">
+    <h2 class="home-sec-t">到访信息</h2>
+    <div class="home-info" id="storeInfo"></div>
+  </div>
+
+  <p class="home-foot">共 __SVC_COUNT__ 项服务 · 提交后店主会按手机号确认</p>
+</section>

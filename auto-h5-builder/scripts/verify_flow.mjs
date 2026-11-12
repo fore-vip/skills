@@ -124,10 +124,9 @@ try {
   add('菜单默认收起', await evalJs('document.getElementById("menuPanel").hidden'),
     await evalJs('document.getElementById("menuPanel").hidden'));
 
-  /* ①b 首页版式：首屏行动点、标题字号、元素不出屏 */
-  const LAYOUTS = ['magazine', 'poster', 'split', 'quiet'];
-  const lay = await evalJs('document.getElementById("view-home").dataset.layout');
-  add('首页版式可识别', lay, LAYOUTS.includes(lay));
+  /* ①b 首页：只验结构契约与首屏可用性。观感由现场设计决定，脚本不预设风格 */
+  const design = await evalJs('document.getElementById("view-home").dataset.home');
+  add('首页设计名已标注', design, !!design && /^[a-z0-9-]{2,33}$/.test(String(design)));
   const hero = JSON.parse(await evalJs(`(() => {
     const b = document.querySelector('#view-home [data-go="book"]');
     const t = document.querySelector('#view-home h1');

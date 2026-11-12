@@ -2,13 +2,17 @@
 """spec + 模板 → 单文件门店 H5（首页 / 预约 / 分享 / 店主管理）
 
 用法：
-  python3 build_app.py --spec store.json --out index.html
-  python3 build_app.py --spec store.json --out index.html --layout poster
   python3 build_app.py --spec store.json --out index.html \
+      --home-html home.html --home-css home.css
+  python3 build_app.py --spec store.json --out index.html --home <目录>
+  python3 build_app.py --spec store.json --out index.html \
+      --home-html home.html --home-css home.css \
       --cloud-config /tmp/public-config.json --base-url https://xxx.example.com
 
 不带 --cloud-config 时产出预览版：页面可看，提交按钮禁用并提示云端未接通。
-不带 --layout 时从 templates/home/ 里随机选一套首页版式（spec.store.layout 可固定）。
+
+首页没有内置版式：必须按 references/home-design.md 现场做设计，产出 home.html /
+home.css 再注入。结构起点是 templates/home/skeleton.html / .css。
 """
 import sys
 
@@ -17,14 +21,11 @@ sys.dont_write_bytecode = True
 import argparse
 import json
 import pathlib
-import random
 import re
 from html import escape as html_escape
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TPL = ROOT / "templates"
-HOME = TPL / "home"
-LAYOUTS = ("magazine", "poster", "split", "quiet")
 STATUS_SET = ("pending", "confirmed", "done", "cancelled")
 
 
@@ -80,15 +81,68 @@ def root_tokens(brand):
     )
 
 
-def pick_layout(spec, forced):
-    pinned = str((spec.get("store") or {}).get("layout") or "").strip()
-    want = forced or pinned
-    if want:
-        if want not in LAYOUTS:
-            fail("首页版式只能是 %s，收到：%s" % (" / ".join(LAYOUTS), want))
-        source = "--layout" if forced else "spec.store.layout"
-        return want, "固定（%s）" % source
-    return random.choice(LAYOUTS), "随机"
+def load_home(args):
+    """首页设计与业务解耦：结构锚点必须齐，观感由调用方现场产出。"""
+    if args.layout:
+        fail("--layout 已废弃：首页不再有内置版式。\n"
+             "  按 references/home-design.md 现场做设计，产出 home.html / home.css 后：\n"
+             "  --home-html home.html --home-css home.css")
+
+    html_path = css_path = None
+    if args.home:
+        base = pathlib.Path(args.home)
+        html_path, css_path = base / "home.html", base / "home.css"
+    if args.home_html:
+        html_path = pathlib.Path(args.home_html)
+    if args.home_css:
+        css_path = pathlib.Path(args.home_css)
+
+    if not html_path or not css_path:
+        fail("首页要现场设计，构建时必须给设计文件：\n"
+             "  --home-html <home.html> --home-css <home.css>   或   --home <目录>\n"
+             "  结构起点：templates/home/skeleton.html / .css\n"
+             "  做法与 brief 字段：references/home-design.md")
+
+    for p in (html_path, css_path):
+        if not p.is_file():
+            fail("找不到首页设计文件：" + str(p))
+
+    home_html = html_path.read_text(encoding="utf-8").strip()
+    home_css = css_path.read_text(encoding="utf-8").strip()
+    if not home_html:
+        fail("首页 HTML 是空的：" + str(html_path))
+    if not home_css:
+        fail("首页 CSS 是空的：" + str(css_path))
+
+    name = (args.home_name or html_path.stem).strip()
+    if name in ("home", "index"):
+        name = html_path.parent.name or "custom"
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,32}", name):
+        fail("首页设计名只能用小写字母 / 数字 / 连字符（2–33 位），收到：" + name)
+
+    if 'data-view="home"' not in home_html or 'id="view-home"' not in home_html:
+        fail("首页设计文件必须是一段 section：<section ... data-view=\"home\" id=\"view-home\" "
+             "data-home=\"%s\">，收到 %s" % (name, html_path))
+
+    if "data-home=" in home_html:
+        home_html = re.sub(r'data-home="[^"]*"', 'data-home="%s"' % name, home_html, count=1)
+    else:
+        home_html = home_html.replace('data-view="home"', 'data-view="home" data-home="%s"' % name, 1)
+
+    hooks = {
+        'id="svcList"': "服务列表容器（<ul id=\"svcList\">）",
+        'id="storeInfo"': "到访信息容器（<div id=\"storeInfo\">）",
+        'data-go="book"': "主按钮（立即预约 → #/book）",
+    }
+    missing = [label for hook, label in hooks.items() if hook not in home_html]
+    if missing:
+        fail("首页设计缺接线：\n  - " + "\n  - ".join(missing) +
+             "\n  这三个锚点由 app.js 驱动，必须保留（见 references/home-design.md 第一节）")
+
+    if "var(--brand" not in home_css:
+        print("[warn] 首页 CSS 没用到品牌令牌 var(--brand…)，观感可能与门店脱节")
+
+    return name, home_html, home_css, str(html_path)
 
 
 def load_spec(path):
@@ -108,10 +162,6 @@ def load_spec(path):
     brand = str(store.get("brand", "#b4735a")).strip()
     if not re.fullmatch(r"#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})", brand):
         errs.append("store.brand 需要 #RRGGBB 形式，收到：" + brand)
-    layout = str(store.get("layout", "")).strip()
-    if layout and layout not in LAYOUTS:
-        errs.append("store.layout 只能是 %s，收到：%s" % (" / ".join(LAYOUTS), layout))
-
     services = spec.get("services") or []
     if not services:
         errs.append("services 至少给一项服务")
@@ -190,11 +240,22 @@ def head_extra(base_url, spec):
     return "\n".join(lines)
 
 
+def home_block_of(html):
+    """首页板块的边界：到下个视图（book）或 main 结束为止。
+    设计里允许嵌套 section，所以不能按第一个 </section> 截断。"""
+    m = re.search(r'data-view="home".*?(?=data-view="book"|</main>)', html, re.S)
+    return m.group(0) if m else ""
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--spec", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--layout", choices=LAYOUTS, help="指定首页版式；不填则随机")
+    ap.add_argument("--home", help="首页设计目录（内含 home.html / home.css）")
+    ap.add_argument("--home-html", help="首页设计 HTML（含 data-view=\"home\" 的 section）")
+    ap.add_argument("--home-css", help="首页设计 CSS")
+    ap.add_argument("--home-name", help="设计名，默认取 home.html 的文件名")
+    ap.add_argument("--layout", help=argparse.SUPPRESS)
     ap.add_argument("--cloud-config")
     ap.add_argument("--base-url", default="")
     args = ap.parse_args()
@@ -206,17 +267,14 @@ def main():
     brand = store.get("brand", "#b4735a")
     base_url = args.base_url.rstrip("/") + "/" if args.base_url else ""
     cfg = load_cloud_config(args.cloud_config) if args.cloud_config else None
-    layout, layout_src = pick_layout(spec, args.layout)
+    home_name, home_html, home_css, home_src = load_home(args)
 
     if cfg and not base_url:
         fail("接了云就必须给 --base-url，Origin 要对得上真实域名")
 
-    home_html = (HOME / (layout + ".html")).read_text(encoding="utf-8")
-    home_css = (HOME / (layout + ".css")).read_text(encoding="utf-8")
-
     css = (TPL / "app.css").read_text(encoding="utf-8")
     css = css.replace("__ROOT_TOKENS__", root_tokens(brand))
-    css = css.rstrip() + "\n\n/* layout:%s */\n%s" % (layout, home_css.rstrip() + "\n")
+    css = css.rstrip() + "\n\n/* home:%s */\n%s" % (home_name, home_css.rstrip() + "\n")
 
     js = (TPL / "app.js").read_text(encoding="utf-8")
     html = (TPL / "app.html").read_text(encoding="utf-8").replace("<!--__HOME__-->", home_html.rstrip())
@@ -262,13 +320,12 @@ def main():
         if status + ":" not in html:
             fail("生成结果缺状态枚举：" + status)
 
-    home_block = re.search(r'data-view="home".*?</section>', html, re.S)
-    home_block = home_block.group(0) if home_block else ""
-    if 'data-layout="%s"' % layout not in home_block:
-        fail("首页版式没写进页面：" + layout)
+    home_block = home_block_of(html)
+    if 'data-home="%s"' % home_name not in home_block:
+        fail("首页设计名没写进页面：" + home_name)
     for hook in ('id="svcList"', 'id="storeInfo"', 'data-go="book"'):
         if hook not in home_block:
-            fail("首页版式 %s 缺接线：%s" % (layout, hook))
+            fail("首页设计 %s 缺接线：%s" % (home_name, hook))
 
     out = pathlib.Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -278,7 +335,7 @@ def main():
     print("[ok] %s  %.1f KB" % (out, out.stat().st_size / 1024))
     print("     门店=%s | 服务 %d 项 | 时段 %d 个 | %s" % (
         store["name"], len(spec["services"]), len(spec["booking"]["slots"]), mode))
-    print("     首页版式=%s（%s）｜可换：%s" % (layout, layout_src, " / ".join(LAYOUTS)))
+    print("     首页设计=%s  ← %s" % (home_name, home_src))
     if base_url:
         print("     站点=%s | 分享链接带 ?ref=<邀请码>" % base_url)
     if not cfg:

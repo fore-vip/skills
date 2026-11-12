@@ -1,0 +1,26 @@
+/* 骨架的功能性底线：只保证「能读、能点、不溢出」。
+   这不是一套视觉方案——视觉按 design-brief 现场写，写完这段可以整体替换。 */
+.home{padding:20px 20px 28px}
+.home-title{font-size:30px;line-height:1.28;word-break:auto-phrase;text-wrap:balance}
+.home-sub{margin-top:12px;font-size:14px;line-height:1.7;color:var(--sub)}
+.home-actions{display:grid;gap:12px;margin-top:22px}
+.home-cta{
+  height:52px;border:0;border-radius:var(--r-sm);background:var(--brand);color:var(--on-brand);
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+}
+.home-alt{display:inline-flex;align-items:center;justify-content:center;min-height:44px;font-size:13px;color:var(--sub)}
+.home-sec{margin-top:32px}
+.home-sec-t{font-size:12px;letter-spacing:.16em;color:var(--muted)}
+.home-svc{margin-top:8px}
+.home-svc li{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--line)}
+.home-svc .svc-main{min-width:0}
+.home-svc .svc-name{font-size:15.5px;font-weight:600;line-height:1.4}
+.home-svc .svc-desc{margin-top:4px;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.home-svc .svc-meta{text-align:right;white-space:nowrap}
+.home-svc .svc-price{font-size:16px;font-variant-numeric:tabular-nums}
+.home-svc .svc-dur{margin-top:3px;font-size:11.5px;color:var(--muted)}
+.home-info .info-row{display:flex;gap:16px;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.6}
+.home-info .info-k{flex:none;color:var(--muted);font-size:12.5px}
+.home-info .info-v{flex:1;min-width:0;text-align:right}
+.home-info .info-v a{color:var(--brand-ink);text-decoration:underline;text-underline-offset:2px}
+.home-foot{margin-top:26px;text-align:center;font-size:11.5px;color:var(--muted)}

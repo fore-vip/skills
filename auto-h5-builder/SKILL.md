@@ -4,11 +4,11 @@ slug: auto-h5-builder
 displayName: 门店预约 H5 应用
 display_name: 门店预约 H5 应用
 display_name_en: Store Booking H5 Builder
-description: 输入一家门店的信息，产出固定四页（首页 / 预约 / 分享 / 店主管理）的单文件 H5，右上菜单统一导航（预约 / 分享 / 登录 / 退出），并接通云服务：顾客提交预约落库，首个登录的账号即店长、登录后直达管理台改单，分享链接带邀请码可统计拉新。
-description_zh: 生成标准四页门店 H5（首页 / 预约 / 分享 / 店主管理），右上菜单导航，接通云服务与订单管理。
-description_en: "Generate a standard four-page store H5 (home, booking, share, owner console) with a top-right menu, wired to a cloud backend: customers book, the first account that signs in becomes the owner, and shared links carry invite codes."
+description: 输入一家门店的信息，产出固定四页（首页 / 预约 / 分享 / 店主管理）的单文件 H5：首页结构与功能固定、视觉按门店主题现场检索开源组件库 / 设计灵感站 / 同业品牌官网后原创设计；右上菜单统一导航（预约 / 分享 / 登录 / 退出），并接通云服务：顾客提交预约落库，首个登录的账号即店长、登录后直达管理台改单，分享链接带邀请码可统计拉新。
+description_zh: 生成标准四页门店 H5（首页 / 预约 / 分享 / 店主管理），首页不套模板、按主题现场检索并原创设计，接通云服务与订单管理。
+description_en: "Generate a standard four-page store H5 (home, booking, share, owner console). The home page has a fixed functional contract but is designed from scratch each time after researching open-source UI libraries, design showcases and real brand sites for that store's theme, wired to a cloud backend: customers book, the first account that signs in becomes the owner, and shared links carry invite codes."
 category: engineering
-version: 1.0.0
+version: 1.1.0
 author: fore.vip
 agent_created: true
 triggers:
@@ -20,6 +20,7 @@ triggers:
   - "预约订单管理"
   - "邀请码裂变"
   - "分享拉新"
+  - "门店落地页设计"
   - "store h5"
   - "booking app"
 ---
@@ -30,7 +31,7 @@ triggers:
 
 ## 交付物与完成标准
 
-产出三样：`index.html`（单文件，含四个页面）、`spec.json`（门店资料）、云端 `bookings` + `store_owner` 两张表。
+产出四样：`index.html`（单文件，含四个页面）、`design-brief.json` 与 `home.html` / `home.css`（首页设计来源与实现）、`spec.json`（门店资料）、云端 `bookings` + `store_owner` 两张表。
 
 判定完成看四个动作，缺一不算完成：
 
@@ -63,30 +64,42 @@ triggers:
 
 不做底部 tab、不做顾客账号体系、不加第二个导航入口。门店差异只走 `spec.json`：文案、服务、价格、配色、时段。
 
-## 首页版式
+## 首页：结构固定，视觉现场设计
 
-首页不是一套固定样式：`templates/home/` 下有四种版式，构建时抽一套，四页结构与菜单都不变。
+首页不内置任何版式。技能只锁两样：**结构契约**（`h1` 主张、`#svcList`、`#storeInfo`、主 CTA、分享入口）与**移动端底线**（首屏看得见「立即预约」、触控 ≥44px、`390px` 不横滚）。其余——版块顺序、构图、配色、字体语气、装饰、动效——都按这家店的主题现场设计。
 
-| 版式 | 观感 |
-|---|---|
-| `magazine` | 纸媒编辑：衬线大标、编号清单、细线分隔 |
-| `poster` | 深色海报首屏 + 白卡列表，第一眼最强 |
-| `split` | 左文右色块首屏，服务双列卡，信息密度高 |
-| `quiet` | 极简居中、发丝线、描边按钮 |
+四步，一步不能省：
 
-默认随机；店主想固定就 `--layout poster`，或在 `spec.store.layout` 写死。四套共同底线：首屏「立即预约」可见、服务与到访信息齐全、`390px` 不出横向滚动条、按钮 ≥44px。新增版式只加 `templates/home/<名>.html` 与 `.css` 两个文件，不碰路由和业务逻辑。
+1. **定主题**：行业 + 调性 + 价格带，写成 3–6 个关键词（例：社区面部护理 / 安静 / 手艺感 / 中客单）。
+2. **当场检索**（`WebSearch` / `WebFetch`，不许凭记忆编 URL）：
+   - 开源社区与组件库：Tailwind UI、shadcn/ui、Aceternity UI、Magic UI、Uiverse、Flowbite、CSS-Tricks
+   - 主题 / 灵感站：Awwwards、Dribbble、Behance、Land-book、Lapa Ninja、Godly
+   - 同业品牌官网：搜该行业真实门店官网，看信息顺序与可信长相
+   合计 ≥3 条真实来源，至少跨两类。
+3. **落成 `design-brief.json`**：来源 URL + 每条「借了哪一处」（具体到构图、字号阶梯、价目写法）+ 设计令牌 + 原创边界。字段见 `references/home-design.md`。
+4. **写 `home.html` + `home.css`**：从 `templates/home/skeleton.html|css` 起手，按 brief 重写视觉。
+
+边界：借版式语法，不抄成品；不引外部字体与图片（页面要离线可开）；装饰用 CSS 渐变 / 内联 SVG / `data:` 自己画；不用 emoji 当图标。
+
+连续做第二家店必须换 `design_family`，不能只改品牌色。浅色品牌（如 `#f5c542`）上不压白字；正文对比度 ≥4.5:1；有动效就必须在 `prefers-reduced-motion` 下关掉。
 
 ## 生成
 
 ```bash
-# 预览：云端未接通，提交按钮禁用并给出提示；不写 --layout 就随机一套首页版式
-python3 scripts/build_app.py --spec store.json --out index.html
-python3 scripts/build_app.py --spec store.json --out index.html --layout poster
+# 预览：必须给现场设计文件，不给就报错（没有默认版式）
+python3 scripts/build_app.py --spec store.json --out index.html \
+  --home-html design/home.html --home-css design/home.css
+
+# 或整个目录（含 home.html / home.css）
+python3 scripts/build_app.py --spec store.json --out index.html --home design/
 
 # 收单：注入云配置与真实域名
 python3 scripts/build_app.py --spec store.json --out index.html \
+  --home-html design/home.html --home-css design/home.css \
   --cloud-config /tmp/public-config.json --base-url https://<真实域名>
 ```
+
+`--layout` 已废弃，传了会直接报错。设计名默认取 `home.html` 的文件名（叫 `home` 则取目录名），也可用 `--home-name` 指定。
 
 ## 云端与权限
 
@@ -102,30 +115,33 @@ python3 scripts/build_app.py --spec store.json --out index.html \
 
 1. `workbuddy_cloud_service action=inspect`：能复用就复用同一 applicationId，没有才 `activate`（`appType=web`）。确认框被取消就停，不重试、不绕路。
 2. `exec_sql` 建两张表 + RLS + GRANT + 策略，跑一次「插入 → 读回 → 改状态 → 再读回」。
-3. `--cloud-config` 与 `--base-url` 生成正式页面。
-4. 跑 `scripts/verify_app.py`（静态）与 `scripts/verify_flow.mjs`（真实浏览器；云模式加 `--cloud`），两条都 PASS 才算页面可用。
+3. `--home-html` / `--home-css` 与 `--cloud-config` / `--base-url` 一起生成正式页面。
+4. 跑 `scripts/verify_app.py`（静态，带 `--brief`）与 `scripts/verify_flow.mjs`（真实浏览器；云模式加 `--cloud`），两条都 PASS 才算页面可用。
 5. 店长用真实邮箱/手机号登录一次，确认菜单出现「店长」标记、管理台能读单；这一步同时完成首登认领。
 6. 提醒店主在云服务控制台打开「邮箱验证码」或「短信验证码」登录开关（一次性）。不开则管理台登录必然失败。
 7. 发布需用户明确指令；交付说明写清是本地预览还是已上线。
 
 ## 汇报口径
 
-写清：产出文件、四页是否齐、菜单四项是否可点、云端表名与证据（单号、状态变更前后）、店长账号归属（哪个邮箱/手机号认领的）、邀请码与统计口径、登录开关是否已开、未做事项。示例数据写示例数据，未上线写未上线。
+写清：产出文件、四页是否齐、菜单四项是否可点、首页设计名与 `design_family`（借了哪几条来源、各借了什么）、云端表名与证据（单号、状态变更前后）、店长账号归属（哪个邮箱/手机号认领的）、邀请码与统计口径、登录开关是否已开、未做事项。示例数据写示例数据，未上线写未上线。
 
 ## 目录
 
 ```
 SKILL.md                    本文件：范式、导航、流程、完成标准
 references/app-spec.md      spec 字段、四页内容要求、样例
+references/home-design.md   首页设计方法：检索来源、brief 字段、原创边界
 references/cloud-schema.md  建表 / RLS / 首登认领 / 邀请统计
 references/delivery.md      上线清单、验收记录、常见阻塞
 templates/app.html          四页骨架 + 右上菜单
-templates/app.css           移动端样式（品牌色走 CSS 变量）
-templates/home/*.html|css   四套首页版式（构建时随机注入一套）
+templates/app.css           移动端基础样式（品牌色走 CSS 变量）
+templates/home/skeleton.*   首页结构骨架（复制起手，不参与默认构建）
 templates/app.js            路由、菜单、渲染、云端读写、管理台
-scripts/build_app.py        spec + 模板 → 单文件 H5
-scripts/verify_app.py       静态闸门
+scripts/build_app.py        spec + 模板 + 现场设计 → 单文件 H5
+scripts/verify_app.py       静态闸门（结构 + 设计来源）
 scripts/verify_flow.mjs     真实浏览器四页流程
 examples/salon.spec.json    可跑样例
+examples/salon.home.*      样例的首页设计
+examples/salon.brief.json   样例的设计研究记录
 examples/salon.html         样例生成物
 ```
