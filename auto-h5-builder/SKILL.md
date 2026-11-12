@@ -4,11 +4,11 @@ slug: auto-h5-builder
 displayName: 门店预约 H5 应用
 display_name: 门店预约 H5 应用
 display_name_en: Store Booking H5 Builder
-description: 输入一家门店的信息，产出固定四页（首页 / 预约 / 分享 / 店主管理）的单文件 H5：首页结构与功能固定、视觉按门店主题现场检索开源组件库 / 设计灵感站 / 同业品牌官网后原创设计；右上菜单统一导航（预约 / 分享 / 登录 / 退出），并接通云服务：顾客提交预约落库，首个登录的账号即店长、登录后直达管理台改单，分享链接带邀请码可统计拉新。
-description_zh: 生成标准四页门店 H5（首页 / 预约 / 分享 / 店主管理），首页不套模板、按主题现场检索并原创设计，接通云服务与订单管理。
-description_en: "Generate a standard four-page store H5 (home, booking, share, owner console). The home page has a fixed functional contract but is designed from scratch each time after researching open-source UI libraries, design showcases and real brand sites for that store's theme, wired to a cloud backend: customers book, the first account that signs in becomes the owner, and shared links carry invite codes."
+description: 门店预约 H5 应用 · 一店一设计的四页预约应用（前凌智选 / fore.vip）。把「门店 H5 / 做个预约页 / 能收预约的页面 / 店主管理 / 预约订单管理 / 邀请码裂变 / 分享拉新」转化为一个可直接投放的单文件 H5：首页结构与功能固定、视觉按门店主题现场检索开源组件库 / 设计灵感站 / 同业品牌官网后原创设计，右上菜单统一导航（预约 / 分享 / 登录 / 退出）。标准流程：S1 写 spec.json 并完成首页设计（design-brief.json + home.html + home.css）→ S2 选定或复用云应用 → S3 激活拿到 publicConfig → S4 exec_sql 建 bookings 与 store_owner 两表并按 13 条 SQL 收紧策略 → S5 注入云配置生成正式页 → S6 静态闸门与真实浏览器闸门 → S7 店长真实登录一次完成首登认领。边界：借版式语法不抄成品，不引外部字体与图片，页面不放厂商链接；发布上线须用户明确指令。当用户要为一家实体门店做可预约、可分享裂变、店主能自己管订单的独立页面时使用。
+description_zh: 一店一设计的门店预约 H5 生成器。输入门店信息即产出四页独立单文件 H5（首页 / 预约 / 分享 / 店主管理），右上菜单统一导航；首页结构固定、视觉现场设计——按主题检索开源组件库、设计灵感站与同业品牌官网后再原创。流程：写 spec 与首页设计 → 选定并激活云应用 → 建 bookings / store_owner 两表并收紧策略 → 注入云配置生成正式页 → 静态与浏览器双闸门 → 店长首登认领。顾客提交即落库，首登账号成为店长、登录后直达管理台改单，分享链接带邀请码可统计拉新。借语法不抄成品，不引外部字体与图片。
+description_en: "Store Booking H5 Builder · a four-page booking app designed per store (fore.vip). Turns store-h5 / build-a-booking-page / owner console / booking order management / invite-code referral / share-to-grow into a single-file H5 that ships as-is: the home page keeps a fixed functional contract while its visual design is produced from scratch for each store after researching open-source UI libraries, design showcases and real brand sites, and a top-right menu drives booking / share / sign-in / sign-out. Flow: spec.json plus the home design (design-brief.json + home.html + home.css), pick or reuse a cloud application, activate it, create the bookings and store_owner tables with 13 SQL statements tightening RLS, build the production page with the cloud config injected, clear the static and real-browser gates, then have the owner sign in once to claim ownership. Bookings land in the cloud, the first account to sign in becomes the owner and lands straight in the console to change order status, and shared links carry invite codes. Borrow layout grammar instead of copying finished work, keep external fonts and images out, and publish only on explicit instruction."
 category: engineering
-version: 1.1.1
+version: 1.1.2
 author: fore.vip
 agent_created: true
 triggers:
@@ -25,7 +25,7 @@ triggers:
   - "booking app"
 ---
 
-# 门店预约 H5 应用
+# 门店预约 H5 应用 · 一店一设计的四页预约应用
 
 一家门店 → 四页 H5 → 接通云服务 → 顾客能约、店长能管、分享能带人。
 
@@ -144,6 +144,7 @@ python3 scripts/build_app.py --spec store.json --out index.html \
 
 ```
 SKILL.md                    本文件：范式、导航、流程、完成标准
+_icon.png                   技能头像：通用 LOGO（512×512，与家族其它技能同一张）
 references/app-spec.md      spec 字段、四页内容要求、样例
 references/home-design.md   首页设计方法：检索来源、brief 字段、原创边界
 references/cloud-schema.md  建表 / RLS / 首登认领 / 邀请统计
