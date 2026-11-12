@@ -91,6 +91,29 @@ def main():
     remote_img = re.findall(r"<img[^>]+src=\"https?://[^\"]+", html)
     check("无远程图片", remote_img or "0", not remote_img)
 
+    # ⑥ 机房与搜索引擎可见性（接云才带域名，预览版不判）
+    if cloud:
+        check("有 canonical 与 og 标签",
+              html.count("rel=\"canonical\"") + html.count("property=\"og:url\""),
+              'rel="canonical"' in html and 'property="og:url"' in html)
+        ld = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
+        node = None
+        if ld:
+            try:
+                node = json.loads(ld.group(1))
+            except json.JSONDecodeError:
+                node = None
+        check("有 LocalBusiness 结构化数据", (node or {}).get("@type"), bool(node))
+        if isinstance(node, dict):
+            need = [k for k in ("name", "url", "address", "telephone") if not node.get(k)]
+            check("结构化数据含名称/地址/电话", need or "齐", not need)
+            check("结构化数据声明预约入口",
+                  (node.get("potentialAction") or {}).get("@type"),
+                  (node.get("potentialAction") or {}).get("@type") == "ReserveAction")
+            check("结构化数据含价目与营业时间",
+                  "%s / %s" % (node.get("priceRange"), bool(node.get("openingHoursSpecification"))),
+                  bool(node.get("priceRange") and node.get("openingHoursSpecification")))
+
     # ⑦ 云配置
     cfg_json = re.search(r"window\.APP_CFG=(\{.*?\}|null);", html, re.S)
     cfg = json.loads(cfg_json.group(1)) if cfg_json and cfg_json.group(1) != "null" else None

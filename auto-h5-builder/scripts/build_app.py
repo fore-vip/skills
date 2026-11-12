@@ -225,6 +225,84 @@ def js_json(obj):
     return text.replace("</", "<\\/")
 
 
+def price_range(services):
+    nums = []
+    for s in services or []:
+        m = re.findall(r"\d+(?:\.\d+)?", str(s.get("price", "")))
+        if m:
+            nums.append(float(m[0]))
+    if not nums:
+        return ""
+    lo, hi = min(nums), max(nums)
+    return "¥%g" % lo if lo == hi else "¥%g-¥%g" % (lo, hi)
+
+
+def opening_hours(text):
+    m = re.search(r"(\d{1,2}:\d{2})\s*[–—\-~～至到]\s*(\d{1,2}:\d{2})", str(text or ""))
+    if not m:
+        return None
+    return [{
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday",
+                      "Friday", "Saturday", "Sunday"],
+        "opens": m.group(1),
+        "closes": m.group(2),
+    }]
+
+
+def structured_data(base_url, spec):
+    """LocalBusiness 结构化数据：给搜索引擎与生成式引擎（GEO）读的机器可读事实。"""
+    store = spec["store"]
+    node = {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": store["name"],
+        "description": store.get("slogan", ""),
+        "url": base_url,
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": store.get("address", ""),
+            "addressCountry": "CN",
+        },
+        "potentialAction": {
+            "@type": "ReserveAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": base_url + "#/book",
+                "inLanguage": "zh-CN",
+                "actionPlatform": [
+                    "http://schema.org/DesktopWebPlatform",
+                    "http://schema.org/MobileWebPlatform",
+                ],
+            },
+        },
+    }
+    if store.get("phone"):
+        node["telephone"] = str(store["phone"])
+    rng = price_range(spec.get("services"))
+    if rng:
+        node["priceRange"] = rng
+    hours = opening_hours(store.get("hours"))
+    if hours:
+        node["openingHoursSpecification"] = hours
+    offers = []
+    for s in (spec.get("services") or [])[:8]:
+        price = re.findall(r"\d+(?:\.\d+)?", str(s.get("price", "")))
+        offer = {
+            "@type": "Offer",
+            "itemOffered": {"@type": "Service", "name": s.get("name", "")},
+            "priceCurrency": "CNY",
+        }
+        if price:
+            offer["price"] = price[0]
+        if s.get("desc"):
+            offer["description"] = s["desc"]
+        offers.append(offer)
+    if offers:
+        node["makesOffer"] = offers
+    return node
+
+
 def head_extra(base_url, spec):
     if not base_url:
         return ""
@@ -233,9 +311,13 @@ def head_extra(base_url, spec):
     lines = [
         '<link rel="canonical" href="%s">' % base_url,
         '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="%s">' % store["name"],
+        '<meta property="og:locale" content="zh_CN">',
         '<meta property="og:title" content="%s">' % title,
         '<meta property="og:description" content="%s">' % store["slogan"],
         '<meta property="og:url" content="%s">' % base_url,
+        '<script type="application/ld+json">%s</script>'
+        % js_json(structured_data(base_url, spec)),
     ]
     return "\n".join(lines)
 

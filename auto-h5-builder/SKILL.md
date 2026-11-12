@@ -4,11 +4,11 @@ slug: auto-h5-builder
 displayName: 门店预约 H5 应用
 display_name: 门店预约 H5 应用
 display_name_en: Store Booking H5 Builder
-description: 门店预约 H5 应用 · 一店一设计的四页预约应用（前凌智选 / fore.vip）。把「门店 H5 / 做个预约页 / 能收预约的页面 / 店主管理 / 预约订单管理 / 邀请码裂变 / 分享拉新」转化为一个可直接投放的单文件 H5：首页结构与功能固定、视觉按门店主题现场检索开源组件库 / 设计灵感站 / 同业品牌官网后原创设计，右上菜单统一导航（预约 / 分享 / 登录 / 退出）。标准流程：S1 写 spec.json 并完成首页设计（design-brief.json + home.html + home.css）→ S2 选定或复用云应用 → S3 激活拿到 publicConfig → S4 exec_sql 建 bookings 与 store_owner 两表并按 13 条 SQL 收紧策略 → S5 注入云配置生成正式页 → S6 静态闸门与真实浏览器闸门 → S7 店长真实登录一次完成首登认领。边界：借版式语法不抄成品，不引外部字体与图片，页面不放厂商链接；发布上线须用户明确指令。当用户要为一家实体门店做可预约、可分享裂变、店主能自己管订单的独立页面时使用。
-description_zh: 一店一设计的门店预约 H5 生成器。输入门店信息即产出四页独立单文件 H5（首页 / 预约 / 分享 / 店主管理），右上菜单统一导航；首页结构固定、视觉现场设计——按主题检索开源组件库、设计灵感站与同业品牌官网后再原创。流程：写 spec 与首页设计 → 选定并激活云应用 → 建 bookings / store_owner 两表并收紧策略 → 注入云配置生成正式页 → 静态与浏览器双闸门 → 店长首登认领。顾客提交即落库，首登账号成为店长、登录后直达管理台改单，分享链接带邀请码可统计拉新。借语法不抄成品，不引外部字体与图片。
-description_en: "Store Booking H5 Builder · a four-page booking app designed per store (fore.vip). Turns store-h5 / build-a-booking-page / owner console / booking order management / invite-code referral / share-to-grow into a single-file H5 that ships as-is: the home page keeps a fixed functional contract while its visual design is produced from scratch for each store after researching open-source UI libraries, design showcases and real brand sites, and a top-right menu drives booking / share / sign-in / sign-out. Flow: spec.json plus the home design (design-brief.json + home.html + home.css), pick or reuse a cloud application, activate it, create the bookings and store_owner tables with 13 SQL statements tightening RLS, build the production page with the cloud config injected, clear the static and real-browser gates, then have the owner sign in once to claim ownership. Bookings land in the cloud, the first account to sign in becomes the owner and lands straight in the console to change order status, and shared links carry invite codes. Borrow layout grammar instead of copying finished work, keep external fonts and images out, and publish only on explicit instruction."
+description: 门店预约 H5 应用 · 一店一设计的四页预约应用，本地生活门店的建站与运营（前凌智选 / fore.vip）。把「门店 H5 / 门店官网 / 网站建设 / 做个预约页 / 能收预约的页面 / 店主管理 / 预约订单管理 / 邀请码裂变 / 分享拉新 / 门店宣发」转化为一个可直接投放的单文件 H5：首页结构与功能固定、视觉按门店主题现场检索开源组件库 / 设计灵感站 / 同业品牌官网后原创设计，右上菜单统一导航（预约 / 分享 / 登录 / 退出）。正式页自带 canonical、Open Graph 与 LocalBusiness 结构化数据，便于搜索引擎与生成式引擎（SEO / GEO）收录，转发到社交平台也有标题与摘要。标准流程：S1 写 spec.json 并完成首页设计（design-brief.json + home.html + home.css）→ S2 选定或复用云应用 → S3 激活拿到 publicConfig → S4 exec_sql 建 bookings 与 store_owner 两表并按 13 条 SQL 收紧策略 → S5 注入云配置生成正式页 → S6 静态闸门与真实浏览器闸门 → S7 店长真实登录一次完成首登认领。边界：借版式语法不抄成品，不引外部字体与图片，页面不放厂商链接，事实以 spec 为准、不堆关键词、不写绝对化用语；发布上线须用户明确指令。当用户要为一家本地生活门店做可预约、可分享裂变、店主能自己管订单、还要能被搜到的独立页面或品牌落地页时使用。
+description_zh: 一店一设计的门店预约 H5 生成器，本地生活门店建站与运营。输入门店信息即产出四页独立单文件 H5（首页 / 预约 / 分享 / 店主管理），右上菜单统一导航；首页结构固定、视觉现场设计——按主题检索开源组件库、设计灵感站与同业品牌官网后再原创。流程：写 spec 与首页设计 → 选定并激活云应用 → 建 bookings / store_owner 两表并收紧策略 → 注入云配置生成正式页 → 静态与浏览器双闸门 → 店长首登认领。顾客提交即落库，首登账号成为店长、登录后直达管理台改单，分享链接带邀请码可统计拉新；正式页自带 canonical、Open Graph 与 LocalBusiness 结构化数据，转发有标题摘要、也便于搜索引擎与生成式引擎（SEO / GEO）收录。借语法不抄成品，不引外部字体与图片。
+description_en: "Store Booking H5 Builder · a four-page booking site designed per store, for local business websites (fore.vip). Turns store-h5 / build-a-booking-page / owner console / booking order management / invite-code referral / share-to-grow into a single-file H5 that ships as-is: the home page keeps a fixed functional contract while its visual design is produced from scratch for each store after researching open-source UI libraries, design showcases and real brand sites, and a top-right menu drives booking / share / sign-in / sign-out. Each published page ships canonical, Open Graph and LocalBusiness structured data, so search engines and generative engines (SEO/GEO) can read the store facts and social shares get a title and summary. Flow: spec.json plus the home design (design-brief.json + home.html + home.css), pick or reuse a cloud application, activate it, create the bookings and store_owner tables with 13 SQL statements tightening RLS, build the production page with the cloud config injected, clear the static and real-browser gates, then have the owner sign in once to claim ownership. Bookings land in the cloud, the first account to sign in becomes the owner and lands straight in the console to change order status, and shared links carry invite codes. Borrow layout grammar instead of copying finished work, keep external fonts and images out, and publish only on explicit instruction."
 category: engineering
-version: 1.1.2
+version: 1.1.3
 author: fore.vip
 agent_created: true
 triggers:
@@ -21,6 +21,12 @@ triggers:
   - "邀请码裂变"
   - "分享拉新"
   - "门店落地页设计"
+  - "门店官网"
+  - "网站建设"
+  - "本地生活"
+  - "门店宣发"
+  - "SEO"
+  - "GEO"
   - "store h5"
   - "booking app"
 ---
@@ -116,6 +122,25 @@ python3 scripts/build_app.py --spec store.json --out index.html \
 - 订单的读与改都按 `store_owner.owner_uid = auth.uid()` 校验，不写成 `USING (true)`。
 - 前端只放 `endpoint / oauthRelayBaseUrl / publishableKey`，不落 `applicationId / resourceId`。
 - 状态只有四个：`pending / confirmed / done / cancelled`，按钮与 SQL 枚举一致。
+
+## 收录与投放（SEO / GEO）
+
+带 `--base-url` 生成正式页时，构建器自动往 `<head>` 写三样东西，不需要另外加：
+
+- `canonical`
+- Open Graph：`og:type / og:site_name / og:locale / og:title / og:description / og:url`
+- `LocalBusiness` 结构化数据（JSON-LD）：`name`、`description`、`url`、`telephone`、`address`（PostalAddress）、`priceRange`（由服务价目算出区间）、`openingHoursSpecification`（从 `store.hours` 解析）、`makesOffer`（逐项服务与价格）、`potentialAction` = `ReserveAction` → `#/book`
+
+前三样让搜索引擎能抓、让转发到微信/社交平台时有标题与摘要；JSON-LD 让生成式引擎（AI 搜索）能直接读到门店的事实型信息，问「这家店在哪、几点开、多少钱」时答得出。
+
+四条底线，写错比没有更糟：
+
+1. **事实以 spec 为准**：门店名、地址、电话、营业时间、价目必须与 spec 完全一致（NAP 一致），不许在页面或结构化数据里另写一套。
+2. **不堆关键词**：标题写「<店名> · 在线预约」即可，不在 `<title>`、`description`、正文里塞一串行业词。
+3. **不写绝对化用语**：结构化数据与文案都不出现「最 / 第一 / 唯一 / 顶级」这类违反广告法的词。
+4. **不引外部统计与字体**：不装第三方统计、不引外部字体与图片，页面要保持离线可开、单文件可投。
+
+四个页面各自有路由（`#/home`、`#/book`、`#/share`、`#/admin`），可以只投某一条深链（二维码、朋友圈、公众号菜单），落地页不必是首页。
 
 ## 交付步骤
 

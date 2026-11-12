@@ -8,7 +8,7 @@
 | 2 | `workbuddy_cloud_service action=inspect`，选定 applicationId | 复用已有应用，不新建同义应用 |
 | 3 | `activate`（reuse 或 create，`appType=web`） | 拿到 `publicConfig`；用户取消就停 |
 | 4 | `exec_sql` 建表 + 授权 + 策略（见 cloud-schema.md 13 条） | 每条返回空数组即成功 |
-| 5 | `build_app.py --home-html --home-css --cloud-config --base-url` 生成正式页 | 静态闸门（带 `--brief`）全过 |
+| 5 | `build_app.py --home-html --home-css --cloud-config --base-url` 生成正式页 | 静态闸门（带 `--brief --cloud`）全过，含 canonical / og / LocalBusiness |
 | 6 | `verify_flow.mjs --cloud` 真机流程 | 43 项全过，且 SQL 能查到刚提交的单 |
 | 7 | 店长用真实账号登录一次 | 菜单出现「店长」标记、管理台直接可见并可改状态；同时完成首登认领 |
 
@@ -23,8 +23,9 @@
 云端：applicationId / 表名 / 单号
 证据：提交单号 <code> → SQL 读回 status=pending → 管理台改 confirmed → SQL 读回 confirmed
 店长：store_owner.owner_uid = <uid>（认领时间 <ts>）；第二个账号登录被拒绝
+收录：canonical + og:title/description/url + LocalBusiness（address / telephone / priceRange / openingHours）
 邀请：分享链接 <url?ref=CH-XXXX>；带该参数下单后 invite_code=CH-XXXX
-闸门：静态 <n>/<n>，流程 <n>/<n>
+闸门：静态 <n>/<n>（预览 58 / 接云 64），流程 43/43
 登录开关：邮箱验证码 已开 / 未开（未开则管理台不可用，必须写清）
 未做：未发布上线；示例数据仅演示
 更多帮助与技术指引：https://auto.fore.vip
