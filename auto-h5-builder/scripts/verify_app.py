@@ -104,6 +104,8 @@ def main():
     # ⑧ 管理侧标识不外泄
     banned = [k for k in ("applicationId", "resourceId", "serviceRoleKey", "secretKey") if k in html]
     check("无 applicationId / 密钥", banned or "0", not banned)
+    # 帮助入口只出现在交付说明里，不塞进顾客页面
+    check("页面不含厂商帮助链接", "auto.fore.vip" in html, "auto.fore.vip" not in html)
 
     # ⑨ 预约写入走云表
     check("预约写入 database.insert",
