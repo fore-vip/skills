@@ -44,3 +44,14 @@
 ## 首屏对齐
 
 `heroAlign=left` 的两套（`tech` / `editorial`）在 `base.css` 里有专门规则：首屏文字与按钮左对齐、标题不居中。这是版式级差异，不要靠内联样式临时改。
+
+## 版式不能牺牲可达性（v3 新增）
+
+版式差异只改变视觉语言，不能改变信息架构与可操作性。以下对所有版式一视同仁，由 `verify_static.py` 与双视口断言守住：
+
+- 窄屏导航入口**不得**用 `display:none` 删除；改为第二行横向滚动，保证 `features / steps / faq` 等区块有直达路径。
+- sticky header 变高时 `.sect` 必须有 `scroll-margin-top`，锚点跳转与逐段截图不会被盖住。
+- 焦点态用实线描边（宽度抽成 `--focus-w` token），不用 `outline:none` 配半透明阴影。
+- 所有 `<input>` 有可读名称，状态容器有 `role="status"` 与 `aria-live`，装饰 svg 有 `aria-hidden`。
+- 有 `<form>` 就有 `<noscript>` 降级说明；没有后端时表单控件整体禁用。
+- 截图按「首屏 + 每个 section + 页尾」输出，桌面与窄屏各留证，禁止用三张切片冒充全页目视。

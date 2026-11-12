@@ -42,3 +42,19 @@ node "$B/scripts/verify_viewport.mjs" --spec "$B/examples/beauty.spec.json" \
 ```
 
 云模式另加 `--cloud-config` 与 `verify_static.py --cloud`。样例 spec 在 `examples/`：改主题时必须整体重写文案与 sections，不要只替换几个词。
+
+## 第三次运行：专家独立会话（反面案例）
+
+用户单独调用专家、只给「社区美容门店」主题。专家按 v2 SKILL 跑完 P0–P4：路由命中 `warm`，写出 `community-beauty.spec.json` 与 `index.html`（20749 字节），产出四张 390px 截图，静态闸门 16/16、视口断言 29/29 全 PASS，然后汇报完成。
+
+用 v3 的 `verify_delivery.py` 回判（把用户诉求原话传进去）得到 `RESULT INCOMPLETE`，缺项逐条为：
+
+- `meta.deliverable` 未声明，用户要的是应用；
+- 页面 `canonical / og:url / ld+json.url` 是 `https://example.com/index.html`；
+- 草稿里留着可提交的表单，主 CTA 承诺「约一次到店护理」却不会保存；
+- 断言把「没有发送」「不会保存」「未开放真实预约」写成 PASS 验收项；
+- 四张截图没有覆盖全部六个区块。
+
+这不是专家执行失败，而是**流程里根本没有创建应用这一步**。v3 的交付形态契约、P3.5、第五道闸门与六角色清单就是针对这次复盘加的。修好后同一份 spec 重新生成，静态闸门 37 项、双视口 34 项全 PASS，交付判定为 `DRAFT`（如实标注「页面草稿，不是应用」）。
+
+另有两个正面样本：美容应用 `webapp` 形态（有 `.genie`、真实站点地址、云端表与可提交表单）判定 `DELIVERED`；门店自动化产品 `draft` 形态判定 `DRAFT`。三态都被实跑验证过，不是纸面规则。

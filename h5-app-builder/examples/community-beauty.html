@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>巷里养肤 · 下楼就能做的一次面部护理</title>
+<meta name="description" content="开在社区巷口的预约制美容小店：面部清洁保湿、肩颈放松、换季屏障护理，按次结算、不办卡、不推销，做完走路回家。">
+<meta name="theme-color" content="#faf6f2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2716%27%20fill%3D%27%2523faf6f2%27%2F%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2732%27%20r%3D%2712%27%20fill%3D%27none%27%20stroke%3D%27white%27%20stroke-width%3D%274%27%2F%3E%3C%2Fsvg%3E">
+<meta property="og:title" content="巷里养肤 · 下楼就能做的一次面部护理">
+<meta property="og:description" content="开在社区巷口的预约制美容小店：面部清洁保湿、肩颈放松、换季屏障护理，按次结算、不办卡、不推销，做完走路回家。">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "巷里养肤 · 下楼就能做的一次面部护理",
+  "description": "开在社区巷口的预约制美容小店：面部清洁保湿、肩颈放松、换季屏障护理，按次结算、不办卡、不推销，做完走路回家。",
+  "inLanguage": "zh-CN",
+  "publisher": {
+    "@type": "Organization",
+    "name": "巷里养肤"
+  }
+}
+</script>
+<style>
+/* 共享控件层：所有可点元素只引用版式 token，同一页内形状/尺寸/状态必然一致。
+   版式差异只来自 layouts.json 覆盖的 :root 变量，不来自这里写死的值。 */
+:root{
+  --bg:#ffffff; --card:#fff8f2; --text:#1c1917; --sub:#57534e; --muted:#8a8279;
+  --line:rgba(28,25,23,.10); --line-2:rgba(28,25,23,.20);
+  --brand:#ea580c; --brand-soft:#fb923c; --on-brand:#fff;
+  --surface:rgba(234,88,12,.05); --surface-2:rgba(234,88,12,.09);
+  --ok:#15803d; --ok-line:rgba(21,128,61,.38);
+  --warn:#b45309; --warn-line:rgba(180,83,9,.38);
+  --r-card:18px; --r-panel:12px; --r-pill:14px;
+  --h-lg:50px; --px-lg:26px; --fs-lg:15px;
+  --h-md:40px; --px-md:18px; --fs-md:13px;
+  --h-sm:34px; --px-sm:13px; --fs-sm:12px;
+  --focus:0 0 0 3px rgba(234,88,12,.30); --focus-w:2px;
+  --icon:16px; --ctl-gap:8px;
+  --shadow:0 10px 28px rgba(180,80,20,.12);
+  --font-title:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+  --hero-pad:88px 0 72px; --cols:3;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1080px,calc(100% - 40px));margin:0 auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ── 唯一按钮基类：三档尺寸 + 四个语义变体 + 唯一选中态 ── */
+.ctl{display:inline-flex;align-items:center;justify-content:center;gap:var(--ctl-gap);
+  height:var(--h-md);padding:0 var(--px-md);
+  border:1px solid var(--line-2);border-radius:var(--r-pill);
+  background:transparent;color:var(--sub);
+  font-family:inherit;font-size:var(--fs-md);font-weight:500;line-height:1;
+  text-decoration:none;white-space:nowrap;cursor:pointer;
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease;
+  -webkit-tap-highlight-color:transparent}
+.ctl:hover{background:var(--surface-2);border-color:var(--brand);color:var(--text)}
+.ctl:active{transform:translateY(1px)}
+.ctl:focus-visible{outline:var(--focus-w) solid var(--brand);outline-offset:var(--focus-w)}
+.ctl[disabled],.ctl[aria-disabled="true"]{opacity:.45;cursor:not-allowed;pointer-events:none}
+.ctl svg{width:var(--icon);height:var(--icon);fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.ctl--lg{height:var(--h-lg);padding:0 var(--px-lg);font-size:var(--fs-lg)}
+.ctl--sm{height:var(--h-sm);padding:0 var(--px-sm);font-size:var(--fs-sm)}
+.ctl--primary{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.ctl--primary:hover{background:var(--brand-soft);border-color:var(--brand-soft);color:var(--on-brand)}
+.ctl--accent{border-color:var(--brand);color:var(--brand-soft)}
+.ctl--accent:hover{background:var(--surface-2);border-color:var(--brand);color:var(--brand-soft)}
+.ctl--ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.ctl--ghost:hover{background:var(--surface-2);border-color:transparent;color:var(--text)}
+.ctl.is-on{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.ctl.is-on:hover{background:var(--brand-soft);border-color:var(--brand-soft);color:var(--on-brand)}
+
+/* ── 标签：不可点，外形明确区别于按钮 ── */
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;
+  border:1px solid var(--line);border-radius:var(--r-pill);background:var(--surface);
+  color:var(--muted);font-size:11.5px;font-weight:400;line-height:1;
+  white-space:nowrap;cursor:default;user-select:none}
+.tag .dot{width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.tag--lg{height:30px;padding:0 14px;font-size:var(--fs-sm);color:var(--sub)}
+.tag--ok{border-color:var(--ok-line);color:var(--ok)}
+.tag--warn{border-color:var(--warn-line);color:var(--warn)}
+.tag--accent{border-color:var(--brand);color:var(--brand-soft)}
+
+/* ── 表单与反馈 ── */
+.field{flex:1;min-width:0;height:var(--h-md);padding:0 var(--px-sm);
+  border:1px solid var(--line-2);border-radius:var(--r-pill);
+  background:var(--card);color:var(--text);
+  font-family:inherit;font-size:var(--fs-md);outline:none;
+  transition:border-color .18s ease,box-shadow .18s ease}
+.field::placeholder{color:var(--muted)}
+.field:focus{border-color:var(--brand);outline:var(--focus-w) solid var(--brand)}
+.field:disabled{opacity:.5;cursor:not-allowed}
+.status{display:flex;align-items:center;gap:8px;min-height:var(--h-md);
+  padding:8px var(--px-md);margin:12px 0 0;
+  border:1px solid var(--warn-line);border-radius:var(--r-panel);
+  background:var(--surface-2);color:var(--warn);
+  font-size:var(--fs-sm);line-height:1.5}
+.status::before{content:'';flex:0 0 6px;height:6px;border-radius:50%;background:currentColor}
+.status[hidden]{display:none}
+.status.is-ok{border-color:var(--ok-line);color:var(--ok)}
+.status.is-warn{border-color:var(--warn-line);color:var(--warn)}
+
+/* ── 页面骨架 ── */
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.hd-in{display:flex;align-items:center;justify-content:space-between;gap:14px;height:62px}
+.hd-logo{font-size:15px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
+.hd-nav{display:flex;align-items:center;gap:8px}
+.hero{padding:var(--hero-pad);text-align:center;position:relative;overflow:hidden}
+.hero .eyebrow{margin-bottom:22px}
+.hero h1{font-family:var(--font-title);font-size:clamp(30px,5.4vw,54px);
+  line-height:1.28;font-weight:650;margin:0 0 18px;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero-p{color:var(--sub);font-size:15.5px;max-width:660px;margin:0 auto 28px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+body[data-layout="tech"] .hero,
+body[data-layout="editorial"] .hero{text-align:left}
+body[data-layout="tech"] .hero-p,
+body[data-layout="editorial"] .hero-p{margin-left:0;margin-right:0}
+body[data-layout="tech"] .hero-btns,
+body[data-layout="editorial"] .hero-btns{justify-content:flex-start}
+body[data-layout="editorial"] .hero{border-bottom:1px solid var(--line)}
+
+.sect{padding:54px 0;scroll-margin-top:100px}
+.sect + .sect{border-top:1px solid var(--line)}
+.sect-head{max-width:680px;margin:0 auto 30px;text-align:center}
+.sect-head h2{font-family:var(--font-title);font-size:clamp(24px,3.4vw,34px);
+  line-height:1.35;font-weight:650;margin:0 0 10px}
+.sect-head p{color:var(--sub);font-size:14.5px;margin:0}
+body[data-layout="tech"] .sect-head,
+body[data-layout="editorial"] .sect-head{margin-left:0;margin-right:0;text-align:left}
+
+.grid{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-card);padding:22px;box-shadow:var(--shadow)}
+.card h3{margin:0 0 8px;font-size:17px;font-weight:650}
+.card p{margin:0;color:var(--sub);font-size:14px}
+.card .num{display:inline-grid;place-items:center;width:30px;height:30px;
+  border-radius:var(--r-panel);background:var(--surface-2);color:var(--brand);
+  font-size:var(--fs-sm);font-weight:700;margin-bottom:14px}
+.card .kicker{display:block;color:var(--brand);font-size:var(--fs-sm);
+  font-weight:600;letter-spacing:.06em;margin-bottom:8px}
+.card .foot{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+
+.stats{grid-template-columns:repeat(4,1fr)}
+.stat{background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-panel);padding:20px;text-align:center}
+.stat b{display:block;font-family:var(--font-title);font-size:30px;font-weight:700;color:var(--brand)}
+.stat span{display:block;color:var(--muted);font-size:var(--fs-sm);margin-top:4px}
+.showcase .card{min-height:170px;display:flex;flex-direction:column;justify-content:space-between}
+.case-idx{font-family:var(--font-title);font-size:26px;color:var(--brand);opacity:.65}
+
+.steps{counter-reset:step}
+.step{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step .k{flex:0 0 32px;height:32px;border-radius:var(--r-pill);
+  background:var(--surface-2);color:var(--brand);font-size:var(--fs-md);
+  font-weight:700;display:grid;place-items:center}
+.step h3{margin:0;font-size:15.5px;font-weight:650}
+.step p{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+
+.quote{max-width:780px;margin:0 auto;text-align:center}
+.quote blockquote{margin:0;font-family:var(--font-title);
+  font-size:clamp(20px,3vw,28px);line-height:1.6;font-weight:600}
+.quote cite{display:block;margin-top:18px;color:var(--muted);font-size:var(--fs-md);font-style:normal}
+body[data-layout="editorial"] .quote{text-align:left}
+
+.faq{max-width:800px;margin:0 auto}
+.faq details{border-bottom:1px solid var(--line);padding:12px 0}
+.faq details:last-child{border-bottom:0}
+.faq-q{width:100%;justify-content:space-between;text-align:left;
+  border-color:transparent;list-style:none;cursor:pointer}
+.faq-q::-webkit-details-marker{display:none}
+.faq-q::after{content:'+';font-size:16px;color:var(--brand)}
+.faq details[open] .faq-q::after{content:'−'}
+.faq-a{padding:12px var(--px-sm) 4px;color:var(--sub);font-size:14px}
+
+.cta-box{background:var(--card);border:1px solid var(--line-2);
+  border-radius:var(--r-card);padding:32px;box-shadow:var(--shadow)}
+.cta-box h2{font-family:var(--font-title);font-size:clamp(22px,3.2vw,32px);margin:0 0 10px}
+.cta-box > p{color:var(--sub);font-size:14.5px;margin:0 0 20px}
+.fields{display:flex;flex-wrap:wrap;gap:10px}
+.fields .field{flex:1 1 200px}
+.cta-note{color:var(--muted);font-size:var(--fs-sm);margin:14px 0 0}
+
+footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--muted);font-size:13px}
+.f-in{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:space-between}
+.f-links{display:flex;flex-wrap:wrap;gap:8px 18px}
+.f-links a{color:var(--sub)}
+.f-links a:focus-visible{outline:var(--focus-w) solid var(--brand);border-radius:var(--r-pill)}
+
+/* 窄屏不删导航入口：改为第二行横向滚动，保证信息架构完整且不撑宽文档 */
+@media(max-width:720px){
+  .wrap{width:calc(100% - 32px)}
+  .hero{padding:56px 0 48px}
+  .hd-in{height:auto;min-height:56px;flex-wrap:wrap;padding:8px 0;gap:6px}
+  .hd-nav{width:100%;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .hd-nav::-webkit-scrollbar{display:none}
+  .sect{padding:40px 0}
+  .grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .card{padding:18px}
+  .cta-box{padding:22px}
+  .fields .field{flex-basis:100%}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.ctl{transition:none}}
+/* 选定版式的 token 覆盖：同一页内所有控件共享，跨主题差异来自这里 */
+:root{--bg:#faf6f2;--card:#fffdfb;--text:#2b211d;--sub:#6b5c53;--muted:#9b8a80;--line:rgba(60,40,30,.12);--line-2:rgba(60,40,30,.22);--brand:#b4573c;--brand-soft:#d97655;--on-brand:#fffdfb;--surface:rgba(180,87,60,.05);--surface-2:rgba(180,87,60,.09);--ok:#4b7a52;--ok-line:rgba(75,122,82,.38);--warn:#b07a20;--warn-line:rgba(176,122,32,.38);--r-card:22px;--r-panel:14px;--r-pill:999px;--h-lg:48px;--px-lg:24px;--fs-lg:15px;--h-md:40px;--px-md:18px;--fs-md:13px;--h-sm:34px;--px-sm:14px;--fs-sm:12px;--focus:0 0 0 3px rgba(180,87,60,.30);--shadow:0 8px 30px rgba(80,50,35,.07);--font-title:Georgia,"Songti SC","PingFang SC",serif;--hero-pad:92px 0 76px;--cols:3;}
+</style>
+</head>
+<body data-layout="warm">
+<header><div class="wrap hd-in">
+  <div class="hd-logo">巷里养肤</div>
+  <nav class="hd-nav" aria-label="页面导航"><a class="ctl ctl--sm ctl--ghost nav-link" href="#features">服务项目</a> <a class="ctl ctl--sm ctl--ghost nav-link" href="#steps">下楼流程</a> <a class="ctl ctl--sm ctl--ghost nav-link" href="#faq">常见问题</a> 
+    <a class="ctl ctl--sm ctl--primary" href="#cta">看看护理项目</a>
+  </nav>
+</div></header>
+<main>
+<section class="hero"><div class="wrap">
+  <div class="tag tag--lg eyebrow"><span class="dot"></span>社区美容 · 步行可达</div>
+  <h1>不用挑日子，<em>下楼就能做一次护理</em></h1>
+  <p class="hero-p">开在巷口的社区美容小店，只做三件日常的事：把脸洗干净、把干燥起皮照顾好、把肩颈放松下来。按次结算，不办卡，不推荐加项；做完走几步就到家，饭也不耽误。</p>
+  <div class="hero-btns">
+    <a class="ctl ctl--lg ctl--primary" href="#cta">先看看做什么项目<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a class="ctl ctl--lg" href="#features">先看看做什么</a>
+  </div>
+</div></section>
+<section class="sect" id="features"><div class="wrap">
+<div class="sect-head"><h2>项目不多，都是街坊常做的三项</h2><p>每项写清时长与示例价格，头回来可以只做一项，不用先买疗程。</p></div>
+<div class="grid"><div class="card"><span class="kicker">基础护理 · 60 分钟</span><h3>面部清洁与补水护理</h3><p>先看当天皮肤状态再定清洁力度；干燥起皮时把去角质换成热敷与保湿敷膜，全程只用基础护理产品。</p><div class="foot"><span class="tag tag--accent">¥198 示例价</span><span class="tag tag--accent">按次结算</span></div></div><div class="card"><span class="kicker">舒缓护理 · 45 分钟</span><h3>肩颈与头皮放松</h3><p>给接完孩子、盯了一天屏幕的街坊准备：热敷、手法放松，不推精油、不问办卡，安静躺一会儿就走。</p><div class="foot"><span class="tag tag--accent">¥168 示例价</span><span class="tag tag--accent">无需办卡</span></div></div><div class="card"><span class="kicker">换季护理 · 75 分钟</span><h3>换季屏障护理</h3><p>春秋风大、脸容易干的时候做，重点是温和清洁、保湿和出门前的防晒提醒；皮肤正泛红时会建议改天。</p><div class="foot"><span class="tag tag--accent">¥268 示例价</span><span class="tag tag--accent">可只做一次</span></div></div></div>
+</div></section>
+<section class="sect" id="showcase"><div class="wrap">
+<div class="sect-head"><h2>街坊都是什么时候来</h2><p>不做大而全的套餐，先把附近人顺手的几种来法写清楚。</p></div>
+<div class="grid showcase"><div class="card"><span class="case-idx">01</span><h3>下班顺路拐进来</h3><p>买完菜、接完孩子，做 45 分钟肩颈放松，回家还赶得上做饭。时间不够就只做这一项。</p><div class="foot"><span class="tag">45 分钟</span></div></div><div class="card"><span class="case-idx">02</span><h3>换季那两周</h3><p>风一吹脸就发干，来做一次温和清洁加保湿敷膜，坐一会儿就走，不带产品回家。</p><div class="foot"><span class="tag">按次结算</span></div></div><div class="card"><span class="case-idx">03</span><h3>和邻居各约各的</h3><p>同一时段只安排一位，不用在店里等号；想同一天来，就把两个时段错开，谁也不用赶。</p><div class="foot"><span class="tag">提前约好</span></div></div></div>
+</div></section>
+<section class="sect" id="steps"><div class="wrap">
+<div class="sect-head"><h2>从下楼到回家，四步</h2><p>每一步都能改主意，改时间说一声就行，不收手续费。</p></div>
+<div class="steps"><div class="step"><span class="k">1</span><div><h3>先挑个顺手的项目</h3><p>翻翻上面三张卡片，头回拿不准就写「先看看」，到店和美容师聊完再定。</p></div></div><div class="step"><span class="k">2</span><div><h3>进门先看皮肤</h3><p>坐下喝口水，美容师问三件事：这两周睡得怎么样、换了什么护肤品、哪里不舒服；今天做哪项，聊完才定。</p></div></div><div class="step"><span class="k">3</span><div><h3>安静把护理做完</h3><p>躺下之后只做说好的项目，不介绍产品、不加项；想睡一会儿，我们就不说话。</p></div></div><div class="step"><span class="k">4</span><div><h3>带走一张护理记录</h3><p>写明这次做了什么、回家怎么保湿、下次隔多久合适；不留联系方式也能走。</p></div></div></div>
+</div></section>
+<section class="sect" id="quote"><div class="wrap">
+
+<div class="quote"><blockquote>下楼就能做，做完也不用被追着问要不要办卡，脸干了自然还想来。</blockquote><cite>住在同小区的顾客 · 示例反馈</cite></div>
+</div></section>
+<section class="sect" id="cta"><div class="wrap">
+
+<div class="cta-box"><h2>想在楼下试一次护理？</h2><p>填好称呼、联系方式和想做的项目，看看预约流程长什么样；本页为示例，未开放真实预约。</p><form id="leadForm" class="fields" onsubmit="return false" novalidate><label class="sr-only" for="f_name">称呼</label><input class="field" id="f_name" type="text" placeholder="怎么称呼你" aria-label="称呼" disabled aria-disabled="true"><label class="sr-only" for="f_contact">联系方式</label><input class="field" id="f_contact" type="text" placeholder="手机号或微信" aria-label="联系方式" disabled aria-disabled="true"><label class="sr-only" for="f_service">意向项目</label><input class="field" id="f_service" type="text" placeholder="想做的项目，或写「先看看」" aria-label="意向项目" disabled aria-disabled="true"><button class="ctl ctl--lg ctl--primary" type="submit" disabled aria-disabled="true">示例表单（未开放）</button></form><div id="leadStatus" class="status" role="status" aria-live="polite" hidden></div><p class="cta-note">示例门店与示例内容 · 页面草稿，表单未开放，不会收集或保存任何信息</p><noscript><p class="cta-note">当前未启用脚本，本页不会提交或保存任何信息。</p></noscript></div>
+</div></section>
+<section class="sect" id="faq"><div class="wrap">
+<div class="sect-head"><h2>来之前常问的几件事</h2></div>
+<div class="faq"><details><summary class="ctl ctl--ghost faq-q">头回来一定要办卡吗？</summary><div class="faq-a">不用。三项护理都能按次结算，示例价就写在上面卡片里，不设疗程，也不用预存。</div></details><details><summary class="ctl ctl--ghost faq-q">皮肤敏感、正在泛红能做吗？</summary><div class="faq-a">先看当天状态；泛红或破损时会改成纯保湿镇静，也可能直接建议改天，不硬做清洁。</div></details><details><summary class="ctl ctl--ghost faq-q">卡片上的价格是真的吗？</summary><div class="faq-a">是示例价，写在这里只为让你看清每项大概花多久、怎么计费；本页未开放真实预约。</div></details><details><summary class="ctl ctl--ghost faq-q">约好了临时来不了怎么办？</summary><div class="faq-a">说一声改时间就行，不收手续费，也不需要解释原因。</div></details></div>
+</div></section>
+</main>
+<footer><div class="wrap f-in">
+  <span>巷里养肤 · 示例门店与示例内容 · 未开放真实预约</span>
+  <div class="f-links"><a href="#features">服务项目</a><a href="#cta">预约护理</a></div>
+</div></footer>
+
+<script>
+/* 锚点高亮与表单反馈。云端写入由独立脚本接管。 */
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nav-link'));
+  function mark(){
+    var best=null, top=180;
+    links.forEach(function(a){
+      var id=a.getAttribute('href').replace('#','');
+      var el=document.getElementById(id);
+      if(el && el.getBoundingClientRect().top<=top) best=a;
+    });
+    links.forEach(function(a){a.classList.toggle('is-on',a===best);});
+  }
+  window.addEventListener('scroll',mark,{passive:true}); mark();
+  var form=document.getElementById('leadForm');
+  if(form && !window.leadCloudEnabled){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var box=document.getElementById('leadStatus');
+      if(box){box.hidden=false;box.className='status is-warn';
+        box.textContent='演示页面未接后端，这条信息没有发送，也不会保存。';}
+    });
+  }
+})();
+</script>
+</body>
+</html>

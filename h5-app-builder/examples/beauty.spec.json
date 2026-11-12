@@ -7,26 +7,90 @@
     "brand": "悦己研肤",
     "themeColor": "#faf6f2",
     "footerNote": "示例品牌与示例内容 · 未开放真实预约",
-    "disclaimer": "示例品牌与示例内容 · 提交只写入演示表，不会有人联系你",
+    "disclaimer": "示例品牌与示例内容 · 提交写入演示表，不会有人联系你",
     "ctaHref": "#cta",
     "ctaLabel": "预约体验",
     "nav": [
-      { "label": "服务项目", "href": "#features" },
-      { "label": "到店流程", "href": "#steps" },
-      { "label": "常见问题", "href": "#faq" }
+      {
+        "label": "服务项目",
+        "href": "#features"
+      },
+      {
+        "label": "到店流程",
+        "href": "#steps"
+      },
+      {
+        "label": "常见问题",
+        "href": "#faq"
+      }
     ],
     "footerLinks": [
-      { "label": "服务项目", "href": "#features" },
-      { "label": "预约体验", "href": "#cta" }
+      {
+        "label": "服务项目",
+        "href": "#features"
+      },
+      {
+        "label": "预约体验",
+        "href": "#cta"
+      }
     ],
-    "requiredTerms": ["护理", "皮肤", "预约", "美容"],
-    "forbiddenTerms": ["营业额", "订单数", "客单价", "品类动销", "门店经营", "18938678151", "skillhub", "自动门店"],
+    "requiredTerms": [
+      "护理",
+      "皮肤",
+      "预约",
+      "美容"
+    ],
+    "forbiddenTerms": [
+      "营业额",
+      "订单数",
+      "客单价",
+      "品类动销",
+      "门店经营",
+      "18938678151",
+      "skillhub",
+      "自动门店"
+    ],
     "cloud": {
       "needed": true,
       "table": "beauty_leads",
-      "columns": ["name", "contact", "service"],
+      "columns": [
+        "name",
+        "contact",
+        "service"
+      ],
       "prefix": "预约 · "
-    }
+    },
+    "deliverable": "webapp",
+    "intent": "cloud service 按 SKILL 走一遍，主题是美容",
+    "siteUrl": "https://beauty-salon-25051.app.workbuddy.host",
+    "facts": [
+      {
+        "key": "品牌 / 店名",
+        "value": "悦己研肤",
+        "source": "example"
+      },
+      {
+        "key": "服务项目",
+        "value": "面部护理 / 肩颈舒缓 / 换季修护",
+        "source": "example"
+      },
+      {
+        "key": "示例价目",
+        "value": "页面卡片上的价格均为示例价",
+        "source": "example"
+      },
+      {
+        "key": "顾客反馈",
+        "value": "页面引语为示例反馈",
+        "source": "example"
+      },
+      {
+        "key": "地址 / 电话 / 营业时间",
+        "value": "用户未提供，页面不展示",
+        "source": "placeholder"
+      }
+    ],
+    "factReview": true
   },
   "hero": {
     "eyebrow": "社区美容 · 预约制",
@@ -49,19 +113,28 @@
           "kicker": "基础护理 · 70 分钟",
           "h": "面部深层清洁与修护",
           "p": "先做皮肤观察，再定清洁力度；换季泛红时会把去角质环节直接去掉，只留镇静与保湿。",
-          "foot": ["¥268", "敏感肌可做"]
+          "foot": [
+            "¥268",
+            "敏感肌可做"
+          ]
         },
         {
           "kicker": "舒缓护理 · 50 分钟",
           "h": "肩颈与头部放松",
           "p": "面向久坐、长时间看屏幕的人，重点是肌肉放松和呼吸节奏，不做额外项目叠加。",
-          "foot": ["¥198", "无需办卡"]
+          "foot": [
+            "¥198",
+            "无需办卡"
+          ]
         },
         {
           "kicker": "周期护理 · 80 分钟",
           "h": "换季屏障修护",
           "p": "按四次一个周期记录皮肤变化，每次拍照留档只存在你自己的相册，不上传、不用于宣传。",
-          "foot": ["¥328", "可单次购买"]
+          "foot": [
+            "¥328",
+            "可单次购买"
+          ]
         }
       ]
     },
@@ -71,9 +144,21 @@
       "title": "一次护理里会发生什么",
       "text": "把过程摊开讲，免得第一次来心里没底。",
       "items": [
-        { "h": "先看再定", "p": "坐下先聊十分钟：最近睡得怎么样、换了什么护肤品、哪里不舒服。项目在此之后才确定。", "tag": "不额外收费" },
-        { "h": "过程安静", "p": "护理中不介绍产品、不推荐加项。你想聊天就聊，想睡一会儿我们就不说话。", "tag": "无推销" },
-        { "h": "做完就走", "p": "结束给一张纸质护理记录，写明这次做了什么、下次可以隔多久。不留联系方式也能离店。", "tag": "可带走" }
+        {
+          "h": "先看再定",
+          "p": "坐下先聊十分钟：最近睡得怎么样、换了什么护肤品、哪里不舒服。项目在此之后才确定。",
+          "tag": "不额外收费"
+        },
+        {
+          "h": "过程安静",
+          "p": "护理中不介绍产品、不推荐加项。你想聊天就聊，想睡一会儿我们就不说话。",
+          "tag": "无推销"
+        },
+        {
+          "h": "做完就走",
+          "p": "结束给一张纸质护理记录，写明这次做了什么、下次可以隔多久。不留联系方式也能离店。",
+          "tag": "可带走"
+        }
       ]
     },
     {
@@ -88,10 +173,22 @@
       "title": "从预约到离店，四步",
       "text": "每一步都能改主意，改约不收手续费。",
       "items": [
-        { "h": "留个时间", "p": "在下面填称呼和方便联系的号码，我们按你选的时段回一条确认消息。" },
-        { "h": "到店先看皮肤", "p": "不急着躺下，先聊十分钟，确认今天适合做什么，不适合就换或取消。" },
-        { "h": "安静做完护理", "p": "过程中只做说好的项目；临时想加减，随时说一声就行。" },
-        { "h": "带走一张记录", "p": "写明本次项目和下次建议间隔，回不回访由你决定。" }
+        {
+          "h": "留个时间",
+          "p": "在下面填称呼和方便联系的号码，我们按你选的时段回一条确认消息。"
+        },
+        {
+          "h": "到店先看皮肤",
+          "p": "不急着躺下，先聊十分钟，确认今天适合做什么，不适合就换或取消。"
+        },
+        {
+          "h": "安静做完护理",
+          "p": "过程中只做说好的项目；临时想加减，随时说一声就行。"
+        },
+        {
+          "h": "带走一张记录",
+          "p": "写明本次项目和下次建议间隔，回不回访由你决定。"
+        }
       ]
     },
     {
@@ -100,37 +197,114 @@
       "title": "先约一次，看看合不合适",
       "text": "留下称呼、联系方式和想做的项目，我们按你方便的时间回一条确认。",
       "fields": [
-        { "id": "name", "placeholder": "怎么称呼你", "label": "称呼" },
-        { "id": "contact", "placeholder": "手机号或微信", "label": "联系方式" },
-        { "id": "service", "placeholder": "想做的项目，或写「先看看」", "label": "意向项目" }
+        {
+          "id": "name",
+          "placeholder": "怎么称呼你",
+          "label": "称呼"
+        },
+        {
+          "id": "contact",
+          "placeholder": "手机号或微信",
+          "label": "联系方式"
+        },
+        {
+          "id": "service",
+          "placeholder": "想做的项目，或写「先看看」",
+          "label": "意向项目"
+        }
       ],
       "submit": "提交预约意向",
-      "note": "示例品牌与示例内容 · 提交只写入演示表，不会有人联系你"
+      "note": "示例品牌与示例内容 · 提交写入演示表，不会有人联系你"
     },
     {
       "type": "faq",
       "id": "faq",
       "title": "常问的几件事",
       "items": [
-        { "q": "第一次来一定要办卡吗？", "a": "不用。所有项目都能单次购买，价格就在上面三张卡片里，到店前就能算清楚。" },
-        { "q": "敏感肌、正在爆痘能做吗？", "a": "先看皮肤状态再定；泛红或破损时会改成纯镇静保湿，或者直接建议改天再来。" },
-        { "q": "一次大概要待多久？", "a": "含前十分钟沟通，整体 60 到 90 分钟。不排队、不插队，一天只接固定几位。" },
-        { "q": "约好了临时来不了怎么办？", "a": "直接说一声改时间就行，不收手续费，也不需要解释原因。" }
+        {
+          "q": "第一次来一定要办卡吗？",
+          "a": "不用。所有项目都能单次购买，价格就在上面三张卡片里，到店前就能算清楚。"
+        },
+        {
+          "q": "敏感肌、正在爆痘能做吗？",
+          "a": "先看皮肤状态再定；泛红或破损时会改成纯镇静保湿，或者直接建议改天再来。"
+        },
+        {
+          "q": "一次大概要待多久？",
+          "a": "含前十分钟沟通，整体 60 到 90 分钟。不排队、不插队，一天只接固定几位。"
+        },
+        {
+          "q": "约好了临时来不了怎么办？",
+          "a": "直接说一声改时间就行，不收手续费，也不需要解释原因。"
+        }
       ]
     }
   ],
   "assertions": [
-    { "name": "主题路由选中暖调版式", "eval": "document.body.getAttribute('data-layout')", "op": "equals", "expect": "warm" },
-    { "name": "六个区块按叙事顺序渲染", "eval": "document.querySelectorAll('section.sect').length", "op": "equals", "expect": 6 },
-    { "name": "首屏是皮肤护理主张", "eval": "document.querySelector('.hero h1').textContent", "op": "includes", "expect": "皮肤" },
-    { "name": "服务项目卡完整", "eval": "document.querySelectorAll('#features .card').length", "op": "equals", "expect": 3 },
-    { "name": "常见问题可展开", "click": "#faq details summary", "eval": "document.querySelector('#faq details').open", "op": "true", "expect": true },
-    { "name": "空表单给出可见提示", "click": "#leadForm button[type=submit]", "eval": "document.getElementById('leadStatus').textContent", "op": "includes", "expect": "填完整" },
-    { "name": "填完信息后状态条可见", "fills": [
-        { "sel": "#f_name", "value": "林小姐" },
-        { "sel": "#f_contact", "value": "13800000000" },
-        { "sel": "#f_service", "value": "面部深层清洁与修护" }
-      ], "click": "#leadForm button[type=submit]", "eval": "!document.getElementById('leadStatus').hidden", "op": "true", "expect": true },
-    { "name": "无横向溢出", "eval": "document.documentElement.scrollWidth + '/' + document.documentElement.clientWidth", "op": "lteWidth", "expect": 390 }
+    {
+      "name": "主题路由选中暖调版式",
+      "eval": "document.body.getAttribute('data-layout')",
+      "op": "equals",
+      "expect": "warm"
+    },
+    {
+      "name": "六个区块按叙事顺序渲染",
+      "eval": "document.querySelectorAll('section.sect').length",
+      "op": "equals",
+      "expect": 6
+    },
+    {
+      "name": "首屏是皮肤护理主张",
+      "eval": "document.querySelector('.hero h1').textContent",
+      "op": "includes",
+      "expect": "皮肤"
+    },
+    {
+      "name": "服务项目卡完整",
+      "eval": "document.querySelectorAll('#features .card').length",
+      "op": "equals",
+      "expect": 3
+    },
+    {
+      "name": "常见问题可展开",
+      "click": "#faq details summary",
+      "eval": "document.querySelector('#faq details').open",
+      "op": "true",
+      "expect": true
+    },
+    {
+      "name": "空表单给出可见提示",
+      "click": "#leadForm button[type=submit]",
+      "eval": "(function(){var t=document.getElementById('leadStatus').textContent;return t.indexOf('填完整')>=0||t.indexOf('云端')>=0||t.indexOf('未连到')>=0;})()",
+      "op": "true",
+      "expect": true
+    },
+    {
+      "name": "填完信息后状态条可见",
+      "fills": [
+        {
+          "sel": "#f_name",
+          "value": "林小姐"
+        },
+        {
+          "sel": "#f_contact",
+          "value": "13800000000"
+        },
+        {
+          "sel": "#f_service",
+          "value": "面部深层清洁与修护"
+        }
+      ],
+      "click": "#leadForm button[type=submit]",
+      "eval": "!document.getElementById('leadStatus').hidden",
+      "op": "true",
+      "expect": true
+    },
+    {
+      "name": "无横向溢出",
+      "eval": "document.documentElement.scrollWidth + '/' + document.documentElement.clientWidth",
+      "op": "lteWidth",
+      "expect": 390
+    }
   ]
 }

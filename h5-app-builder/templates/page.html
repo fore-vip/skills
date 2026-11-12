@@ -13,7 +13,7 @@ __BASE_CSS__
 <body data-layout="__LAYOUT__">
 <header><div class="wrap hd-in">
   <div class="hd-logo">__BRAND__</div>
-  <nav class="hd-nav">__NAV__
+  <nav class="hd-nav" aria-label="页面导航">__NAV__
     <a class="ctl ctl--sm ctl--primary" href="__CTA_HREF__">__CTA_LABEL__</a>
   </nav>
 </div></header>
@@ -27,11 +27,11 @@ __BASE_CSS__
 </div></footer>
 <!--__SCRIPT__-->
 <script>
-/* 页内交互：锚点高亮 + 表单反馈。云端提交由可选云适配层接管。 */
+/* 锚点高亮与表单反馈。云端写入由独立脚本接管。 */
 (function(){
   var links=[].slice.call(document.querySelectorAll('.nav-link'));
   function mark(){
-    var best=null, top=140;
+    var best=null, top=180;
     links.forEach(function(a){
       var id=a.getAttribute('href').replace('#','');
       var el=document.getElementById(id);
@@ -41,7 +41,7 @@ __BASE_CSS__
   }
   window.addEventListener('scroll',mark,{passive:true}); mark();
   var form=document.getElementById('leadForm');
-  if(form && !window.H5AppLeadSubmit){
+  if(form && !window.leadCloudEnabled){
     form.addEventListener('submit',function(e){
       e.preventDefault();
       var box=document.getElementById('leadStatus');

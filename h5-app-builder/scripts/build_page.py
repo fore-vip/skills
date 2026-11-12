@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""主题 spec + 选定版式 -> 单文件落地宣传页。
+"""主题 spec + 选定版式 -> 单文件落地宣传页 / 应用页面。
 
 版式由主题关键词路由（pick_layout.py），也可 --layout 显式指定；
-内容结构由 spec.sections 顺序决定，生成器不预设任何业务板块。
+内容结构与业务口径由 spec 决定，生成器不预设任何业务板块。
+交付形态由 meta.deliverable 决定：draft（页面草稿）/ webapp（可发布应用）/ site（站点页）。
 写盘前自检不过就不产出文件。
 
 用法:
@@ -17,6 +18,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import quote, urlparse
 
 sys.dont_write_bytecode = True  # 运行不污染技能包
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -26,37 +28,80 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PAGE = ROOT / "templates" / "page.html"
 DEFAULT_CSS = ROOT / "templates" / "base.css"
 SDK_CDN = "https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"
+BAD_HOSTS = ("example.com", "example.org", "example.net", "localhost", "127.0.0.1")
+DELIVERABLES = ("draft", "webapp", "site")
+PROCESS_WORDS = ("生成器", "spec.json", "SKILL", "模板生成", "H5App", "前凌智选",
+                 "AUTO 工作室", "publicConfig", "applicationId")
+# 没有后端时不许出现的强行动词（避免「看起来能预约、其实不能」）
+LIVE_ACTION_WORDS = ("预约", "立即", "马上", "报名", "下单", "提交")
 
 
 def esc(v):
     return html.escape(str(v), quote=True)
 
 
-def render_head(meta, base_url):
+def visible_text(page):
+    t = re.sub(r"<head[\s\S]*?</head>", "", page)
+    t = re.sub(r"<script[\s\S]*?</script>", "", t)
+    t = re.sub(r"<style[\s\S]*?</style>", "", t)
+    return html.unescape(re.sub(r"<[^>]+>", " ", t))
+
+
+def resolve_site(meta, override):
+    """站点地址只来自 spec 或显式参数；没有就返回空串（草稿态，不写假域名）。"""
+    site = (override or meta.get("siteUrl") or "").strip().rstrip("/")
+    if site and not site.startswith(("http://", "https://")):
+        site = "https://" + site
+    return site
+
+
+def page_url(meta, site):
+    return (site + "/" + meta.get("slug", "index") + ".html") if site else ""
+
+
+def favicon_href(meta):
+    if meta.get("favicon"):
+        return esc(meta["favicon"])
+    color = str(meta.get("themeColor", "#b4573c")).replace("#", "%23")
+    svg = ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>"
+           "<rect width='64' height='64' rx='16' fill='" + color + "'/>"
+           "<circle cx='32' cy='32' r='12' fill='none' stroke='white' stroke-width='4'/></svg>")
+    return "data:image/svg+xml," + quote(svg, safe="")
+
+
+def render_head(meta, site):
     title, desc = esc(meta["title"]), esc(meta["description"])
-    url = base_url.rstrip("/") + "/" + meta.get("slug", "index") + ".html"
+    url = page_url(meta, site)
     ld = {"@context": "https://schema.org", "@type": "WebPage",
-          "name": meta["title"], "url": url, "description": meta["description"],
+          "name": meta["title"], "description": meta["description"],
           "inLanguage": "zh-CN",
           "publisher": {"@type": "Organization", "name": meta.get("brand", "")}}
-    return "\n".join([
+    if url:
+        ld["url"] = url
+    lines = [
         "<title>" + title + "</title>",
         '<meta name="description" content="' + desc + '">',
         '<meta name="theme-color" content="' + esc(meta.get("themeColor", "#ffffff")) + '">',
-        '<link rel="canonical" href="' + esc(url) + '">',
+        '<link rel="icon" href="' + favicon_href(meta) + '">',
         '<meta property="og:title" content="' + title + '">',
         '<meta property="og:description" content="' + desc + '">',
         '<meta property="og:type" content="website">',
-        '<meta property="og:url" content="' + esc(url) + '">',
-        '<meta name="twitter:card" content="summary_large_image">',
-        '<script type="application/ld+json">',
-        json.dumps(ld, ensure_ascii=False, indent=2),
-        "</script>",
-    ])
+    ]
+    if url:
+        lines.append('<link rel="canonical" href="' + esc(url) + '">')
+        lines.append('<meta property="og:url" content="' + esc(url) + '">')
+    if meta.get("ogImage"):
+        lines.append('<meta property="og:image" content="' + esc(meta["ogImage"]) + '">')
+        lines.append('<meta name="twitter:card" content="summary_large_image">')
+    else:
+        lines.append('<meta name="twitter:card" content="summary">')
+    lines += ['<script type="application/ld+json">',
+              json.dumps(ld, ensure_ascii=False, indent=2), "</script>"]
+    return "\n".join(lines)
 
 
-def render_hero(h):
-    arrow = '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+def render_hero(h, ctx):
+    arrow = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
     return "\n".join([
         '<section class="hero"><div class="wrap">',
         '  <div class="tag tag--lg eyebrow"><span class="dot"></span>' + esc(h["eyebrow"]) + "</div>",
@@ -72,19 +117,19 @@ def render_hero(h):
     ])
 
 
-def head_of(s):
+def head_of(s, skip_title=False, skip_text=False):
     out = []
-    if s.get("title") or s.get("text"):
+    if (s.get("title") and not skip_title) or (s.get("text") and not skip_text):
         out.append('<div class="sect-head">')
-        if s.get("title"):
+        if s.get("title") and not skip_title:
             out.append("<h2>" + esc(s["title"]) + "</h2>")
-        if s.get("text"):
+        if s.get("text") and not skip_text:
             out.append("<p>" + esc(s["text"]) + "</p>")
         out.append("</div>")
     return "".join(out)
 
 
-def render_features(s):
+def render_features(s, ctx):
     out = ['<div class="grid">']
     for it in s["items"]:
         out.append('<div class="card">')
@@ -103,7 +148,7 @@ def render_features(s):
     return "".join(out)
 
 
-def render_showcase(s):
+def render_showcase(s, ctx):
     out = ['<div class="grid showcase">']
     for i, it in enumerate(s["items"], 1):
         out.append('<div class="card">')
@@ -116,7 +161,7 @@ def render_showcase(s):
     return "".join(out)
 
 
-def render_stats(s):
+def render_stats(s, ctx):
     out = ['<div class="grid stats">']
     for it in s["items"]:
         out.append('<div class="stat"><b>' + esc(it["v"]) + "</b><span>"
@@ -125,7 +170,7 @@ def render_stats(s):
     return "".join(out)
 
 
-def render_steps(s):
+def render_steps(s, ctx):
     out = ['<div class="steps">']
     for i, it in enumerate(s["items"], 1):
         out.append('<div class="step"><span class="k">' + str(i) + "</span><div>"
@@ -134,12 +179,15 @@ def render_steps(s):
     return "".join(out)
 
 
-def render_quote(s):
+def render_quote(s, ctx):
     return ('<div class="quote"><blockquote>' + esc(s["text"]) + "</blockquote><cite>"
             + esc(s.get("cite", "")) + "</cite></div>")
 
 
-def render_faq(s):
+render_quote.owns = ("text",)
+
+
+def render_faq(s, ctx):
     out = ['<div class="faq">']
     for it in s["items"]:
         out.append("<details><summary class=\"ctl ctl--ghost faq-q\">" + esc(it["q"])
@@ -148,25 +196,37 @@ def render_faq(s):
     return "".join(out)
 
 
-def render_cta(s):
+def render_cta(s, ctx):
+    """live=False 时表单整体禁用：不许出现「填完手机号却白填」的假提交。"""
+    live = ctx["live"]
+    dis = "" if live else ' disabled aria-disabled="true"'
     out = ['<div class="cta-box">', "<h2>" + esc(s["title"]) + "</h2>"]
     if s.get("text"):
         out.append("<p>" + esc(s["text"]) + "</p>")
-    out.append('<form id="leadForm" class="fields">')
+    out.append('<form id="leadForm" class="fields" onsubmit="return false" novalidate>')
     for f in s.get("fields", []):
-        out.append('<input class="field" id="f_' + esc(f["id"]) + '" type="'
+        fid = "f_" + esc(f["id"])
+        label = esc(f.get("label", f["placeholder"]))
+        out.append('<label class="sr-only" for="' + fid + '">' + label + "</label>")
+        out.append('<input class="field" id="' + fid + '" type="'
                    + esc(f.get("type", "text")) + '" placeholder="' + esc(f["placeholder"])
-                   + '" aria-label="' + esc(f.get("label", f["placeholder"])) + '">')
-    out.append('<button class="ctl ctl--lg ctl--primary" type="submit">'
+                   + '" aria-label="' + label + '"' + dis + ">")
+    out.append('<button class="ctl ctl--lg ctl--primary" type="submit"' + dis + ">"
                + esc(s.get("submit", "提交")) + "</button>")
     out.append("</form>")
-    out.append('<div id="leadStatus" class="status" hidden></div>')
+    out.append('<div id="leadStatus" class="status" role="status" aria-live="polite" hidden></div>')
     if s.get("note"):
         out.append('<p class="cta-note">' + esc(s["note"]) + "</p>")
+    out.append('<noscript><p class="cta-note">当前未启用脚本，本页不会提交或保存任何信息。</p></noscript>')
     out.append("</div>")
     return "".join(out)
 
 
+render_cta.owns = ("title", "text")
+
+
+# 每个 renderer 用 owns 声明自己已经渲染了哪些字段；新增类型时必须在自己的函数上声明，
+# 而不是回头改 render_sections 的 if 分支（历史 bug：quote 的 text 被渲染两遍）。
 RENDERERS = {
     "features": render_features,
     "showcase": render_showcase,
@@ -179,30 +239,31 @@ RENDERERS = {
 }
 
 
-def render_sections(sections):
+def render_sections(sections, ctx):
     out = []
     for s in sections:
         t = s["type"]
         if t not in RENDERERS:
-            raise ValueError("未知 section 类型: " + t + "（可用: "
-                             + ", ".join(RENDERERS) + "）")
+            raise ValueError("未知 section 类型: " + t + "（可用: " + ", ".join(RENDERERS) + "）")
+        fn = RENDERERS[t]
+        owns = getattr(fn, "owns", ())
         sid = s.get("id", t)
         out.append('<section class="sect" id="' + esc(sid) + '"><div class="wrap">')
-        out.append(head_of(s))
-        out.append(RENDERERS[t](s))
+        out.append(head_of(s, "title" in owns, "text" in owns))
+        out.append(fn(s, ctx))
         out.append("</div></section>")
     return "\n".join(out)
 
 
 CLOUD_LEAD_JS = """<script src="__SDK_URL__"></script>
 <script>
-/* 可选云适配层：只做预约表单写入；配置来自 publicConfig；失败一律给可见提示。 */
+/* 预约表单写入。配置来自平台公开参数，失败一律给可见提示。 */
 (function(){
   var CFG = __PUBLIC_CONFIG__, TABLE = __TABLE__, COLS = __COLS__, PREFIX = __PREFIX__;
   var form = document.getElementById('leadForm');
   var box = document.getElementById('leadStatus');
   if (!form) return;
-  window.H5AppLeadSubmit = true;
+  window.leadCloudEnabled = true;
   function say(t, ok){
     box.hidden = false;
     box.className = 'status ' + (ok ? 'is-ok' : 'is-warn');
@@ -238,18 +299,71 @@ CLOUD_LEAD_JS = """<script src="__SDK_URL__"></script>
 </script>"""
 
 
-def selfcheck(page, spec, cloud_mode=False):
+def selfcheck(page, spec, cloud_mode=False, site=""):
     errs = []
+    meta = spec["meta"]
+    deliverable = meta.get("deliverable", "")
+    cloud = meta.get("cloud", {})
     leftovers = re.findall(r"__[A-Z][A-Z0-9_]*__|\{\{[^{}]+\}\}", page)
     if leftovers:
         errs.append("占位符残留: " + repr(sorted(set(leftovers))[:5]))
     for tag in ["div", "section", "a", "span", "header", "footer", "main", "nav", "button",
                 "form", "details", "summary", "blockquote", "h1", "h2", "h3", "p",
-                "script", "style"]:
+                "script", "style", "label", "noscript"]:
         o = len(re.findall(r"<%s[\s>]" % tag, page))
         c = page.count("</%s>" % tag)
         if o != c:
             errs.append("标签不平衡 %s %d/%d" % (tag, o, c))
+
+    # 交付形态与云服务必须对齐
+    if deliverable not in DELIVERABLES:
+        errs.append("meta.deliverable 缺失或非法（可选 draft/webapp/site）")
+    if deliverable in ("webapp", "site") and not site:
+        errs.append("非草稿形态必须提供 meta.siteUrl 或 --base-url")
+    if site and any(urlparse(site).netloc.startswith(h) or urlparse(site).netloc == h
+                    for h in BAD_HOSTS):
+        errs.append("站点地址是占位域名，禁止交付: " + site)
+    if deliverable == "webapp":
+        if not cloud.get("needed") or not cloud.get("table") or not cloud.get("columns"):
+            errs.append("webapp 形态必须声明 meta.cloud.needed/table/columns 并接后端")
+        if not cloud_mode:
+            errs.append("webapp 形态必须传 --cloud-config 才能生成")
+    if cloud_mode and not (cloud.get("needed") and cloud.get("table")):
+        errs.append("传了 --cloud-config 但 spec 未声明 meta.cloud.needed/table")
+
+    # head 元数据：三处 URL 一致、零假域名、零意外外链
+    url = page_url(meta, site)
+    canon = re.findall(r'<link rel="canonical" href="([^"]+)"', page)
+    ogurl = re.findall(r'<meta property="og:url" content="([^"]+)"', page)
+    ldm = re.search(r'<script type="application/ld\+json">([\s\S]*?)</script>', page)
+    ldurl = ""
+    if ldm:
+        try:
+            ldurl = json.loads(ldm.group(1)).get("url", "")
+        except ValueError:
+            errs.append("ld+json 不是合法 JSON")
+    if url:
+        if canon != [url] or ogurl != [url] or ldurl != url:
+            errs.append("canonical / og:url / ld+json.url 与站点地址不一致")
+    elif canon or ogurl or ldurl:
+        errs.append("草稿态没有真实站点地址，却写了 canonical / og:url / ld+json.url")
+    if '<link rel="icon"' not in page:
+        errs.append("缺少 favicon")
+    ogimg = meta.get("ogImage", "")
+    if ogimg and ogimg.startswith("http") and urlparse(ogimg).netloc != urlparse(site).netloc:
+        errs.append("og:image 是跨域外链")
+    if meta.get("ogImage") and 'summary_large_image' not in page:
+        errs.append("声明了 og:image 却没写大图卡")
+    if not meta.get("ogImage") and 'summary_large_image' in page:
+        errs.append("声明大图卡却没有 og:image")
+    abs_urls = re.findall(r'(?:href|src)=["\'](https?://[^"\']+)', page)
+    allowed = {url, ogimg} - {""}
+    for u in abs_urls:
+        if u in allowed or (cloud_mode and u == SDK_CDN):
+            continue
+        errs.append("存在未登记的绝对外链: " + u[:60])
+
+    # 资源边界
     if not cloud_mode and re.search(r"<script[^>]+src=|<link[^>]+rel=['\"]stylesheet|<img[^>]+src=['\"]https?://", page):
         errs.append("存在外部脚本/样式/图片依赖，违反零外链")
     if cloud_mode:
@@ -266,11 +380,40 @@ def selfcheck(page, spec, cloud_mode=False):
                 errs.append("云接线缺失: " + needle)
         if re.search(r"<link[^>]+rel=.stylesheet|<img[^>]+src=.https?://", page):
             errs.append("存在外部样式/图片依赖")
-    disclaimer = spec["meta"].get("disclaimer", "")
-    if disclaimer and disclaimer not in page:
+
+    # 表单：没有后端就必须整体禁用，且禁止强行动词
+    has_form = "<form" in page
+    if has_form:
+        if '<noscript>' not in page:
+            errs.append("缺少 noscript 降级提示")
+        if 'role="status"' not in page or 'aria-live=' not in page:
+            errs.append("状态反馈容器缺少 role/aria-live")
+        if not cloud_mode:
+            inputs = re.findall(r"<input\b[^>]*>", page)
+            btn = re.findall(r"<button\b[^>]*>", page)
+            if [x for x in inputs + btn if "disabled" not in x]:
+                errs.append("没有后端却留着可填写/可提交的控件")
+        for label in (meta.get("ctaLabel", ""), spec["hero"].get("primary", "")):
+            if not cloud_mode and any(w in label for w in LIVE_ACTION_WORDS):
+                errs.append("没有后端却承诺强行动作: " + label)
+    if 'aria-hidden="true"' not in page:
+        errs.append("装饰性图标缺少 aria-hidden")
+
+    # 正文：口径、串台、重复
+    text = visible_text(page)
+    disclaimer = meta.get("disclaimer", "")
+    if disclaimer and disclaimer not in text:
         errs.append("口径声明未出现在页面: " + disclaimer[:30])
+    for w in PROCESS_WORDS:
+        if w in page:
+            errs.append("正文/脚本残留制作过程词: " + w)
+    for s in spec["sections"]:
+        frag = s.get("text", "")
+        if len(frag) >= 12 and text.count(frag) > 1:
+            errs.append("区块说明重复渲染: " + frag[:24])
     if re.search(r"\bTODO\b|\bFIXME\b|\bXXX\b|lorem ipsum", page):
         errs.append("残留占位文案")
+
     scripts = re.findall(r"<script(?![^>]*application/ld\+json)[^>]*>([\s\S]*?)</script>", page)
     try:
         import tempfile
@@ -295,13 +438,14 @@ def main():
     ap.add_argument("--registry", default="")
     ap.add_argument("--layout", default="", help="显式指定版式 id，跳过主题路由")
     ap.add_argument("--out", required=True)
-    ap.add_argument("--base-url", default="https://example.com")
+    ap.add_argument("--base-url", default="", help="覆盖 spec.meta.siteUrl；草稿态留空")
     ap.add_argument("--footer-links", default="")
     ap.add_argument("--cloud-config", default="", help="publicConfig JSON；给了就启用预约表单云写入")
     a = ap.parse_args()
 
     spec = json.loads(Path(a.spec).read_text(encoding="utf-8"))
     meta = spec["meta"]
+    site = resolve_site(meta, a.base_url)
     reg = load_registry(a.registry) if a.registry else None
     chosen = choose(meta.get("topic", meta["title"]), reg, a.layout or meta.get("layoutId") or None)
     if not chosen["matched"]:
@@ -312,9 +456,10 @@ def main():
     page = page.replace("__BASE_CSS__", Path(a.css).read_text(encoding="utf-8").rstrip())
     page = page.replace("__TOKENS__", tokens)
     page = page.replace("__LAYOUT__", chosen["id"])
-    page = page.replace("<!--__HEAD__-->", render_head(meta, a.base_url))
-    page = page.replace("<!--__HERO__-->", render_hero(spec["hero"]))
-    page = page.replace("<!--__SECTIONS__-->", render_sections(spec["sections"]))
+    page = page.replace("<!--__HEAD__-->", render_head(meta, site))
+    page = page.replace("<!--__HERO__-->", render_hero(spec["hero"], {}))
+    page = page.replace("<!--__SECTIONS__-->",
+                        render_sections(spec["sections"], {"live": bool(a.cloud_config)}))
     nav = "".join('<a class="ctl ctl--sm ctl--ghost nav-link" href="'
                   + esc(x["href"]) + '">' + esc(x["label"]) + "</a> "
                   for x in meta.get("nav", []))
@@ -341,10 +486,10 @@ def main():
                   .replace("__PUBLIC_CONFIG__", json.dumps(pub, ensure_ascii=False))
                   .replace("__TABLE__", json.dumps(table, ensure_ascii=False))
                   .replace("__COLS__", json.dumps(cols, ensure_ascii=False))
-                  .replace("__PREFIX__", json.dumps(cloud.get("prefix", "预约 · "), ensure_ascii=False)))
+                  .replace("__PREFIX__", json.dumps(cloud.get("prefix", ""), ensure_ascii=False)))
     page = page.replace("<!--__SCRIPT__-->", script)
 
-    errs = selfcheck(page, spec, cloud_mode)
+    errs = selfcheck(page, spec, cloud_mode, site)
     if errs:
         for e in errs:
             print("[FAIL] " + e, file=sys.stderr)
@@ -356,7 +501,8 @@ def main():
     print("[ok] %s  %d bytes / %d lines" % (out, len(page.encode("utf-8")), page.count("\n") + 1))
     print("     版式=%s（%s）matched=%s | %s" % (chosen["id"], chosen["name"],
                                           chosen["matched"], chosen["reason"]))
-    print("     自检通过：占位符清零、标签平衡、零外链、口径声明齐备、JS 语法通过")
+    print("     形态=%s | 站点=%s | 自检通过：占位符/标签/域名/外链/口径/去重/无障碍/JS 语法"
+          % (meta.get("deliverable", "?"), site or "草稿（无站点地址）"))
     return 0
 
 

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * 真实视口闸门：CDP 强制 390x844（--window-size 会被夹到 500，不可信）。
+ * 真实视口闸门：CDP 强制视口（--window-size 会被夹到 500，不可信）。
  * ① 计算样式一致性（页内所有 .ctl 的圆角/高度/字号/主色必须统一）
- * ② spec.assertions 业务交互断言（换主题只改 spec）
- * ③ 首屏 / 中段 / 页尾三张截图
+ * ② spec.assertions 业务交互断言（只在主视口跑，换主题只改 spec）
+ * ③ 默认双视口 390 + 1280：窄屏导航入口必须保留，桌面不能横向溢出
+ * ④ 截图按「首屏 + 每个 section + 页尾」逐段输出，覆盖全页
  * 用法: node verify_viewport.mjs --spec examples/beauty.spec.json --url http://127.0.0.1:8767/index.html
  */
 import { spawn } from 'node:child_process';
@@ -14,8 +15,9 @@ const argv = process.argv.slice(2);
 const arg = k => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : undefined; };
 const SPEC = resolve(arg('--spec') || 'examples/beauty.spec.json');
 const URL = arg('--url') || 'http://127.0.0.1:8765/index.html';
-const WIDTH = Number(arg('--width') || 390);
 const HEIGHT = Number(arg('--height') || 844);
+const WIDTHS = (arg('--widths') || (arg('--width') ? String(arg('--width')) : '390,1280'))
+  .split(',').map(s => Number(s.trim())).filter(Boolean);
 const SHOT_PREFIX = arg('--shots') || '/tmp/h5app';
 const CHROME = arg('--chrome') || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = Number(arg('--port') || 9223);
@@ -26,12 +28,13 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 const spec = JSON.parse(readFileSync(SPEC, 'utf8'));
 const assertions = spec.assertions || [];
 if (!assertions.length) { console.log('[FAIL] spec 里没有 assertions'); process.exit(1); }
+if (!WIDTHS.length) { console.log('[FAIL] 没有有效视口宽度'); process.exit(1); }
 
 rmSync(PROFILE, { recursive: true, force: true });
 const chrome = spawn(CHROME, [
   '--headless=new', '--disable-gpu', '--no-sandbox', '--hide-scrollbars', '--no-first-run',
   '--remote-debugging-port=' + PORT, '--user-data-dir=' + PROFILE,
-  '--window-size=800,900', 'about:blank'
+  '--window-size=1400,900', 'about:blank'
 ], { stdio: 'ignore' });
 
 let ws, seq = 0, failed = false;
@@ -49,9 +52,9 @@ async function evalJs(expression) {
   if (r.result.exceptionDetails) throw new Error(JSON.stringify(r.result.exceptionDetails));
   return r.result.result.value;
 }
-async function shot(name) {
+async function shot(width, name) {
   const r = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
-  writeFileSync(SHOT_PREFIX + '-' + name + '.png', Buffer.from(r.result.data, 'base64'));
+  writeFileSync(SHOT_PREFIX + '-' + width + '-' + name + '.png', Buffer.from(r.result.data, 'base64'));
 }
 async function endpoint() {
   for (let i = 0; i < 60; i++) {
@@ -79,6 +82,7 @@ function judge(op, value, expect) {
 const STYLE_PROBE = `(() => {
   const cs = e => getComputedStyle(e);
   const all = [...document.querySelectorAll('.ctl')];
+  const navs = [...document.querySelectorAll('.hd-nav .nav-link')];
   const uniq = a => [...new Set(a)];
   const h = { lg: [], md: [], sm: [] };
   all.forEach(e => {
@@ -94,9 +98,15 @@ const STYLE_PROBE = `(() => {
     fieldHeights: uniq([...document.querySelectorAll('.field')].map(e => cs(e).height)),
     fieldRadii: uniq([...document.querySelectorAll('.field')].map(e => cs(e).borderRadius)),
     inlineStyles: document.querySelectorAll('[style]').length,
+    navTotal: navs.length,
+    navVisible: navs.filter(e => cs(e).display !== 'none').length,
+    overflow: document.documentElement.scrollWidth + '/' + innerWidth,
     layout: document.body.getAttribute('data-layout')
   });
 })()`;
+
+const checks = [];
+const shotNames = [];
 
 try {
   const url = await endpoint();
@@ -108,54 +118,75 @@ try {
   };
   await send('Page.enable');
   await send('Runtime.enable');
-  await send('Emulation.setDeviceMetricsOverride',
-    { width: WIDTH, height: HEIGHT, deviceScaleFactor: 1, mobile: true });
-  await send('Page.navigate', { url: URL });
-  await sleep(WAIT);
 
-  const checks = [];
-  const vp = await evalJs('innerWidth + "x" + innerHeight');
-  checks.push(['视口回读', vp, vp === WIDTH + 'x' + HEIGHT]);
-
-  // ① 计算样式一致性（页内必须统一，跨主题允许不同）
-  const s = JSON.parse(await evalJs(STYLE_PROBE));
-  checks.push(['控件数量 > 0', s.count, s.count > 0]);
-  checks.push(['页内圆角统一（版式 ' + s.layout + '）', s.radii.join(','), s.radii.length === 1]);
-  checks.push(['字号仅用三档 token', s.fontSizes.join(','), s.fontSizes.length <= 3]);
-  checks.push(['大号控件高度一致', s.heights.lg.join(','), s.heights.lg.length <= 1]);
-  checks.push(['中号控件高度一致', s.heights.md.join(','), s.heights.md.length <= 1]);
-  checks.push(['小号控件高度一致', s.heights.sm.join(','), s.heights.sm.length <= 1]);
-  checks.push(['主色按钮底色统一', s.primaryBg.join(','), s.primaryBg.length === 1]);
-  checks.push(['输入框高度与中号控件一致', s.fieldHeights.join(','),
-    s.fieldHeights.length <= 1 && s.fieldHeights[0] === s.heights.md[0]]);
-  checks.push(['输入框圆角与控件一致', s.fieldRadii.join(','),
-    s.fieldRadii.length <= 1 && s.fieldRadii[0] === s.radii[0]]);
-  checks.push(['页面零内联样式', s.inlineStyles, s.inlineStyles === 0]);
-
-  // ② 业务交互断言
-  for (const a of assertions) {
-    if (a.click) await evalJs('document.querySelector(' + JSON.stringify(a.click) + ').click()');
-    if (a.hash) { await evalJs('location.hash=' + JSON.stringify(a.hash)); await sleep(150); }
-    const fills = a.fills || (a.fill ? [a.fill] : []);
-    for (const f of fills) {
-      await evalJs('(function(){var e=document.querySelector(' + JSON.stringify(f.sel) + ');'
-        + 'if(e){e.value=' + JSON.stringify(f.value) + ';'
-        + 'e.dispatchEvent(new Event("input",{bubbles:true}));}})()');
+  for (let wi = 0; wi < WIDTHS.length; wi++) {
+    const W = WIDTHS[wi];
+    const primary = wi === 0;
+    const tag = W + 'px';
+    await send('Emulation.setDeviceMetricsOverride',
+      { width: W, height: HEIGHT, deviceScaleFactor: 1, mobile: W <= 720 });
+    if (primary) {
+      await send('Page.navigate', { url: URL });
+      await sleep(WAIT);
+    } else {
+      await sleep(700);
     }
-    const value = await evalJs(a.eval);
-    checks.push([a.name, String(value).slice(0, 60), judge(a.op, value, a.expect)]);
-  }
+    const s = JSON.parse(await evalJs(STYLE_PROBE));
+    checks.push([tag + ' 视口回读', await evalJs('innerWidth + "x" + innerHeight'),
+      (await evalJs('innerWidth')) === W]);
+    checks.push([tag + ' 无横向溢出', s.overflow, Number(s.overflow.split('/')[0]) <= W]);
+    checks.push([tag + ' 导航入口全部可见', s.navVisible + '/' + s.navTotal,
+      s.navTotal > 0 && s.navVisible === s.navTotal]);
+    checks.push([tag + ' 页内圆角统一（' + s.layout + '）', s.radii.join(','), s.radii.length === 1]);
+    checks.push([tag + ' 字号仅用三档 token', s.fontSizes.join(','), s.fontSizes.length <= 3]);
+    checks.push([tag + ' 三档高度各自统一',
+      [s.heights.lg, s.heights.md, s.heights.sm].map(x => x.length).join('/'),
+      s.heights.lg.length <= 1 && s.heights.md.length <= 1 && s.heights.sm.length <= 1]);
+    checks.push([tag + ' 主色按钮底色统一', s.primaryBg.join(','), s.primaryBg.length === 1]);
+    checks.push([tag + ' 输入框与控件同高同圆角',
+      s.fieldHeights.join(',') + ' / ' + s.fieldRadii.join(','),
+      s.fieldHeights.length <= 1 && s.fieldHeights[0] === s.heights.md[0]
+      && s.fieldRadii.length <= 1 && s.fieldRadii[0] === s.radii[0]]);
+    checks.push([tag + ' 页面零内联样式', s.inlineStyles, s.inlineStyles === 0]);
 
-  // ③ 三档截图
-  await evalJs('window.scrollTo(0,0)'); await sleep(200); await shot('hero');
-  await evalJs('window.scrollTo(0, 620)'); await sleep(200); await shot('mid');
-  await evalJs('window.scrollTo(0, document.body.scrollHeight)'); await sleep(200); await shot('bottom');
+    if (primary) {
+      for (const a of assertions) {
+        if (a.click) await evalJs('document.querySelector(' + JSON.stringify(a.click) + ').click()');
+        if (a.hash) { await evalJs('location.hash=' + JSON.stringify(a.hash)); await sleep(150); }
+        const fills = a.fills || (a.fill ? [a.fill] : []);
+        for (const f of fills) {
+          await evalJs('(function(){var e=document.querySelector(' + JSON.stringify(f.sel) + ');'
+            + 'if(e){e.value=' + JSON.stringify(f.value) + ';'
+            + 'e.dispatchEvent(new Event("input",{bubbles:true}));}})()');
+        }
+        const value = await evalJs(a.eval);
+        checks.push([tag + ' ' + a.name, String(value).slice(0, 60), judge(a.op, value, a.expect)]);
+      }
+      // 逐区块截图：首屏 + 每个 section 锚点 + 页尾，保证没有一段没被目视
+      await evalJs('window.scrollTo(0,0)'); await sleep(200);
+      await shot(W, 'hero'); shotNames.push(W + '-hero');
+      for (const sec of spec.sections) {
+        const id = sec.id || sec.type;
+        await evalJs('(function(){var e=document.getElementById(' + JSON.stringify(id)
+          + ');if(e)e.scrollIntoView({block:"start"});})()');
+        await sleep(180);
+        await shot(W, id); shotNames.push(W + '-' + id);
+      }
+      await evalJs('window.scrollTo(0, document.body.scrollHeight)'); await sleep(200);
+      await shot(W, 'bottom'); shotNames.push(W + '-bottom');
+    } else {
+      await evalJs('window.scrollTo(0,0)'); await sleep(200);
+      await shot(W, 'hero'); shotNames.push(W + '-hero');
+      await evalJs('window.scrollTo(0, document.body.scrollHeight)'); await sleep(200);
+      await shot(W, 'bottom'); shotNames.push(W + '-bottom');
+    }
+  }
 
   for (const [name, value, ok] of checks) {
     console.log((ok ? 'PASS ' : 'FAIL ') + name + ' :: ' + value);
     if (!ok) failed = true;
   }
-  console.log('截图: ' + SHOT_PREFIX + '-{hero,mid,bottom}.png');
+  console.log('截图(' + shotNames.length + '): ' + shotNames.join(', '));
   console.log(failed ? 'RESULT FAIL' : 'RESULT ALL PASS (' + checks.length + ')');
 } catch (e) {
   console.log('ERROR ' + (e && e.message ? e.message : String(e)));
