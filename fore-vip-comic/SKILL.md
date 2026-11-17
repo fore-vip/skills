@@ -4,11 +4,11 @@ slug: comic
 displayName: 手绘漫画
 display_name: 手绘漫画
 display_name_en: Handdrawn Comic
-description: "手绘漫画与动画成图助手（fore.vip）。把主题、梗或知识画成手绘质感的多格漫画——提示词由六层编译器生成、角色风格用参考图跨格锁定、成品可一键转镜头动效或真动画，产出可直接发布的 PNG/GIF/MP4。开场先以选项形式收集主题、画风、版式与文案调性，再编译分镜为逐格 prompt、带锚点串行生图、脚本合成中文对白与版式；合成器内置文字溢出与气泡尾巴越界两道硬校验，不通过直接报错。当用户说「画漫画 / 四格漫画 / 六格漫画 / 手绘漫画 / 四格动画 / 让漫画动起来 / 漫画版 XX / 把某个梗画成漫画 / 用漫画讲清楚 XX / 漫画配图」时启用。不产出单张海报或封面（走 poster-studio）、不改写生图提示词（走 fore-vip-image-prompt）、不做纯图片拼接（走 fore-vip-image-stitch）、不做儿童科普图文排版（走 fore-vip-kids-science）。"
-description_zh: "把主题、梗或知识画成手绘质感的多格漫画并可动化。六层提示词编译 + 参考图锁定角色风格 + 合成器硬校验，开场选项收集参数，输出 PNG/GIF/MP4。不产出海报封面、不改写生图提示词、不做纯图片拼接。"
-description_en: "Hand-drawn comic and animation generator. Turns a theme, joke, or knowledge into a multi-panel comic with a hand-drawn feel: a six-layer prompt compiler, reference-image style locking across panels, and a compositor that renders Chinese dialogue and layout with built-in overflow and bubble-tail checks, outputting publish-ready PNG/GIF/MP4. It collects parameters as options, compiles the storyboard into per-panel prompts, generates serially with an anchor image, then offers zero-cost motion or AI animation. It does not produce posters, rewrite image prompts, or stitch plain images."
+description: "手绘漫画与动画成图助手（fore.vip）。把主题、梗或知识画成手绘质感的多格漫画——提示词由六层编译器生成、角色风格用参考图跨格锁定、成品可一键转镜头动效或真动画，产出可直接发布的 PNG/GIF/MP4。开场先判主题信息充分度：信息不足时基于有限信息做最优剧情提案、标注假设并请用户确认，确认后再收集画风、版式与文案调性；信息充分则直接收参。随后编译分镜为逐格 prompt、带锚点串行生图、脚本合成中文对白与版式；合成器内置文字溢出与气泡尾巴越界两道硬校验，不通过直接报错。当用户说「画漫画 / 四格漫画 / 六格漫画 / 手绘漫画 / 四格动画 / 让漫画动起来 / 漫画版 XX / 把某个梗画成漫画 / 用漫画讲清楚 XX / 漫画配图」时启用。不产出单张海报或封面（走 poster-studio）、不改写生图提示词（走 fore-vip-image-prompt）、不做纯图片拼接（走 fore-vip-image-stitch）、不做儿童科普图文排版（走 fore-vip-kids-science）。"
+description_zh: "把主题、梗或知识画成手绘质感的多格漫画并可动化。开场先判主题信息充分度，不足时基于有限信息提案剧情并请用户确认；六层提示词编译 + 参考图锁定角色风格 + 合成器硬校验，输出 PNG/GIF/MP4。不产出海报封面、不改写生图提示词、不做纯图片拼接。"
+description_en: "Hand-drawn comic and animation generator. Turns a theme, joke, or knowledge into a multi-panel comic with a hand-drawn feel: a six-layer prompt compiler, reference-image style locking across panels, and a compositor that renders Chinese dialogue and layout with built-in overflow and bubble-tail checks, outputting publish-ready PNG/GIF/MP4. It first checks whether the brief has enough detail; if not, it proposes a plot from the available signals with explicit assumptions and waits for confirmation before collecting style, layout and tone. It then compiles the storyboard, generates serially with an anchor image, and offers zero-cost motion or AI animation. It does not produce posters, rewrite image prompts, or stitch plain images."
 category: image
-version: 1.1.1
+version: 1.1.2
 author: fore.vip
 owner: team
 agent_created: true
@@ -50,9 +50,14 @@ AI 生图对中文几乎必然写错字，气泡位置也不可控；而漫画�
 不要试图让 AI 一次画出带中文的完整四格——那是最容易翻车的路径。
 动画化同理：运动由动态模块给，不要让模型直接生成带对白的动画。
 
-## 第一步（强制）：以选项形式收集主题与风格
+## 第一步（强制）：判定信息充分度 → 收集参数 → 剧情提案确认
 
-**在写分镜脚本之前，必须先调用 `AskUserQuestion` 收集四项参数。** 除非用户已在本轮对话中明确给出该项，此时跳过对应问题。
+**在写分镜脚本之前，先判定用户给的主题信息够不够，再分两路走。**
+
+- **信息充分度判定**：看用户是否明确给出了「主体 / 场景 / 冲突（转折点）/ 情绪倾向」中的至少 3 项；「你的样子」「我的故事」这类有歧义的主体按未给出计。
+- **≥3 项（充分）**：按下面的模板用 `AskUserQuestion` 收集尚未明确的参数，然后进第二步。
+- **≤2 项（不足）**：**不要空泛追问，也不要用选项把剧情设计推回用户**。先按 `references/brief-expansion.md` 从已有信息推演最优剧情，输出带编号假设的「主题提案」，并用 `AskUserQuestion` 停等用户确认；确认后才进第二步。提案未确认前不得写 storyboard、不得编译、不得生图。
+- 参数题（画风 / 版式 / 调性）只问参数；剧情由本 SKILL 提案，不问用户「你想怎么画」。
 
 调用模板（照抄，按需删减已明确的项）：
 
@@ -106,10 +111,11 @@ AI 生图对中文几乎必然写错字，气泡位置也不可控；而漫画�
 
 **跳过规则**：用户已给出该项时不要重复问——已经说了主题就跳过主题题，说了"你定"就全部使用默认值（钢笔淡彩 + 四格 2×2 + 口语吐槽）。
 **用户若只给了方向、没给具体主题**（例如选了"知识科普"或答"你定"）：先产出 **3 个具体主题候选**，每个用一句话讲清四格分别画什么，让用户挑选后再进入分镜。不要在主题模糊时直接开画。
+**用户若给的主题内容过少**（一句话、一个词、只有角色或只有情绪，四要素不足 3 项）：走 `references/brief-expansion.md` 的提案分支——先提取已有信号、用最小充分假设补全，输出「主题提案 + 编号假设 + 四格演进表 + 台词草案」，再让用户确认或修改假设。**这是剧情设计的职责，不得用一串选项题把设计工作推回用户，也不得未经确认直接开画。**
 
 ## 第二步：写分镜 + 编译提示词
 
-选定题材后，**先定主题路线，再落分镜**，最后编译提示词。
+选定题材后（信息不足时须先完成第一步的提案确认），**先定主题路线，再落分镜**，最后编译提示词。提案里确认过的路线、四维标注与台词草案直接落成 `storyboard.json`，不要重新设计。
 
 - **主题路线（强制）**：一句话写清"起点 → 转折 → 终点"，四格沿这条线推进。只定四幕职责、不定路线，必然产出四格同构图的失败品。五类题材的路线模板见 `references/narrative-patterns.md`。
 - **画面演进（强制）**：四格在景别 `shot`、场景状态 `state`、光线 `light`、情绪 `emotion` 四维上各需 ≥3 种取值；`scene` 里显式写 `_shot_`（`overhead` / `extreme close-up` / `wide pull-back`）。编译器会拦截雷同分镜。
@@ -180,6 +186,7 @@ python scripts/compose_comic.py <spec.json>
 | `references/motion.md` | 第 5 步动态化时读 | GIF / MP4 两条路径、成本告知、VideoGen 玩法与参数 |
 | `references/spec-format.md` | 写 spec JSON 时读 | 字段说明、坐标定法、完整示例 |
 | `references/styles.md` | 第 2 步写 storyboard 时读 | 5 种画风的 prompt 前缀与适用场景（即画风选项的来源） |
+| `references/brief-expansion.md` | 第 1 步判出信息不足时读 | 信息充分度判定、信号提取、最小充分假设、剧情提案模板与确认闸门 |
 | `references/narrative-patterns.md` | 第 2 步写分镜时读 | 5 种四幕节奏模板、文案字数预算、气泡形状语用表 |
 | `references/pitfalls.md` | 生图与修补时读 | 生图纪律、能力边界、瑕疵修补、环境事实 |
 
