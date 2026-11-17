@@ -8,7 +8,7 @@ description: "手绘漫画与动画成图助手（fore.vip）。把主题、梗�
 description_zh: "把主题、梗或知识画成手绘质感的多格漫画并可动化。六层提示词编译 + 参考图锁定角色风格 + 合成器硬校验，开场选项收集参数，输出 PNG/GIF/MP4。不产出海报封面、不改写生图提示词、不做纯图片拼接。"
 description_en: "Hand-drawn comic and animation generator. Turns a theme, joke, or knowledge into a multi-panel comic with a hand-drawn feel: a six-layer prompt compiler, reference-image style locking across panels, and a compositor that renders Chinese dialogue and layout with built-in overflow and bubble-tail checks, outputting publish-ready PNG/GIF/MP4. It collects parameters as options, compiles the storyboard into per-panel prompts, generates serially with an anchor image, then offers zero-cost motion or AI animation. It does not produce posters, rewrite image prompts, or stitch plain images."
 category: image
-version: 1.1.0
+version: 1.1.1
 author: fore.vip
 owner: team
 agent_created: true
@@ -109,13 +109,15 @@ AI 生图对中文几乎必然写错字，气泡位置也不可控；而漫画�
 
 ## 第二步：写分镜 + 编译提示词
 
-选定题材后，先落定每格的**画面内容 + 台词 + 说话人**，再把它们编译成逐格 prompt。
+选定题材后，**先定主题路线，再落分镜**，最后编译提示词。
 
+- **主题路线（强制）**：一句话写清"起点 → 转折 → 终点"，四格沿这条线推进。只定四幕职责、不定路线，必然产出四格同构图的失败品。五类题材的路线模板见 `references/narrative-patterns.md`。
+- **画面演进（强制）**：四格在景别 `shot`、场景状态 `state`、光线 `light`、情绪 `emotion` 四维上各需 ≥3 种取值；`scene` 里显式写 `_shot_`（`overhead` / `extreme close-up` / `wide pull-back`）。编译器会拦截雷同分镜。
 - 四幕节奏、各题材的叙事模板、文案字数预算见 `references/narrative-patterns.md`。
 - 第 3 格安排视觉峰值，第 4 格放最妙的一句。
 - 台词字数必须控制在预算内（答案 ≤16 字、问题 ≤13 字），超了就改文案，不要缩字号硬塞。
 
-把分镜写成 `storyboard.json`（格式与字段见 `references/prompt-compiler.md`），然后编译：
+把分镜写成 `storyboard.json`（格式、route 与演进字段见 `references/prompt-compiler.md`），然后编译：
 
 ```bash
 python scripts/build_prompts.py storyboard.json prompts.json

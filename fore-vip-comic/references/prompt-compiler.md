@@ -40,6 +40,7 @@
 ```json
 {
   "style": "<从 styles.md 复制的整段风格前缀>",
+  "route": "正常需求 → 层层加码 → 当场爆发 → 一问打回",
   "composition": "Composition leaves the upper third of the panel almost completely empty for a speech bubble.",
   "character": {
     "role": "a junior designer", "build": "slim, slightly hunched",
@@ -48,13 +49,28 @@
     "signature": "a red mug in hand"
   },
   "panels": [
-    {"scene": "The designer stares at a laptop showing a long requirement list.", "emotion": "weary, shoulders slumped"},
-    {"scene": "Seven chat pop-ups stack up above the desk.", "emotion": "increasingly tense"},
-    {"scene": "The designer throws both hands up, the red mug tilted.", "emotion": "bursting, eyes wide"},
-    {"scene": "The laptop shows one more calm question bubble.", "emotion": "deadpan silence"}
+    {"scene": "A wide shot of a designer at a tidy desk facing a single email, morning light.", "emotion": "calm, expectant", "shot": "wide", "state": "tidy", "light": "soft"},
+    {"scene": "A closer view as seven chat pop-ups stack up across the screen, the desk now crowded with printouts.", "emotion": "increasingly tense", "shot": "close", "state": "crowded", "light": "warm"},
+    {"scene": "An extreme close-up of the designer throwing both hands up, the red mug tilted, sharp shadows.", "emotion": "bursting, eyes wide", "shot": "extreme_close", "state": "chaotic", "light": "highlight"},
+    {"scene": "A wide shot pull-back: one calm question bubble on the screen, the designer frozen, still air.", "emotion": "deadpan silence", "shot": "wide", "state": "settled", "light": "clear"}
   ]
 }
 ```
+
+### 顶层 `route`（必填）
+
+主题路线，一句话写清"起点 → 转折 → 终点"，中文即可。四格必须沿这条线推进。**缺失时编译器直接拒绝**——不允许没有路线就分镜。路线模板见 `narrative-patterns.md`「主题路线」节。
+
+### 每格演进标注（必填，不进 prompt）
+
+| 字段 | 含义 | 取值示例 |
+|---|---|---|
+| `shot` | 景别 | `wide` / `mid` / `close` / `extreme_close` / `overhead` |
+| `state` | 场景状态 | `tidy` / `crowded` / `chaotic` / `focused` / `settled` |
+| `light` | 光线色调 | `soft` / `warm` / `dark` / `highlight` / `clear` |
+| `emotion` | 人物情绪（同时进 prompt） | 英文短句，四格各异 |
+
+四格在 `shot / state / light / emotion` 四个维度上**每个都至少需要 3 种不同取值**，且相邻格的 scene 描述雷同度不得 > 0.55。这些标注只用于闸门校验，不拼进 prompt（避免中文或标签词进入生图）。
 
 ## scene 写法铁律
 
@@ -69,7 +85,7 @@
 python scripts/build_prompts.py storyboard.json prompts.json
 ```
 
-脚本做三件事：拼六层、拒绝含中文的 prompt、断言前 3 层与负面层四格逐字相同。输出 `prompts.json` 含每格最终 prompt 与 `model_params`。
+脚本做五件事：拼六层、拒绝含中文的 prompt、断言固定层四格逐字相同、断言主题路线 `route` 已填、**拦截同构图四连**（演进维度取值不足或 scene 两两雷同度 >0.55 时报错，并提示改写景别/场景状态）。输出 `prompts.json` 含每格最终 prompt、`route`、`model_params` 与每格 `evolution` 标注。
 
 `model_params` 里两个关键值不要改：
 
