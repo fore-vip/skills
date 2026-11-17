@@ -1,0 +1,81 @@
+# 提示词编译：六层结构与故事板
+
+## 为什么不再"逐字复制前缀"
+
+旧做法把一整段前缀粘到每格 prompt 开头，靠人肉保证四格一致。问题：前缀藏在自然语言的 `# 第三步` 里，改一次画风要改四处；角色描述每格手写一遍，措辞迟早漂移；中文台词混进 prompt 时模型会照着画字。
+
+新做法：**把 prompt 拆成六层，固定层由脚本注入，手写层只有 scene 和 emotion**。`scripts/build_prompts.py` 编译后强制校验——除 scene/emotion 外，任意两格必须逐字相同，不一致直接报错。
+
+## 六层结构
+
+| 层 | 字段 | 固定/可变 | 来源 | 作用 |
+|---|---|---|---|---|
+| 1 风格层 | `style` | 固定 | `styles.md` 逐字复制 | 画风、笔触、纸感、负面约束 |
+| 2 角色层 | `character` | 固定 | 定妆块（见下） | 锁人物长相与穿着 |
+| 3 构图层 | `composition` | 固定 | 通常 `upper third empty` | 给气泡留位 |
+| 4 场景层 | `scene` | **可变** | 分镜脚本 | 本格画面，纯物理描述 |
+| 5 情绪层 | `emotion` | **可变** | 分镜脚本 | 表情与肢体，弱于场景 |
+| 6 负面层 | `negative` | 固定 | 默认或覆盖 | 禁文字、禁气泡、禁水印 |
+
+编译结果 = `1 + 2 + 3 + 4 + 5 + 6`，四格之间只有第 4、5 层不同。
+
+## 角色定妆块（第二次起复用）
+
+`character` 用对象写，字段固定顺序，脚本拼成一句英文。四格必须传同一个对象。
+
+| 字段 | 含义 | 示例 |
+|---|---|---|
+| `role` | 身份 | `a junior designer` |
+| `build` | 体型 | `slim, slightly hunched` |
+| `hair` | 发型发色 | `short messy black hair` |
+| `eyes` | 眼部特征 | `round glasses` |
+| `outfit` | 穿着 | `oversized hoodie, rolled-up sleeves` |
+| `colors` | 主色 | `beige and muted blue palette` |
+| `signature` | 记忆点道具 | `a red mug in hand` |
+
+写够 5–7 个字段，模型才能锁住；少于 3 个字段时四格飘的概率显著上升。字段值一律英文短句，不写中文。
+
+## storyboard.json 格式
+
+```json
+{
+  "style": "<从 styles.md 复制的整段风格前缀>",
+  "composition": "Composition leaves the upper third of the panel almost completely empty for a speech bubble.",
+  "character": {
+    "role": "a junior designer", "build": "slim, slightly hunched",
+    "hair": "short messy black hair", "eyes": "round glasses",
+    "outfit": "oversized hoodie", "colors": "beige and muted blue",
+    "signature": "a red mug in hand"
+  },
+  "panels": [
+    {"scene": "The designer stares at a laptop showing a long requirement list.", "emotion": "weary, shoulders slumped"},
+    {"scene": "Seven chat pop-ups stack up above the desk.", "emotion": "increasingly tense"},
+    {"scene": "The designer throws both hands up, the red mug tilted.", "emotion": "bursting, eyes wide"},
+    {"scene": "The laptop shows one more calm question bubble.", "emotion": "deadpan silence"}
+  ]
+}
+```
+
+## scene 写法铁律
+
+1. **只写可拍摄的物理事实**：谁、在哪、做什么、手里拿什么、光线如何。
+2. **不写台词、不写文字内容**——对白留给合成器，写进去模型会画错字。
+3. **不写抽象概念**（"压力""崩溃"），改写成可见动作（"双手举起""杯子倾斜"）。情绪交给 `emotion` 层。
+4. 英文，单句 15–30 词。中文会被编译器拒绝。
+
+## 编译与校验
+
+```bash
+python scripts/build_prompts.py storyboard.json prompts.json
+```
+
+脚本做三件事：拼六层、拒绝含中文的 prompt、断言前 3 层与负面层四格逐字相同。输出 `prompts.json` 含每格最终 prompt 与 `model_params`。
+
+`model_params` 里两个关键值不要改：
+
+| 参数 | 值 | 原因 |
+|---|---|---|
+| `revise` | `false` | 关闭模型自动改写 prompt，否则会偷偷改掉固定层 |
+| `background` | `opaque` | 手绘纸感需要实底，透明底会让纸纹丢失 |
+
+生图时逐格取 `panels[i].prompt`，参数用 `1536x1024` + `quality=high`。
