@@ -8,7 +8,7 @@ description: "手绘漫画与动画成图助手（fore.vip）。把主题、梗�
 description_zh: "把主题、梗或知识画成手绘质感的多格漫画并可动化。开场先判主题信息充分度，不足时基于有限信息提案剧情并请用户确认；六层提示词编译 + 参考图锁定角色风格 + 合成器硬校验，输出 PNG/GIF/MP4。不产出海报封面、不改写生图提示词、不做纯图片拼接。"
 description_en: "Hand-drawn comic and animation generator. Turns a theme, joke, or knowledge into a multi-panel comic with a hand-drawn feel: a six-layer prompt compiler, reference-image style locking across panels, and a compositor that renders Chinese dialogue and layout with built-in overflow and bubble-tail checks, outputting publish-ready PNG/GIF/MP4. It first checks whether the brief has enough detail; if not, it proposes a plot from the available signals with explicit assumptions and waits for confirmation before collecting style, layout and tone. It then compiles the storyboard, generates serially with an anchor image, and offers zero-cost motion or AI animation. It does not produce posters, rewrite image prompts, or stitch plain images."
 category: image
-version: 1.1.2
+version: 1.2.0
 author: fore.vip
 owner: team
 agent_created: true
@@ -118,7 +118,7 @@ AI 生图对中文几乎必然写错字，气泡位置也不可控；而漫画�
 选定题材后（信息不足时须先完成第一步的提案确认），**先定主题路线，再落分镜**，最后编译提示词。提案里确认过的路线、四维标注与台词草案直接落成 `storyboard.json`，不要重新设计。
 
 - **主题路线（强制）**：一句话写清"起点 → 转折 → 终点"，四格沿这条线推进。只定四幕职责、不定路线，必然产出四格同构图的失败品。五类题材的路线模板见 `references/narrative-patterns.md`。
-- **画面演进（强制）**：四格在景别 `shot`、场景状态 `state`、光线 `light`、情绪 `emotion` 四维上各需 ≥3 种取值；`scene` 里显式写 `_shot_`（`overhead` / `extreme close-up` / `wide pull-back`）。编译器会拦截雷同分镜。
+- **画面演进（参照模板）**：按 `references/narrative-patterns.md`「提示词参照模板」选一套骨架，把 `{槽位}` 填成可拍摄的物理事实；`scene` 里显式写 `_shot_`（`overhead` / `extreme close-up` / `wide pull-back`）。剧情可无限扩展，**编译器对同质只提醒、不阻断**——不用数值阈值卡创意。
 - 四幕节奏、各题材的叙事模板、文案字数预算见 `references/narrative-patterns.md`。
 - 第 3 格安排视觉峰值，第 4 格放最妙的一句。
 - 台词字数必须控制在预算内（答案 ≤16 字、问题 ≤13 字），超了就改文案，不要缩字号硬塞。
@@ -129,7 +129,7 @@ AI 生图对中文几乎必然写错字，气泡位置也不可控；而漫画�
 python scripts/build_prompts.py storyboard.json prompts.json
 ```
 
-编译器做三件事：把 **6 层**（风格/角色/构图/场景/情绪/负面）拼成逐格 prompt；拒绝含中文的 prompt；断言四格的固定层逐字相同。**不要手写 prompt 绕过编译器**——那是风格漂移的头号来源。台词与说话人另存，供第四步合成使用，不进 prompt。
+编译器把 **6 层**（风格/角色/构图/场景/情绪/负面）拼成逐格 prompt，并做硬断言：拒绝含中文、固定层逐字一致、路线与四维标注齐全；**创意性同质只提醒不阻断**。**不要手写 prompt 绕过编译器**——那是风格漂移的头号来源。台词与说话人另存，供第四步合成使用，不进 prompt。
 
 ## 第三步：带锚点逐格生图
 

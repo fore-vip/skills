@@ -4,10 +4,12 @@
 用法:
     python build_prompts.py <storyboard.json> [output.json]
 
-输出含 model_params 与每格最终 prompt。内置两组断言：
-1. 一致性：除 scene / emotion 外，所有格的固定层必须逐字相同。
-2. 演进性：必须先定主题路线 route；四格的 shot/state/light/emotion
-   必须多样，scene 描述不得两两雷同——拦截"四格同一构图"的失败模式。
+校验分两类：
+1. 硬断言（结构性/确定性，不满足即报错）：style 已填、route 已填、四维标注齐全、
+   scene 非空且为英文、固定层四格逐字一致。
+2. 软提醒（创意性，只提示不阻断）：四格演进维度过于同质、scene 描述雷同。
+   剧情是可无限扩展的路线，不用数值阈值卡死——提醒时给出参照模板，
+   让调用者照着模板扩展（见 references/narrative-patterns.md）。
 
 输入规范见 ../references/prompt-compiler.md。
 """
@@ -24,6 +26,11 @@ DEFAULT_NEGATIVE = (
 CHAR_FIELDS = ("role", "build", "hair", "eyes", "outfit", "colors", "signature")
 EVOLVE_DIMS = ("shot", "state", "light")
 STOP = set("a an the at of on in over under with and to for from as is are by into near beside".split())
+REFERENCE_TEMPLATE = (
+    "参照模板（可无限套用）：1 wide 交代起点 → 2 overhead/close 加压堆叠 → "
+    "3 extreme_close 聚焦峰值 → 4 wide pull-back 收束。"
+    "槽位与顺序可自由替换、增删；见 references/narrative-patterns.md「提示词参照模板」。"
+)
 
 
 def build_character(c):
@@ -47,28 +54,28 @@ def jaccard(a, b):
     return len(a & b) / len(a | b)
 
 
-def check_evolution(route, panels):
+def evolution_notes(route, panels):
+    """结构性必填仍硬校验；创意性同质只返回提醒，不阻断。"""
     if not route:
-        raise SystemExit("缺少 route：必须先写一条主题路线（起点 → 转折 → 终点），不允许直接分镜")
+        raise SystemExit("缺少 route：必须先写一条主题路线（起点 → 转折 → 终点）")
     n = len(panels)
     for i, p in enumerate(panels, 1):
         for dim in EVOLVE_DIMS + ("emotion",):
             if not str(p.get(dim, "")).strip():
-                raise SystemExit(f"panel{i}: 缺少演进标注 {dim}（shot/state/light/emotion 必填，见 narrative-patterns.md）")
+                raise SystemExit(f"panel{i}: 缺少演进标注 {dim}（shot/state/light/emotion 必填，照参照模板填写即可）")
+
+    notes = []
     for dim in EVOLVE_DIMS + ("emotion",):
         distinct = len({str(p.get(dim)).strip().lower() for p in panels})
         if distinct < min(3, n):
-            raise SystemExit(
-                f"演进闸门：{dim} 只有 {distinct} 种取值（四格需 ≥3 种）。"
-                f"四格不能同一景别/场景状态/光线/情绪——按主题路线重新设计每格，禁止只换道具。")
+            notes.append(f"{dim} 只有 {distinct} 种取值——可参照模板换一个视角，不必硬凑数量")
     scenes = [tokens(str(p.get("scene", ""))) for p in panels]
     for i in range(n):
         for j in range(i + 1, n):
             sim = jaccard(scenes[i], scenes[j])
             if sim > 0.55:
-                raise SystemExit(
-                    f"演进闸门：panel{i+1} 与 panel{j+1} 的 scene 雷同度 {sim:.2f} > 0.55，"
-                    "判定为同一画面的复制。请改写景别（overhead/close-up/wide）、场景状态或光线。")
+                notes.append(f"panel{i+1} 与 panel{j+1} scene 雷同度 {sim:.2f}——参照模板改写其中一格的景别或场景状态")
+    return notes
 
 
 def compile_storyboard(sb):
@@ -85,7 +92,7 @@ def compile_storyboard(sb):
     if not isinstance(panels, list) or not panels:
         raise SystemExit("panels 必须是非空数组")
 
-    check_evolution(route, panels)
+    notes = evolution_notes(route, panels)
 
     out = []
     for i, p in enumerate(panels, 1):
@@ -118,6 +125,8 @@ def compile_storyboard(sb):
             "anchor": "用角色定妆图作 image1；input_fidelity 先做小样确定取值",
             "serial": True, "distinct_output_dir": True,
         },
+        "reference_template": REFERENCE_TEMPLATE,
+        "warnings": notes,
         "panels": out,
     }
 
@@ -135,7 +144,11 @@ def main():
         print("saved", sys.argv[2])
     else:
         print(text)
-    print("check: 固定层逐字一致；主题路线已定；shot/state/light/emotion 四格演进；scene 无雷同")
+    if result["warnings"]:
+        for note in result["warnings"]:
+            print("提醒:", note)
+        print("参照:", result["reference_template"])
+    print("check: 固定层逐字一致；路线与四维标注齐全；创意性同质只提醒、不阻断")
 
 
 if __name__ == "__main__":

@@ -70,7 +70,7 @@
 | `light` | 光线色调 | `soft` / `warm` / `dark` / `highlight` / `clear` |
 | `emotion` | 人物情绪（同时进 prompt） | 英文短句，四格各异 |
 
-四格在 `shot / state / light / emotion` 四个维度上**每个都至少需要 3 种不同取值**，且相邻格的 scene 描述雷同度不得 > 0.55。这些标注只用于闸门校验，不拼进 prompt（避免中文或标签词进入生图）。
+四格在 `shot / state / light / emotion` 上照 `narrative-patterns.md` 的**参照模板**填写即可。**取值数量与 scene 雷同度只作软提醒，不再硬拒绝**——剧情是可无限扩展的路线，不用数值阈值卡死。这些标注不拼进 prompt（避免中文或标签词进入生图）。
 
 **来自剧情提案时**：确认过的路线直接填 `route`，四维标注与英文 `scene` / `emotion` 直接取自提案，台词草案另存供合成器使用；提案里的假设清单不必写进 storyboard（已确认即事实），如需追溯可放可选的 `assumptions` 字段，编译器会忽略它。
 
@@ -87,7 +87,7 @@
 python scripts/build_prompts.py storyboard.json prompts.json
 ```
 
-脚本做五件事：拼六层、拒绝含中文的 prompt、断言固定层四格逐字相同、断言主题路线 `route` 已填、**拦截同构图四连**（演进维度取值不足或 scene 两两雷同度 >0.55 时报错，并提示改写景别/场景状态）。输出 `prompts.json` 含每格最终 prompt、`route`、`model_params` 与每格 `evolution` 标注。
+脚本做五件事：拼六层、拒绝含中文的 prompt、断言固定层四格逐字相同、断言主题路线 `route` 与四维标注已填、**对创意性同质只提醒不阻断**（取值单一或 scene 雷同只写入 `warnings`，并附 `reference_template` 供照着扩展）。输出 `prompts.json` 含每格最终 prompt、`route`、`model_params`、每格 `evolution` 标注、`warnings` 与 `reference_template`。
 
 `model_params` 里两个关键值不要改：
 
