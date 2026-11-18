@@ -1,10 +1,10 @@
 ---
 name: fore-vip-appearance
 slug: appearance
-displayName: 颜值分析
-display_name: 颜值分析
+displayName: 颜值穿搭
+display_name: 颜值穿搭
 display_name_en: Appearance Analysis
-description: "颜值综合分析与形象建议助手（fore.vip）。用户提供一张或多张人物照片、或一段含人物的视频，先做素材合规检查，再按六维加权模型给出颜值综合评分（每项带观察依据），并结合脸型、五官、肤色、身形与场景给出可落地的发型与穿搭建议，末尾强制声明内容为 AI 生成、仅供参考。当用户说「测颜值 / 颜值打分 / 看看我颜值 / 颜值分析 / 形象评分 / 给我发型建议 / 适合什么发型 / 穿搭建议 / 怎么穿好看 / 分析一下照片里的人 / 评价这个视频里的人」并提供了人物图文或视频素材时启用。不生成人物照片、不改写生图提示词（走 fore-vip-image-prompt）、不做图片拼接（走 fore-vip-image-stitch）、不画漫画（走 fore-vip-comic）。"
+description: "颜值穿搭分析与形象建议助手（fore.vip）。用户提供一张或多张人物照片、或一段含人物的视频，先做素材合规检查，再按六维加权模型给出颜值综合评分（每项带观察依据），并结合脸型、五官、肤色、身形与场景给出可落地的发型与穿搭建议，末尾强制声明内容为 AI 生成、仅供参考。当用户说「测颜值 / 颜值打分 / 看看我颜值 / 颜值分析 / 形象评分 / 给我发型建议 / 适合什么发型 / 穿搭建议 / 怎么穿好看 / 分析一下照片里的人 / 评价这个视频里的人」并提供了人物图文或视频素材时启用。不生成人物照片、不改写生图提示词（走 fore-vip-image-prompt）、不做图片拼接（走 fore-vip-image-stitch）、不画漫画（走 fore-vip-comic）。"
 description_zh: "基于用户上传的人物照片或视频做颜值六维综合评分与发型穿搭建议，强制 AI 生成免责声明。"
 description_en: "Analyzes people in uploaded photos or videos with a six-dimension weighted appearance score and actionable hairstyle/outfit advice, always closing with an AI-generated disclaimer."
 category: image
@@ -30,7 +30,7 @@ negative_triggers:
   - "单张海报 / 封面（走 poster-studio）"
 ---
 
-# 颜值综合分析与形象建议
+# 颜值穿搭分析与形象建议
 
 对用户提供的**人物照片或视频**给出颜值综合评分与可落地的形象建议。评分走固定模型、建议走知识库，避免每次自由发挥导致口径漂移。
 
@@ -82,7 +82,7 @@ negative_triggers:
 按下方模板输出，全文用中文。
 
 ```
-【颜值分析报告】
+【颜值穿搭分析报告】
 
 一、素材说明
 - 素材类型：<图片 N 张 / 视频（抽取 N 帧）>

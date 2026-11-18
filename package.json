@@ -165,7 +165,7 @@
     },
     {
       "name": "fore-vip-appearance",
-      "display_name": "颜值分析",
+      "display_name": "颜值穿搭",
       "description": "颜值综合分析与形象建议：对用户提供的人物照片或视频做素材合规检查后，按六维加权模型给出颜值评分（每项带观察依据），并结合脸型、五官、肤色、身形与场景给出可落地的发型与穿搭建议，末尾强制 AI 生成免责声明。",
       "path": "fore-vip-appearance/",
       "category": "image"
