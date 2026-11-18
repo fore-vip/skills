@@ -8,7 +8,7 @@ description: "颜值穿搭分析与形象建议助手（fore.vip）。用户提�
 description_zh: "基于用户上传的人物照片或视频做颜值六维综合评分与发型穿搭建议，强制 AI 生成免责声明。"
 description_en: "Analyzes people in uploaded photos or videos with a six-dimension weighted appearance score and actionable hairstyle/outfit advice, always closing with an AI-generated disclaimer."
 category: image
-version: 1.0.0
+version: 1.0.1
 author: fore.vip
 owner: team
 agent_created: true
